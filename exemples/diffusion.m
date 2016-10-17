@@ -14,7 +14,7 @@ clf
 
 ax = axes('units','pixels','position',[1 1 500 400],'color','k');
 
-text('units', 'pixels', 'position', [50,230,0],'string','Sophie','color','w','fontname','helvetica','fontsize',100)
+text('units', 'pixels', 'position', [50,230,0],'string','Hello World!','color','w','fontname','helvetica','fontsize',100)
 
 initial = getframe(gca);
 
