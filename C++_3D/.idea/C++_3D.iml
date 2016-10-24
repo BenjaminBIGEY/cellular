@@ -2,18 +2,18 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/World/Display.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/World/Display.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/World/Grid3D.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/World/Elements/Grid3D.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/World/Elements/Grid3D.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/World/World.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/World/Ant.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/World/Unit.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/World/Unit.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/World/Elements/Ant.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/World/Display/Display.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/World/Elements/Unit.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/World/Elements/Unit.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/World/World.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/World/Ant.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/World/Grid3D.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/World/Elements/Ant.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/World/Display/Display.cpp" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">

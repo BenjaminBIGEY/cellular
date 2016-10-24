@@ -5,6 +5,10 @@
 #ifndef C_3D_DISPLAY_H
 #define C_3D_DISPLAY_H
 
+#include <SDL/SDL.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <cstdlib>
 
 class Display {
 

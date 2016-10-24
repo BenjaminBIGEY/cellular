@@ -26,9 +26,14 @@ void World::update(useconds_t usec) {
         antPosition = _listAnts[i]->getPosition();
         newColor = _grid->getColor(antPosition);
         _listAnts[i]->update(newColor);
+
         _grid->update(antPosition);
 
+        // TODO
         //display(antPosition, newColor);
     }
+
+    usleep(usec);
+
     _count++;
 }

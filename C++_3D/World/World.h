@@ -5,9 +5,11 @@
 #ifndef C_3D_WORLD_H
 #define C_3D_WORLD_H
 
-#include "Ant.h"
-#include "Grid3D.h"
+#include "Elements/Ant.h"
+#include "Elements/Grid3D.h"
+#include "Display/Display.h"
 
+#include <unistd.h>
 #include <memory>
 #include <vector>
 
