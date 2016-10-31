@@ -4,8 +4,6 @@
 
 #include "Display.h"
 
-Display::Display() {}
-
 bool Display::initGL() {
     std::cout << "Starting  GLFW" << std::endl;
 
@@ -23,7 +21,7 @@ bool Display::initGL() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    _window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr);
+    _window = glfwCreateWindow(800, 600, "project : Langton 3D", nullptr, nullptr);
 
     if (_window == nullptr) {
         std::cout << "Failed to create the GLFW window" << std::endl;
@@ -59,6 +57,20 @@ bool Display::initGL() {
     glViewport(0, 0, width, height);
 
     return true;
+}
+
+void Display::update() {
+    glfwGetFramebufferSize(_window, &_width, &_height);
+    glViewport(0, 0, _width, _height);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    glfwSwapBuffers(_window);
+    glfwPollEvents();
+    std::cout << "boucle de display" << std::endl;
+}
+
+bool Display::isWindowOpened() {
+    return !glfwWindowShouldClose(_window);
 }
 
 /*

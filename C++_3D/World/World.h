@@ -28,6 +28,8 @@ public:
 
     void debug();
 
+    bool continueMainLoop();
+
 private:
     std::unique_ptr<Grid3D> _grid = nullptr;
     std::vector<std::unique_ptr<Ant>> _listAnts;

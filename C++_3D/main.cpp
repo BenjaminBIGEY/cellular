@@ -6,9 +6,8 @@
 int main(int argc, char** argv) {
     World world(20, 20, 20);
     world.addAnt(10, 10, 10);
-    world.addAnt(0, 0, 0);
 
-    while(true) {
+    while(world.continueMainLoop()) {
         world.update(50);
     }
 

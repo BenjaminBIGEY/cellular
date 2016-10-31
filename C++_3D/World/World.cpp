@@ -6,7 +6,7 @@
 
 World::World(int x, int y, int z) {
     _grid = make_unique<Grid3D>(x, y, z);
-    
+
     _display = make_unique<Display>();
     if(!_display->initGL())
         exit(EXIT_FAILURE);
@@ -17,13 +17,9 @@ void World::addAnt(int x, int y, int z) {
     _listAnts.push_back(std::move(ant));
 }
 
-void World::debug() {
-    std::cout << "The (x,y,z) size is : (" << _grid->getSizeX() << "," << _grid->getSizeY() << "," << _grid->getSizeZ() << ").\n\n";
-    _grid->setColor(10, 15, 20, Color::ORANGE);
-    std::cout << "The color of the (10,15,20) case is : " << _grid->getColor(10,15,20) << std::endl;
-}
-
 void World::update(useconds_t usec) {
+    _display->update();
+
     Vector3 antPosition(0,0,0);
     Color newColor;
     for(int i = 0 ; i < _listAnts.size() ; i++) {
@@ -32,6 +28,8 @@ void World::update(useconds_t usec) {
         _listAnts[i]->update(newColor);
 
         _grid->update(antPosition);
+        auto pos = _listAnts[i].get()->getPosition();
+        std::cout << "The ant is at position : X = " << pos.x << " ; Y = " << pos.y << " ; Z = " << pos.z << ".\n";
 
         // TODO
         //display(antPosition, newColor);
@@ -40,4 +38,14 @@ void World::update(useconds_t usec) {
     usleep(usec);
 
     _count++;
+}
+
+void World::debug() {
+    std::cout << "The (x,y,z) size is : (" << _grid->getSizeX() << "," << _grid->getSizeY() << "," << _grid->getSizeZ() << ").\n\n";
+    _grid->setColor(10, 15, 20, Color::ORANGE);
+    std::cout << "The color of the (10,15,20) case is : " << _grid->getColor(10,15,20) << std::endl;
+}
+
+bool World::continueMainLoop() {
+    return _display->isWindowOpened();
 }
