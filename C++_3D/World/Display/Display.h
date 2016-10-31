@@ -4,26 +4,40 @@
 
 #ifndef C_3D_DISPLAY_H
 #define C_3D_DISPLAY_H
-/*
-#include <SDL2/SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/freeglut.h>*/
+
+#include <iostream>
 
 // GLEW
 #define GLEW_STATIC
 #include <GL/glew.h>
 // GLFW
 #include <GLFW/glfw3.h>
+//#include <bits/unique_ptr.h>
+#include <memory>
 
-#include <cstdlib>
+
+/*
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}*/
 
 
 class Display {
 public:
-    Display(){}
+    Display();
+    bool initGL(); // return false if something is wrong
     /*void initGL();
     void display();*/
+
+    static void glfwErrorCallback(int error, const char* description);
+    static void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
+
+private:
+    // Window dimensions
+    const GLuint WIDTH = 800, HEIGHT = 600;
+
+    GLFWwindow* _window = nullptr;
 };
 
 

@@ -6,6 +6,10 @@
 
 World::World(int x, int y, int z) {
     _grid = make_unique<Grid3D>(x, y, z);
+    
+    _display = make_unique<Display>();
+    if(!_display->initGL())
+        exit(EXIT_FAILURE);
 }
 
 void World::addAnt(int x, int y, int z) {
