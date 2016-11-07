@@ -28,17 +28,9 @@ public:
 
     void debug();
 
-    bool continueMainLoop();
-
 private:
     std::unique_ptr<Grid3D> _grid = nullptr;
     std::vector<std::unique_ptr<Ant>> _listAnts;
-
-    std::unique_ptr<Display> _display = nullptr;
-
-    // Counter of moves
-    int _count = 0;
-
 };
 
 

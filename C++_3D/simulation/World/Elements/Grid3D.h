@@ -11,6 +11,7 @@
 #include <iostream>
 
 
+
 class Grid3D {
 public:
     Grid3D(int sizeX, int sizeY, int sizeZ);
