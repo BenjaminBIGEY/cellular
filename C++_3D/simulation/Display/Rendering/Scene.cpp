@@ -28,10 +28,9 @@ void Scene::render(Context *context) {
     this->_camera.setRatio((float) width / height);
     this->_camera.updateCamera();
     this->_camera.setCameraView(context);
+}
 
-    for (auto object : _objects) {
-        object->render(context);
-    }
+void Scene::stopUseContext(Context *context) {
     context->pushLight(_light);
 
     context->program().stopUsing();
@@ -40,7 +39,7 @@ void Scene::render(Context *context) {
 void Scene::setLight(Light &light) {
     this->_light = light;
 }
-
+/*
 void Scene::addObject(std::shared_ptr<Renderable> renderable) {
     _objects.push_back(std::shared_ptr<Renderable>(renderable));
-}
+}*/

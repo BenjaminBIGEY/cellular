@@ -5,7 +5,11 @@
 #include "Display.h"
 
 Display::Display() {
-    createScene();
+
+}
+
+Display::~Display() {
+    glfwTerminate();
 }
 
 bool Display::initGL() {
@@ -40,18 +44,8 @@ bool Display::initGL() {
     glfwSetKeyCallback(_window, glfwKeyCallback);
     glfwSetScrollCallback(_window, glfwScrollCallback);
 
-    // Creating of context
-    Context context(_window);
-
     glEnable(GL_MULTISAMPLE);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-
-
-
-    /*****
-     *
-     */
-
 
 
     // Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
@@ -69,24 +63,6 @@ bool Display::initGL() {
     glViewport(0, 0, width, height);
 
     return true;
-}
-
-void Display::initGrid(int sizeX, int sizeY, int sizeZ) {
-    _scene = std::make_unique<Scene>();
-
-    Light light(LIGHT_POINT, 0, 0, 0);
-    _scene->setLight(light);
-
-    auto cubeRender = std::make_shared<RenderableCube>(1.0f);
-    cubeRender->getMaterial().setDiffuse(1.0f, 1.0f, 1.0f);
-
-    for(int x = 0 ; x < sizeX ; x++) {
-        for(int y = 0 ; y < sizeY ; y++) {
-            for(int z = 0 ; z < sizeZ ; z++) {
-                objec
-            }
-        }
-    }
 }
 
 void Display::update() {

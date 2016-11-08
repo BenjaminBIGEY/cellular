@@ -26,14 +26,15 @@ public :
 
     void setLight(Light &light);
 
-    void addObject(std::shared_ptr<Renderable> renderable);
+    //void addObject(std::shared_ptr<Renderable> renderable);
 
     void render(Context *context);
+    void stopUseContext(Context *context);
 private :
     Camera _camera;
     Light _light;
 
-    std::vector<std::shared_ptr<Renderable>> _objects;
+    //std::vector<std::shared_ptr<Renderable>> _objects;
 };
 
 

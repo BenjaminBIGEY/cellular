@@ -9,13 +9,14 @@
 
 #include <deque>
 #include <iostream>
+#include <bits/shared_ptr.h>
 
 
 
 class Grid3D {
 public:
-    Grid3D(int sizeX, int sizeY, int sizeZ);
-    ~Grid3D();
+    //Grid3D(int sizeX, int sizeY, int sizeZ);
+    //~Grid3D();
 
     void update(Vector3 position);
 

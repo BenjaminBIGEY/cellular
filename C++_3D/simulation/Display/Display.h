@@ -13,35 +13,24 @@
 // GLFW
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-//#include <bits/unique_ptr.h>
 #include <memory>
 #include <unistd.h>
 
 #include "FileBuffer.h"
-#include "Rendering/Context.h"
-#include "Rendering/Renderable.h"
-#include "Rendering/RenderableCube.h"
-#include "Rendering/Scene.h"
 
-/*
-enum Colors {
-    TRANSPARENT = 0,
-    WHITE,
-    BLACK,
-    ORANGE,
-    PURPLE,
-    YELLOW,
-    BLUE,
-    GREEN,
-    RED,
-    BROWN
-};*/
+
+
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args) {
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
 
 class Display {
 public:
     Display();
-    bool initGL(); // return false if something is
-    void initGrid(int sizeX, int sizeY, int sizeZ/*, Colors color = TRANSPARENT*/);
+    ~Display();
+
+    bool initGL(); // return false if something is wrong
 
     void update();
 
@@ -49,13 +38,14 @@ public:
 
     void debug();
 
+    GLFWwindow* getWindow(){return _window;}
+
 private:
     static void glfwErrorCallback(int error, const char* description);
     static void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     static void glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
     GLFWwindow* _window = nullptr;
-    std::unique_ptr<Scene> _scene = nullptr;
 
 
     int _width, _height;

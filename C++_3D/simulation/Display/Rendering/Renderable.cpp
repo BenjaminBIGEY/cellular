@@ -57,6 +57,10 @@ void RenderableModel::setPosition(float x, float y, float z) {
     this->_z = z;
 }
 
+glm::vec3 RenderableModel::getPosition() {
+    return glm::vec3(this->_x, this->_y, this->_z);
+}
+
 void RenderableModel::setMaterial(Material &material) {
     this->_material = material;
     this->_compiled = false;

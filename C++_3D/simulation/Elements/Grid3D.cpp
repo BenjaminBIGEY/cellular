@@ -3,7 +3,7 @@
 //
 
 #include "Grid3D.h"
-
+/*
 Grid3D::Grid3D(int sizeX, int sizeY, int sizeZ) {
     initGrid(sizeX, sizeY, sizeZ);
 }
@@ -31,7 +31,7 @@ void Grid3D::initGrid(int sizeX, int sizeY, int sizeZ) {
         }
         _grid.push_back(std::move(grid2D));
     }
-}
+}*/
 
 void Grid3D::update(Vector3 pos) {
     _grid[pos.x][pos.y][pos.z]++;
