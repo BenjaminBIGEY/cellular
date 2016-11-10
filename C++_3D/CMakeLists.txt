@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.6)
 project(langton3D)
 
 
-#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../build)
-#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../build)
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../build)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall")
 
@@ -33,4 +33,4 @@ link_directories(/usr/local/lib/)
 
 add_custom_command(TARGET langton3D PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/World/Display/Rendering/Shaders $<TARGET_FILE_DIR:langton3D>/Shaders)
+        ${CMAKE_SOURCE_DIR}/simulation/Display/Rendering/Shaders $<TARGET_FILE_DIR:langton3D>/Shaders)

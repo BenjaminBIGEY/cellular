@@ -31,7 +31,7 @@ glm::vec3 Cube::getGraphicalPos() {
 
 //////////////////////////////////////////////////////////////////////////////////
 
-Grid3D::Grid3D(int sizeX, int sizeY, int sizeZ, float sizeCube, Color colorInit) {
+Grid3D::Grid3D(int sizeX, int sizeY, int sizeZ, Color colorInit) {
     _grid.clear();
 
     for(int x = 0 ; x < sizeX ; x++) {
@@ -43,7 +43,7 @@ Grid3D::Grid3D(int sizeX, int sizeY, int sizeZ, float sizeCube, Color colorInit)
             for (int z = 0; z < sizeZ; z++) {
                 // Add cube
                 std::shared_ptr<Unit> unit = std::make_shared<Unit>(colorInit);
-                std::shared_ptr<RenderableCube> cubeRender = std::make_shared<RenderableCube>(sizeCube);
+                std::shared_ptr<RenderableCube> cubeRender = std::make_shared<RenderableCube>();
                 cubeRender->getMaterial().setDiffuse(1.0f, 1.0f, 1.0f);
                 //cubeRender->addTexturePath("assets/cubeInit.png");
 
@@ -51,7 +51,6 @@ Grid3D::Grid3D(int sizeX, int sizeY, int sizeZ, float sizeCube, Color colorInit)
                                     unit,
                                     cubeRender));
 
-                ///_display->addObjectScene(v[z]._render);
             }
             grid2D.push_back(std::move(v));
         }

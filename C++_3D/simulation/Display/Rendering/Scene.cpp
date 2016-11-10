@@ -7,10 +7,8 @@
 #include <iostream>
 
 #include "Scene.h"
-#include "Renderable.h"
-#include "Context.h"
-#include "Camera.h"
-#include "Program.h"
+
+
 
 Scene::Scene(std::shared_ptr<Grid3D> grid3D) : _camera(), _light() {
     _grid = grid3D;

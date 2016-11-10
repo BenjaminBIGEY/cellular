@@ -10,7 +10,7 @@
 
 class RenderableCube : public RenderableModel {
 public :
-    RenderableCube(float length = 1);
+    RenderableCube();
 
     virtual void render(Context *context) override;
 

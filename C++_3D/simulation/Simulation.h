@@ -16,7 +16,7 @@
 
 class Simulation {
 public:
-    Simulation(int sizeX, int sizeY, int sizeZ, float sizeCube = 1.0f, Color colorInit = (Color)0);
+    Simulation(int sizeX, int sizeY, int sizeZ, Color colorInit = (Color)0);
     ~Simulation();
     void addAnt(int x, int y, int z);
 

@@ -5,8 +5,8 @@
 #include "Simulation.h"
 
 
-Simulation::Simulation(int sizeX, int sizeY, int sizeZ, float sizeCube, Color colorInit) {
-    _grid = std::make_shared<Grid3D>(sizeX, sizeY, sizeZ, sizeCube, colorInit);
+Simulation::Simulation(int sizeX, int sizeY, int sizeZ, Color colorInit) {
+    _grid = std::make_shared<Grid3D>(sizeX, sizeY, sizeZ, colorInit);
     _scene = std::make_shared<Scene>(_grid);
 
     Light light(LIGHT_POINT, 0, 0, 0);

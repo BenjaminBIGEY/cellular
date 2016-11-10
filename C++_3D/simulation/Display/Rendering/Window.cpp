@@ -41,7 +41,7 @@ Window::Window() {
     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
     glfwSwapInterval(1);
 
-    this->_context = std::make_unique<Context>(_window);
+    _context = std::make_unique<Context>(_window);
 
     glEnable(GL_MULTISAMPLE);
 }

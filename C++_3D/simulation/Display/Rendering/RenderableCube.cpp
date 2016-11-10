@@ -13,8 +13,7 @@
 #include "Context.h"
 #include "RenderableCube.h"
 
-RenderableCube::RenderableCube(float length) :
-        RenderableModel(), _length(length) {
+RenderableCube::RenderableCube() : RenderableModel() {
 }
 
 void RenderableCube::render(Context *context) {
