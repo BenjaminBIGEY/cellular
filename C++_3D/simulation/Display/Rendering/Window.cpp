@@ -42,10 +42,6 @@ Window::Window() {
     glfwSwapInterval(1);
 
     this->_context = std::make_unique<Context>(_window);
-    // Set the required callback functions
-
-    /*glfwSetKeyCallback(_window, glfwKeyCallback);
-    glfwSetScrollCallback(_window, glfwScrollCallback);*/
 
     glEnable(GL_MULTISAMPLE);
 }

@@ -15,11 +15,7 @@ public :
     virtual void render(Context *context) override;
 
 private :
-    /// Calcule les points du modèle de la sphère et crée un
-    /// buffer openGL qui accueille les données.
     void buildModelData(Context *context);
-
-    float _length = 1;
 };
 
 

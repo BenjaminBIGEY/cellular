@@ -9,8 +9,8 @@
 #include <bits/unique_ptr.h>
 
 // GLEW
-#define GLEW_STATIC
-#include <GL/glew.h>
+//#define GLEW_STATIC
+//#include <GL/glew.h>
 // GLFW
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
