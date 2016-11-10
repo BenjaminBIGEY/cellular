@@ -4,13 +4,6 @@
 
 #include "Display.h"
 
-Display::Display() {
-
-}
-
-Display::~Display() {
-    glfwTerminate();
-}
 
 bool Display::initGL() {
     std::cout << "Starting  GLFW" << std::endl;
@@ -26,7 +19,7 @@ bool Display::initGL() {
     // Set all the required options for GLFW
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_SAMPLES, 4);
+    glfwWindowHint(GLFW_SAMPLES, 16);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
@@ -39,6 +32,7 @@ bool Display::initGL() {
     }
 
     glfwMakeContextCurrent(_window);
+    gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
     glfwSwapInterval(1);
     // Set the required callback functions
     glfwSetKeyCallback(_window, glfwKeyCallback);
@@ -75,9 +69,6 @@ void Display::update() {
     std::cout << "boucle de display" << std::endl;
 }
 
-bool Display::isWindowOpened() {
-    return !glfwWindowShouldClose(_window);
-}
 
 /*
  * Callbacks definition

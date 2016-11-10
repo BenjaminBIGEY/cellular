@@ -5,30 +5,20 @@
 #ifndef LANGTON3D_SIMULATION_H
 #define LANGTON3D_SIMULATION_H
 
-#include <deque>
-
-#include "Display/FileBuffer.h"
+#include "Grid3D.h"
 #include "Display/Display.h"
 #include "Display/Rendering/Context.h"
-#include "Display/Rendering/RenderableCube.h"
 #include "Display/Rendering/Scene.h"
-#include "Elements/Unit.h"
+#include "Display/Rendering/Window.h"
 #include "Elements/Ant.h"
 
-
-struct Cube {
-    Cube(std::string name, std::shared_ptr<Unit> unit, std::shared_ptr<RenderableCube> render);
-    std::shared_ptr<Unit> _unit = nullptr;
-    std::shared_ptr<RenderableCube> _render = nullptr;
-    FileBuffer _buffer;
-};
 
 
 class Simulation {
 public:
     Simulation(int sizeX, int sizeY, int sizeZ, float sizeCube = 1.0f, Color colorInit = (Color)0);
-    void addAnt(int x, int y, int z);
     ~Simulation();
+    void addAnt(int x, int y, int z);
 
     void mainLoop();
 
@@ -38,15 +28,18 @@ public:
 
 
 private:
-    void render(std::shared_ptr<RenderableCube> object);
+
+    //void render(std::shared_ptr<RenderableCube> object);
 
     void createControlKeys();
+    static void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
+    static void glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
-    std::unique_ptr<Display> _display = nullptr;
+    //std::unique_ptr<Display> _display = nullptr;
     std::shared_ptr<Scene> _scene = nullptr;
-    Context* _context = nullptr;
 
-    std::deque<std::deque<std::deque<Cube>>> _grid3D;
+    std::unique_ptr<Window> _window = nullptr;
+    std::shared_ptr<Grid3D> _grid = nullptr;
     std::vector<std::unique_ptr<Ant>> _listAnts;
 
     // Counter of moves

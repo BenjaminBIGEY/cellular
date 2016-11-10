@@ -4,12 +4,15 @@
 
 #include "Simulation.h"
 
-Cube::Cube(std::string name, std::shared_ptr<Unit> unit, std::shared_ptr<RenderableCube> render) : _buffer(name) {
-    _unit = unit;
-    _render = render;
-}
 
 Simulation::Simulation(int sizeX, int sizeY, int sizeZ, float sizeCube, Color colorInit) {
+    _grid = std::make_shared<Grid3D>(sizeX, sizeY, sizeZ, sizeCube, colorInit);
+    _scene = std::make_shared<Scene>(_grid);
+
+
+
+
+
     _display = make_unique<Display>();
     // Creating of context
     _context = new Context(_display->getWindow());
@@ -19,32 +22,8 @@ Simulation::Simulation(int sizeX, int sizeY, int sizeZ, float sizeCube, Color co
     Light light(LIGHT_POINT, 0, 0, 0);
     _scene->setLight(light);
 
+    _grid = make_unique<Grid3D>(sizeX, sizeY, sizeZ, sizeCube, colorInit);
 
-    _grid3D.clear();
-
-    for(int x = 0 ; x < sizeX ; x++) {
-        std::deque<std::deque<Cube> > grid2D;
-
-        for(int y = 0 ; y < sizeY ; y ++) {
-            std::deque<Cube> v;
-
-            for (int z = 0; z < sizeZ; z++) {
-                // Add cube
-                std::shared_ptr<Unit> unit = std::make_shared<Unit>(colorInit);
-                std::shared_ptr<RenderableCube> cubeRender = std::make_shared<RenderableCube>(sizeCube);
-                cubeRender->getMaterial().setDiffuse(1.0f, 1.0f, 1.0f);
-                //cubeRender->addTexturePath("assets/cubeInit.png");
-
-                v.emplace_back(Cube(std::to_string(x) + ',' + std::to_string(y) + ',' + std::to_string(z),
-                                    unit,
-                                    cubeRender));
-
-                //_display->addObjectScene(v[z]._render);
-            }
-            grid2D.push_back(std::move(v));
-        }
-        _grid3D.push_back(std::move(grid2D));
-    }
 
 
     // Initialization of Graphic part
@@ -57,9 +36,7 @@ Simulation::Simulation(int sizeX, int sizeY, int sizeZ, float sizeCube, Color co
 }
 
 Simulation::~Simulation() {
-    _grid3D[0][0].clear();
-    _grid3D[0].clear();
-    _grid3D.clear();
+
 
     _listAnts.clear();
 
@@ -141,18 +118,51 @@ void Simulation::addAnt(int x, int y, int z) {
     std::unique_ptr<Ant> ant = make_unique<Ant>(x, y, z, Orientation::FRONT);
     _listAnts.push_back(std::move(ant));
 }
-
+/*
 void Simulation::render(std::shared_ptr<RenderableCube> object) {
     _scene->render(_context);
 
     object->render(_context);
 
     _scene->stopUseContext(_context);
-}
+}*/
 
 void Simulation::createControlKeys() {
     int rightKey = glfwGetKey(_display->getWindow(), GLFW_KEY_RIGHT);
     int leftKey = glfwGetKey(_display->getWindow(), GLFW_KEY_LEFT);
     int upKey = glfwGetKey(_display->getWindow(), GLFW_KEY_UP);
     int downKey = glfwGetKey(_display->getWindow(), GLFW_KEY_DOWN);
+}
+
+/*
+ * Callbacks definition
+ */
+void Display::glfwErrorCallback(int error, const char* description) {
+    std::cerr << "There was a glfw error : " << description << std::endl;
+}
+
+// Is called whenever a key is pressed/released via GLFW
+void Display::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+    std::cout << key << std::endl;
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, GL_TRUE);
+/* EXAMPLES :
+    if (key == GLFW_KEY_KP_0 && action == GLFW_PRESS) {
+        auto traveling = std::make_unique<Traveling>(
+                scene->camera(), 0, 0, 30, 0, 0, 0, 0, 1, 0
+        );
+        traveling->setDuration(0.5f);
+        scene->camera().traveling(traveling);
+    }
+    else if (key == GLFW_KEY_KP_1 && action == GLFW_PRESS) {
+        auto traveling = std::make_unique<Traveling>(
+                scene->camera(), 15, 15, 15, 0, 0, 0, 0, 0, 1
+        );
+        traveling->setDuration(0.5f);
+        scene->camera().traveling(traveling);
+    }*/
+}
+
+void Display::glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+    _scene->getCamera().zoom((float) pow(1.2, - yoffset));
 }
