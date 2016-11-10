@@ -6,6 +6,7 @@
 #define LANGTON3D_GRID3D_H
 
 #include <deque>
+#include <glm/glm.hpp>
 #include <iostream>
 
 #include "Display/FileBuffer.h"
@@ -19,6 +20,8 @@ struct Cube {
     Color getColor();
 
     void render(Context *context);
+
+    glm::vec3 getGraphicalPos();
 
 private:
     std::shared_ptr<Unit> _unit = nullptr;
@@ -39,6 +42,7 @@ public:
     int getSizeZ();
 
     void render(Context* context, int x, int y, int z);
+    glm::vec3 getGraphicalPos(int x, int y, int z);
 
     Color getColor(Vector3 position);
     Color getColor(int x, int y, int z);

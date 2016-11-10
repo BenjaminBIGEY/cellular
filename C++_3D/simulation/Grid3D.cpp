@@ -10,7 +10,7 @@ Cube::Cube(std::string name, std::shared_ptr<Unit> unit, std::shared_ptr<Rendera
 }
 
 void Cube::nextColor() {
-    _unit->operator++();
+    _unit->operator++(1);
 }
 
 void Cube::setColor(Color c) {
@@ -23,6 +23,10 @@ Color Cube::getColor() {
 
 void Cube::render(Context *context) {
     _render->render(context);
+}
+
+glm::vec3 Cube::getGraphicalPos() {
+    return _render->getPosition();
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +85,10 @@ int Grid3D::getSizeZ() {
 
 void Grid3D::render(Context *context, int x, int y, int z) {
     _grid[x][y][y].render(context);
+}
+
+glm::vec3 Grid3D::getGraphicalPos(int x, int y, int z) {
+    return _grid[x][y][z].getGraphicalPos();
 }
 
 Color Grid3D::getColor(Vector3 pos) {

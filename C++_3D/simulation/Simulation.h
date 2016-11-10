@@ -5,13 +5,13 @@
 #ifndef LANGTON3D_SIMULATION_H
 #define LANGTON3D_SIMULATION_H
 
+#include <unistd.h>
+
 #include "Grid3D.h"
-#include "Display/Display.h"
 #include "Display/Rendering/Context.h"
 #include "Display/Rendering/Scene.h"
 #include "Display/Rendering/Window.h"
 #include "Elements/Ant.h"
-
 
 
 class Simulation {
@@ -20,29 +20,25 @@ public:
     ~Simulation();
     void addAnt(int x, int y, int z);
 
-    void mainLoop();
+    void mainLoop(useconds_t usec);
 
-    bool continueMainLoop();
-
-    void update(useconds_t usec); // microseconds
+    bool continueSimulation();
 
 
 private:
-
-    //void render(std::shared_ptr<RenderableCube> object);
+    void updateSimulation();
+    void input();
 
     void createControlKeys();
     static void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     static void glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
-    //std::unique_ptr<Display> _display = nullptr;
     std::shared_ptr<Scene> _scene = nullptr;
 
     std::unique_ptr<Window> _window = nullptr;
     std::shared_ptr<Grid3D> _grid = nullptr;
     std::vector<std::unique_ptr<Ant>> _listAnts;
 
-    // Counter of moves
     int _count = 0;
 
     // Controls
