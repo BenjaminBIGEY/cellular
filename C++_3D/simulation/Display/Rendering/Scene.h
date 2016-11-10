@@ -11,6 +11,7 @@
 
 #include "Camera.h"
 #include "Light.h"
+#include "../../Grid3D.h"
 
 class Camera;
 class Light;
@@ -20,21 +21,18 @@ class Renderable;
 class Scene {
 
 public :
-    Scene();
+    Scene(std::shared_ptr<Grid3D> grid3D);
 
     Camera& getCamera() {return _camera;}
 
     void setLight(Light &light);
 
-    //void addObject(std::shared_ptr<Renderable> renderable);
-
     void render(Context *context);
-    void stopUseContext(Context *context);
+
 private :
+    std::shared_ptr<Grid3D> _grid;
     Camera _camera;
     Light _light;
-
-    //std::vector<std::shared_ptr<Renderable>> _objects;
 };
 
 

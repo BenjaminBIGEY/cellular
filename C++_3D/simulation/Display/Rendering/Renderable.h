@@ -64,8 +64,6 @@ protected :
     GLuint _vertexBuffer = 0;
     GLuint _normalBuffer = 0;
     GLuint _texCoordBuffer = 0;
-
-    int _verticesCount = 0;
 };
 
 
