@@ -18,7 +18,7 @@ file(GLOB_RECURSE
         SOURCE_FILES
         simulation/*.cpp)
 
-set(GLAD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/glad/src/glad.c)
+set(GLAD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/glad/src/glad.c simulation/Grid3D.cpp simulation/Grid3D.h simulation/Display/Rendering/Window.cpp simulation/Display/Rendering/Window.h)
 
 find_package(glfw3 3.2 REQUIRED)
 
