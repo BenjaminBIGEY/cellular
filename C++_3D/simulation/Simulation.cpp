@@ -27,9 +27,18 @@ Simulation::~Simulation() {
     _listAnts.clear();
 }
 
-void Simulation::mainLoop(useconds_t usec) {
-    updateSimulation();
+void Simulation::mainLoop() {
+    // Update of the simulation
+    for(int i = 0 ; i < _listAnts.size() ; i++) {
+        //for (auto ant : _listAnts) {
+        Vector3 pos = _listAnts[i]->getPosition();
+        _listAnts[i]->update(_grid->getColor(pos.x, pos.y, pos.z));
 
+        _grid->update(pos);
+    }
+    _count++;
+
+    // Update of the display
     _window->setupFrame();
 
     if (!_scene->getCamera().isTraveling()) {
@@ -38,24 +47,24 @@ void Simulation::mainLoop(useconds_t usec) {
     input();
 
     _window->finalizeFrame();
-
-    usleep(usec);
 }
 
-bool Simulation::continueSimulation() {
-    return _window->isWindowOpened();
-}
+void Simulation::start(int fps) {
+    double frameRate = 1000.0 / fps; // 1000 ms / frames per seconds
+    double beginLoop(0), endLoop(0), timeElapsed(0);
 
-void Simulation::updateSimulation() {
-    for(int i = 0 ; i < _listAnts.size() ; i++) {
-    //for (auto ant : _listAnts) {
-        Vector3 pos = _listAnts[i]->getPosition();
-        _listAnts[i]->update(_grid->getColor(pos.x, pos.y, pos.z));
+    while(_window->isWindowOpened()) {
+        beginLoop = glfwGetTime();
 
-        _grid->update(pos);
+        mainLoop();
+
+        endLoop = glfwGetTime();
+        timeElapsed = endLoop - beginLoop;
+        if(timeElapsed < frameRate)
+            usleep(frameRate - timeElapsed);
     }
-    _count++;
 }
+
 
 void Simulation::input() {
     glm::vec3 cameraUp = _scene->getCamera().getUp();

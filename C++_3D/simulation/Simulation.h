@@ -20,13 +20,12 @@ public:
     ~Simulation();
     void addAnt(int x, int y, int z);
 
-    void mainLoop(useconds_t usec);
-
-    bool continueSimulation();
+    void start(int fps = 60);
 
 
 private:
-    void updateSimulation();
+    void mainLoop();
+
     void input();
 
     void createControlKeys();
