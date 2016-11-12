@@ -23,7 +23,7 @@ Shader Shader::loadFromFile(std::string filename, GLenum shaderType) {
     return Shader(shaderCode, shaderType);
 }
 
-Shader::Shader(std::string& shaderCode, GLenum shaderType) : _id(0), _shaderType(_shaderType) {
+Shader::Shader(std::string& shaderCode, GLenum shaderType) : _id(0), _shaderType(shaderType) {
 
     _id = glCreateShader(_shaderType);
 

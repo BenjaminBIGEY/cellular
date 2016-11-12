@@ -63,6 +63,4 @@ void Material::pushMaterial(Context * context) {
 
     context->program().setUniform1f("material.specularIntensity", _specularIntensity);
     context->program().setUniform1f("material.specularHardness", _specularHardness);
-
-    context->program().setUniform1i("material.emit", _emit);
 }

@@ -43,8 +43,10 @@ Grid3D::Grid3D(int sizeX, int sizeY, int sizeZ, Color colorInit) {
             for (int z = 0; z < sizeZ; z++) {
                 // Add cube
                 std::shared_ptr<Unit> unit = std::make_shared<Unit>(colorInit);
-                std::shared_ptr<RenderableCube> cubeRender = std::make_shared<RenderableCube>();
-                cubeRender->getMaterial().setDiffuse(1.0f, 1.0f, 1.0f);
+                std::shared_ptr<RenderableCube> cubeRender = std::make_shared<RenderableCube>(0.0, 0.0, 0.0, 0.0); // Transparent
+                cubeRender->getMaterial().setAmbient(0.85f, 0.25f, 0.1f); // never completely dark
+                cubeRender->getMaterial().setDiffuse(0.85f, 0.75f, 0.1f); // directional impact of light
+                cubeRender->getMaterial().setSpecular(0.0f, 0.0f, 0.0f);  // bright spot of a light
                 //cubeRender->addTexturePath("assets/cubeInit.png");
 
                 v.emplace_back(Cube(std::to_string(x) + ',' + std::to_string(y) + ',' + std::to_string(z),

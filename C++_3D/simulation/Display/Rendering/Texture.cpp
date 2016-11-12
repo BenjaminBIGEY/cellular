@@ -2,7 +2,8 @@
 // Created by benji on 07/11/16.
 //
 
-#include <CImg/CImg.h> "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h" "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"  "pthread.h"
+#include <CImg/CImg.h>
+#include "pthread.h"
 
 #include "Texture.h"
 

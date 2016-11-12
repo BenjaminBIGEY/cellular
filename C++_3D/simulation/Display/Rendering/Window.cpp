@@ -29,7 +29,7 @@ Window::Window() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    _window = glfwCreateWindow(800, 600, "project : Langton 3D", nullptr, nullptr);
+    _window = glfwCreateWindow(800, 600, "Langton 3D", nullptr, nullptr);
 
     if (!_window) {
         std::cout << "Failed to create the GLFW window" << std::endl;

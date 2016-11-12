@@ -10,12 +10,15 @@
 
 class RenderableCube : public RenderableModel {
 public :
-    RenderableCube();
+    // Red, Green, Blue, Alpha components for the cube color
+    RenderableCube(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 0.8);
 
     virtual void render(Context *context) override;
 
 private :
     void buildModelData(Context *context);
+
+    GLfloat _r, _g, _b, _a; // red, green, blue, alpha components
 };
 
 

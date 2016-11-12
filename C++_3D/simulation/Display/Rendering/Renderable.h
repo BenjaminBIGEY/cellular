@@ -8,6 +8,10 @@
 
 #include "Material.h"
 
+#ifndef BUFFER_OFFSET
+#define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
+#endif
+
 class Scene;
 class Context;
 

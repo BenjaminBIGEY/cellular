@@ -5,9 +5,10 @@
 #include <stdexcept>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+
 #include "Program.h"
 
-Program::Program(std::vector<Shader> &shaders) {
+Program::Program(const std::vector<Shader> &shaders) {
     if(shaders.size() <= 0)
         throw std::runtime_error("No shaders were provided to create the program");
 
@@ -17,7 +18,7 @@ Program::Program(std::vector<Shader> &shaders) {
         throw std::runtime_error("glCreateProgram failed");
 
     //attach all the shaders
-    for(unsigned i = 0; i < shaders.size(); ++i)
+    for(unsigned i = 0 ; i < shaders.size(); ++i)
         glAttachShader(_id, shaders[i].getID());
 
     //link the shaders together
@@ -111,4 +112,9 @@ void Program::setUniform1i(GLchar *uniformName, const GLint &value) {
 void Program::setUniform1f(GLchar *uniformName, const GLfloat &value) {
     if (!isInUse()) throw std::runtime_error("This program is not in use.");
     glUniform1f(uniform(uniformName), value);
+}
+
+void Program::setUniform4f(GLchar *uniformName, const GLfloat &x, const GLfloat &y, const GLfloat &z, GLfloat &t) {
+    if (!isInUse()) throw std::runtime_error("This program is not in use.");
+    glUniform4f(uniform(uniformName), x, y, z, t);
 }

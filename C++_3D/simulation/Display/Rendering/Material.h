@@ -28,10 +28,6 @@ public :
 
     void setAmbient(float r, float g, float b);
 
-    void setEmit(bool emit) {
-        this->_emit = emit;
-    }
-
     void pushMaterial(Context * context);
 
 private :
@@ -44,7 +40,6 @@ private :
     float _specularIntensity;
     float _specularHardness;
 
-    bool _emit;
 };
 
 

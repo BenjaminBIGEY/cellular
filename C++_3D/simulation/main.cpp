@@ -3,8 +3,8 @@
 
 
 int main(int argc, char** argv) {
-    Simulation simu(20, 20, 20);
-    simu.addAnt(10, 10, 10);
+    Simulation simu(5, 5, 5);
+    //simu.addAnt(10, 10, 10);
 
     simu.start(50);
     return 0;

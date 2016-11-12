@@ -9,7 +9,7 @@ Simulation::Simulation(int sizeX, int sizeY, int sizeZ, Color colorInit) {
     _grid = std::make_shared<Grid3D>(sizeX, sizeY, sizeZ, colorInit);
     _scene = std::make_shared<Scene>(_grid);
 
-    Light light(LIGHT_POINT, 0, 0, 0);
+    Light light(0, 0, 0);
     _scene->setLight(light);
 
     _window = std::make_unique<Window>();
@@ -62,6 +62,8 @@ void Simulation::start(int fps) {
         timeElapsed = endLoop - beginLoop;
         if(timeElapsed < frameRate)
             usleep(frameRate - timeElapsed);
+        else
+            std::cerr << "FPS low : " << 1.0 / timeElapsed << '\n';
     }
 }
 

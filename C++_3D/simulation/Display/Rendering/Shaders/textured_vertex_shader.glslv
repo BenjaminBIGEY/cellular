@@ -6,19 +6,19 @@ uniform mat4 model;
 
 in vec3 vert;
 in vec3 vertNorm;
-in vec4 vertColor;
+in vec2 vertTexCoord;
 
 
 out vec3 fragVert;
 out vec3 fragNorm;
-out vec4 fragColor;
+out vec2 fragTexCoord;
 
 
 void main() {
     // Passage to the fragment shader
     fragVert = vert;
     fragNorm = vertNorm;
-    fragColor = vertColor;
+    fragTexCoord = vertTexCoord;
 
     // Application of position modifications
     gl_Position = projection * camera * model * vec4(vert, 1);

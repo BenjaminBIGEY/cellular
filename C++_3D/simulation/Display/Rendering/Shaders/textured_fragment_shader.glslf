@@ -1,5 +1,8 @@
 #version 150 core
 
+uniform int       useTextures;
+uniform sampler2D tex;
+
 uniform mat4 model;
 uniform vec3 cameraPos;
 
@@ -16,12 +19,18 @@ uniform struct {
 
 in vec3 fragVert;
 in vec3 fragNorm;
-in vec4 fragColor;
+in vec4 fragTexCoord;
 
 out vec4 finalColor;
 
 void main() {
-    vec4 color = fragColor;
+    vec4 color;
+    if (useTextures == 1) {
+        color = texture(tex, fragTexCoord);
+    }
+    else {
+        color = Vec4(1);
+    }
 
     // Calculation of reals positions of scene elements
     vec3 normal   = normalize(transpose(inverse(mat3(model))) * fragNorm);
@@ -65,4 +74,11 @@ void main() {
     //Calcul final
     vec3 gamma = vec3(1);
     finalColor = vec4(pow(ambientIntensity + attenuation * (diffuseIntensity + specularIntensity), gamma), 0.8);
+
+
+
+
+    if (useTextures == 1) {
+        finalColor *= texture(tex, fragTexCoord);
+    }
 }

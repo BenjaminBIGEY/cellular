@@ -13,7 +13,7 @@
 
 class Program {
 public :
-    Program(std::vector<Shader>& shaders);
+    Program(const std::vector<Shader>& shaders);
     Program(const Program &other);
     ~Program();
 
@@ -29,10 +29,11 @@ public :
 
     void setUniformMatrix4(GLchar * uniformName, glm::mat4 &matrix);
     void setUniform3f(GLchar *uniformName, const GLfloat &x, const GLfloat &y, const GLfloat &z);
-    void setUniform1i(GLchar * uniformName, const GLint &value);
+    void setUniform1i(GLchar *uniformName, const GLint &value);
     void setUniform1f(GLchar *uniformName, const GLfloat &value);
+    void setUniform4f(GLchar *uniformName, const GLfloat &x, const GLfloat &y, const GLfloat &z, GLfloat &t);
 private :
-    int _id;
+    GLuint _id;
 };
 
 
