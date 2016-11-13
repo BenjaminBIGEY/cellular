@@ -8,7 +8,7 @@ Ant::Ant(int x, int y, int z, Orientation orientation) : _pos{x, y, z} {
     _orientation = orientation;
 }
 
-Vector3 Ant::getPosition() {
+glm::vec3 Ant::getPosition() {
     return _pos;
 }
 

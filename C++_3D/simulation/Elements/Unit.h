@@ -5,12 +5,6 @@
 #ifndef C_3D_UNIT_H
 #define C_3D_UNIT_H
 
-class Vector3 {
-public:
-    Vector3(int x, int y, int z) : x(x), y(y), z(z) {}
-    int x, y, z;
-};
-
 enum Color {
     WHITE = 0,
     BLACK = 1,

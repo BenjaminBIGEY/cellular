@@ -66,7 +66,7 @@ Grid3D::~Grid3D() {
     _grid.clear();
 }
 
-void Grid3D::update(Vector3 pos) {
+void Grid3D::update(glm::vec3 pos) {
     _grid[pos.x][pos.y][pos.z].nextColor();
 
     // TODO : case of the ant at the limit of the grid
@@ -92,7 +92,7 @@ glm::vec3 Grid3D::getGraphicalPos(int x, int y, int z) {
     return _grid[x][y][z].getGraphicalPos();
 }
 
-Color Grid3D::getColor(Vector3 pos) {
+Color Grid3D::getColor(glm::vec3 pos) {
     if(pos.x <= getSizeX() && pos.y <= getSizeY() && pos.z <= getSizeZ())
         return _grid[pos.x][pos.y][pos.z].getColor();
 
@@ -101,10 +101,10 @@ Color Grid3D::getColor(Vector3 pos) {
 }
 
 Color Grid3D::getColor(int x, int y, int z) {
-    return getColor(Vector3(x,y,z));
+    return getColor(glm::vec3(x,y,z));
 }
 
-void Grid3D::setColor(Vector3 pos, Color color) {
+void Grid3D::setColor(glm::vec3 pos, Color color) {
     if(pos.x <= getSizeX() && pos.y <= getSizeY() && pos.z <= getSizeZ())
         _grid[pos.x][pos.y][pos.z].setColor(color);
     else
@@ -112,5 +112,5 @@ void Grid3D::setColor(Vector3 pos, Color color) {
 }
 
 void Grid3D::setColor(int x, int y, int z, Color color) {
-    setColor(Vector3(x,y,z), color);
+    setColor(glm::vec3(x,y,z), color);
 }

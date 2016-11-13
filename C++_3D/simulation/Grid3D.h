@@ -35,7 +35,7 @@ public:
     Grid3D(int sizeX, int sizeY, int sizeZ, Color colorInit = (Color)0);
     ~Grid3D();
 
-    void update(Vector3 position);
+    void update(glm::vec3 position);
 
     int getSizeX();
     int getSizeY();
@@ -44,10 +44,10 @@ public:
     void render(Context* context, int x, int y, int z);
     glm::vec3 getGraphicalPos(int x, int y, int z);
 
-    Color getColor(Vector3 position);
+    Color getColor(glm::vec3 position);
     Color getColor(int x, int y, int z);
 
-    void setColor(Vector3 position, Color color);
+    void setColor(glm::vec3 position, Color color);
     void setColor(int x, int y, int z, Color color);
 
 private:

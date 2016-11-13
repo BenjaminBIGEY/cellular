@@ -7,6 +7,7 @@
 
 #include "Unit.h"
 #include <array>
+#include <glm/glm.hpp>
 
 /*********
  * RULES *
@@ -54,7 +55,7 @@ class Ant {
 public:
     Ant(int x, int y, int z, Orientation orientation);
 
-    Vector3 getPosition();
+    glm::vec3 getPosition();
     Orientation getOrientation();
 
     void update(Color color);
@@ -64,7 +65,7 @@ protected:
     void move(int incrementing);
 
 private:
-    Vector3 _pos;
+    glm::vec3 _pos;
 
     Orientation _orientation;
 };

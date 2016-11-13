@@ -32,7 +32,7 @@ private:
     static void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     static void glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
-    std::shared_ptr<Scene> _scene = nullptr;
+    std::unique_ptr<Scene> _scene = nullptr;
 
     std::unique_ptr<Window> _window = nullptr;
     std::shared_ptr<Grid3D> _grid = nullptr;
