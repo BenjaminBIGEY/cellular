@@ -4,7 +4,7 @@
 
 #include "Grid3D.h"
 
-Cube::Cube(std::string name, std::shared_ptr<Unit> unit, std::shared_ptr<RenderableCube> render) : _buffer(name) {
+Cube::Cube(std::string name, std::shared_ptr<Unit> unit, std::shared_ptr<RenderableCube> render) : _buffer("cube_" + name) {
     _unit = unit;
     _render = render;
 }
@@ -49,6 +49,7 @@ Grid3D::Grid3D(int sizeX, int sizeY, int sizeZ, Color colorInit) {
                 cubeRender->getMaterial().setSpecular(0.0f, 0.0f, 0.0f);  // bright spot of a light
                 //cubeRender->addTexturePath("assets/cubeInit.png");
 
+                // File buffer name : cube_X,Y,Z
                 v.emplace_back(Cube(std::to_string(x) + ',' + std::to_string(y) + ',' + std::to_string(z),
                                     unit,
                                     cubeRender));
@@ -66,8 +67,13 @@ Grid3D::~Grid3D() {
     _grid.clear();
 }
 
-void Grid3D::update(glm::vec3 pos) {
+void Grid3D::update(glm::vec3 pos, int count) {
     _grid[pos.x][pos.y][pos.z].nextColor();
+
+    // Send of unit information in the buffer : count;color
+    std::string bufferLine = std::to_string(count) + ';' + std::to_string((int)_grid[pos.x][pos.y][pos.z].getColor());
+    _grid[pos.x][pos.y][pos.z]._buffer.addLine(bufferLine);
+
 
     // TODO : case of the ant at the limit of the grid
 }
@@ -85,7 +91,7 @@ int Grid3D::getSizeZ() {
 }
 
 void Grid3D::render(Context *context, int x, int y, int z) {
-    _grid[x][y][y].render(context);
+    _grid[x][y][z].render(context);
 }
 
 glm::vec3 Grid3D::getGraphicalPos(int x, int y, int z) {

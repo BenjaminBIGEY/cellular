@@ -22,12 +22,12 @@ public:
 
     void start(int fps = 60);
 
-
 private:
     void mainLoop();
 
     void input();
 
+    void createWindow();
     void createControlKeys();
     static void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     static void glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
@@ -45,6 +45,8 @@ private:
     int _leftKey;
     int _upKey;
     int _downKey;
+    int _plusKey;
+    int _minusKey;
 };
 
 

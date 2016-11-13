@@ -9,7 +9,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Scene.h"
-#include "Renderable.h"
 #include "Context.h"
 #include "RenderableCube.h"
 

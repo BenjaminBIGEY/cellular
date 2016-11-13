@@ -8,6 +8,7 @@
 #include <deque>
 #include <glm/glm.hpp>
 #include <iostream>
+#include <sstream>
 
 #include "Display/FileBuffer.h"
 #include "Display/Rendering/RenderableCube.h"
@@ -23,10 +24,13 @@ struct Cube {
 
     glm::vec3 getGraphicalPos();
 
-private:
-    std::shared_ptr<Unit> _unit = nullptr;
+
+
     std::shared_ptr<RenderableCube> _render = nullptr;
     FileBuffer _buffer;
+private:
+    std::shared_ptr<Unit> _unit = nullptr;
+
 };
 
 
@@ -35,7 +39,7 @@ public:
     Grid3D(int sizeX, int sizeY, int sizeZ, Color colorInit = (Color)0);
     ~Grid3D();
 
-    void update(glm::vec3 position);
+    void update(glm::vec3 position, int count);
 
     int getSizeX();
     int getSizeY();
