@@ -41,7 +41,7 @@ public :
     RenderableModel();
     ~RenderableModel();
 
-    void setPosition(float x, float y, float z);
+    void setPosition(GLfloat x, GLfloat y, GLfloat z);
     glm::vec3 getPosition();
 
     void setMaterial(Material &material);
@@ -61,7 +61,7 @@ protected :
 
     //Fields
 
-    float _x, _y, _z;
+    GLfloat _x, _y, _z;
     Material _material;
     std::vector<std::string> _texturePaths;
 

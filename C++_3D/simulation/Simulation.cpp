@@ -10,7 +10,7 @@ Simulation::Simulation(int sizeX, int sizeY, int sizeZ, Color colorInit) {
     _grid = std::make_shared<Grid3D>(sizeX, sizeY, sizeZ, colorInit);
     _scene = std::make_unique<Scene>(_grid);
 
-    Light light(0, 0, 0);
+    Light light(10, 10, 10);
     _scene->setLight(light);
 }
 
@@ -44,7 +44,7 @@ void Simulation::mainLoop() {
 void Simulation::start(int fps) {
     createWindow();
 
-    double frameRate = 1000.0 / fps; // 1000 ms / frames per seconds
+    double frameRate = 100.0 / fps; // 1000 ms / frames per seconds
     double beginLoop(0), endLoop(0), timeElapsed(0);
 
     while(_window->isWindowOpened()) {

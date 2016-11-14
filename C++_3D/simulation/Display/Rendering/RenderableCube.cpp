@@ -21,6 +21,7 @@ RenderableCube::RenderableCube(GLfloat r, GLfloat g, GLfloat b, GLfloat a) : Ren
 
 void RenderableCube::render(Context *context) {
     if (!_compiled) buildModelData(context);
+    else std::cout << "Warning : ModelData don't compiled\n" << std::endl;
 
     //Translation
     glm::mat4x4 model = glm::translate(glm::mat4x4(), glm::tvec3<float>(this->_x, this->_y, this->_z));
@@ -118,7 +119,7 @@ void RenderableCube::buildModelData(Context *context) {
         colors[i] = i%4 == 0 ? _r : (i%4 == 1 ? _g : (i%4 == 2 ? _b : _a)); // {r, g, b, a, r, g, b, ...}
     }
 
-    GLfloat* texCoords = new GLfloat[texCoordBufferSize]; // TODO
+    //GLfloat* texCoords = new GLfloat[texCoordBufferSize]; // TODO
 
     /**
      * OpenGL treatment
@@ -148,12 +149,12 @@ void RenderableCube::buildModelData(Context *context) {
 
             glEnableVertexAttribArray((GLuint)context->program().attrib("vertColor"));
             glVertexAttribPointer((GLuint)context->program().attrib("vertColor"), 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-        } else {
+        } /*else {
             glBufferData(GL_ARRAY_BUFFER, texCoordBufferSize * sizeof(GLfloat), texCoords, GL_STATIC_DRAW);
 
             glEnableVertexAttribArray((GLuint)context->program().attrib("vertTexCoord"));
             glVertexAttribPointer((GLuint)context->program().attrib("vertTexCoord"), 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-        }
+        }*/
 
     // End
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -161,7 +162,7 @@ void RenderableCube::buildModelData(Context *context) {
 
     delete[] normals;
     delete[] colors;
-    delete[] texCoords;
+    //delete[] texCoords;
 
 
     _compiled = true;
