@@ -15,8 +15,6 @@ Scene::Scene(std::shared_ptr<Grid3D> grid3D) : _camera(), _light() {
 }
 
 void Scene::render(Context *context) {
-    std::cout << "render de la scène appelé\n" << std::endl;
-
     int width, height;
     context->getWindowDimensions(width, height);
 
@@ -35,7 +33,8 @@ void Scene::render(Context *context) {
         for(int y = 0 ; y < _grid->getSizeY() ; y++) {
             for(int z = 0 ; z < _grid->getSizeZ() ; z++) {
                 cubeGraphicalPos = _grid->getGraphicalPos(x, y, z);
-                //_camera.moveCameraByCenterPoint(cubeGraphicalPos.x, cubeGraphicalPos.y, cubeGraphicalPos.z);
+                // TODO : laisser?
+                _camera.moveCameraByCenterPoint(cubeGraphicalPos.x, cubeGraphicalPos.y, cubeGraphicalPos.z);
 
                 _grid->render(context, x, y, z);
             }

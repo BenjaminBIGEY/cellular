@@ -42,10 +42,9 @@ Grid3D::Grid3D(int sizeX, int sizeY, int sizeZ, Color colorInit) {
 
             for (int z = 0; z < sizeZ; z++) {
                 // Add cube
-                //std::cout << "new cube at " << x << ", " << y << ", " << z << " construction of grid3D\n";
                 std::shared_ptr<Unit> unit = std::make_shared<Unit>(colorInit);
                 std::shared_ptr<RenderableCube> cubeRender = std::make_shared<RenderableCube>(0.0, 0.0, 0.0, 0.0); // Transparent
-                cubeRender->setPosition((GLfloat)1.1 * x, (GLfloat)1.1 * y, (GLfloat)1.1 * z);
+                cubeRender->setPosition((GLfloat)2 * x, (GLfloat)2 * y, (GLfloat)2 * z);
 
                 cubeRender->getMaterial().setAmbient(0.85f, 0.25f, 0.1f); // never completely dark
                 cubeRender->getMaterial().setDiffuse(0.85f, 0.75f, 0.1f); // directional impact of light

@@ -21,7 +21,6 @@ RenderableCube::RenderableCube(GLfloat r, GLfloat g, GLfloat b, GLfloat a) : Ren
 
 void RenderableCube::render(Context *context) {
     if (!_compiled) buildModelData(context);
-    else std::cout << "Warning : ModelData don't compiled\n" << std::endl;
 
     //Translation
     glm::mat4x4 model = glm::translate(glm::mat4x4(), glm::tvec3<float>(this->_x, this->_y, this->_z));
@@ -167,5 +166,5 @@ void RenderableCube::buildModelData(Context *context) {
 
     _compiled = true;
 
-    this->loadTextures();
+    //this->loadTextures();
 }
