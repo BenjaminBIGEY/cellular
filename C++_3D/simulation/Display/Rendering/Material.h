@@ -28,6 +28,8 @@ public :
 
     void setAmbient(float r, float g, float b);
 
+    void setShininess(float shininess);
+
     void pushMaterial(Context * context);
 
 private :
@@ -40,6 +42,7 @@ private :
     float _specularIntensity;
     float _specularHardness;
 
+    float _shininess;
 };
 
 

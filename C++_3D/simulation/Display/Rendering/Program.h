@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <glm/detail/type_mat.hpp>
+#include <glm/detail/type_vec3.hpp>
 
 #include "Shader.h"
 
@@ -27,11 +28,16 @@ public :
     GLint attrib(const GLchar* attribName);
     GLint uniform(const GLchar* uniformName);
 
-    void setUniformMatrix4(GLchar * uniformName, glm::mat4 &matrix);
-    void setUniform3f(GLchar *uniformName, const GLfloat &x, const GLfloat &y, const GLfloat &z);
-    void setUniform1i(GLchar *uniformName, const GLint &value);
-    void setUniform1f(GLchar *uniformName, const GLfloat &value);
-    void setUniform4f(GLchar *uniformName, const GLfloat &x, const GLfloat &y, const GLfloat &z, GLfloat &t);
+    void setUniformMatrix4(const GLchar * uniformName, glm::mat4 &matrix);
+    void setUniform3f (const GLchar *uniformName, const GLfloat &x, const GLfloat &y, const GLfloat &z);
+    void setUniform1i (const GLchar *uniformName, const GLint &value);
+    void setUniform1f (const GLchar *uniformName, const GLfloat &value);
+    void setUniform4f (const GLchar *uniformName, const GLfloat &x, const GLfloat &y, const GLfloat &z, GLfloat &t);
+    void setUniform3fv(const GLchar *uniformName, const GLsizei count, const GLfloat *array);
+
+    void setUniform(const GLchar* uniformName, const GLfloat &value);
+    void setUniform(const GLchar* uniformName, const glm::vec3 &v);
+
 private :
     GLuint _id;
 };

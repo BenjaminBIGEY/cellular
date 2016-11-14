@@ -11,7 +11,7 @@ Material::Material(float diffuseR, float diffuseG, float diffuseB, float specula
                    float ambientR, float ambientG, float ambientB) :
 
         _ambientR(ambientR), _ambientG(ambientG), _ambientB(ambientB), _diffuseR(diffuseR), _diffuseG(diffuseG), _diffuseB(diffuseB),
-        _specularR(specularR), _specularG(specularG), _specularB(specularB), _specularIntensity(0.5), _specularHardness(5) {
+        _specularR(specularR), _specularG(specularG), _specularB(specularB), _shininess(80.0), _specularIntensity(0.5), _specularHardness(5) {
 
 }
 
@@ -46,21 +46,27 @@ void Material::setAmbient(float r, float g, float b) {
     _ambientB = b;
 }
 
+void Material::setShininess(float shininess) {
+    _shininess = shininess;
+}
+
 void Material::pushMaterial(Context * context) {
     glActiveTexture(GL_TEXTURE0);
     if (this->textures.size() >= 1) {
         glBindTexture(GL_TEXTURE_2D, this->textures[0].getID());
-        context->program().setUniform1i("useTextures", 1);
+        context->program().setUniform1i((GLchar*)"useTextures", 1);
     }
     else {
         glBindTexture(GL_TEXTURE_2D, 0);
-        context->program().setUniform1i("useTextures", 0);
+        context->program().setUniform1i((GLchar*)"useTextures", 0);
     }
 
-    context->program().setUniform3f("material.ambientColor", _ambientR, _ambientG, _ambientB);
-    context->program().setUniform3f("material.diffuseColor", _diffuseR, _diffuseG, _diffuseB);
-    context->program().setUniform3f("material.specularColor", _specularR, _specularG, _specularB);
+    context->program().setUniform3f((GLchar*)"material.ambientColor", _ambientR, _ambientG, _ambientB);
+    context->program().setUniform3f((GLchar*)"material.diffuseColor", _diffuseR, _diffuseG, _diffuseB);
+    context->program().setUniform3f((GLchar*)"material.specularColor", _specularR, _specularG, _specularB);
 
-    context->program().setUniform1f("material.specularIntensity", _specularIntensity);
-    context->program().setUniform1f("material.specularHardness", _specularHardness);
+    context->program().setUniform1f((GLchar*)"material.specularIntensity", _specularIntensity);
+    context->program().setUniform1f((GLchar*)"material.specularHardness", _specularHardness);
+
+    context->program().setUniform1f((GLchar*)"material.shininess", _shininess);
 }

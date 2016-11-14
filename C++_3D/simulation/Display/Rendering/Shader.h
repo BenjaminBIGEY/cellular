@@ -14,7 +14,7 @@ class Shader {
 public :
     static Shader loadFromFile(std::string filename, GLenum shaderType);
 
-    Shader(std::string &shaderCode, GLenum shaderType);
+    Shader(const std::string &shaderCode, GLenum shaderType);
     Shader(const Shader &other);
     virtual ~Shader();
 

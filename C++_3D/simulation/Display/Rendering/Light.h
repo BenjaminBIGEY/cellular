@@ -5,17 +5,34 @@
 #ifndef LANGTON3D_LIGHT_H
 #define LANGTON3D_LIGHT_H
 
+#include <glm/glm.hpp>
+#include <vector>
+
+#include "Context.h"
 
 class Context;
 
+struct lightInfos {
+    glm::vec3 _position;
+    glm::vec3 _color;
+    float _attenuation;
+    float _ambientCoeff;
+};
 
 class Light {
 public :
-    Light(float x = 0, float y = 0, float z = 0);
+    Light(){}
+    void addLight(lightInfos light);
+    void addLight(GLfloat x, GLfloat y, GLfloat z, GLfloat r, GLfloat g, GLfloat b, float attenuation, float ambientCoeff);
+    void addLight(glm::vec3 position, glm::vec3 color, float attenuation, float ambientCoeff);
 
     void pushLight(Context *context);
+
 private :
-    float _x, _y, _z;
+    template <typename T>
+    void setLightUniform(Context *context, const std::string propertyName, GLint lightIndex, const T& value);
+
+    std::vector<lightInfos> _listLights;
 };
 
 

@@ -10,7 +10,7 @@
 
 
 
-Scene::Scene(std::shared_ptr<Grid3D> grid3D) : _camera(), _light() {
+Scene::Scene(std::shared_ptr<Grid3D> grid3D) : _camera() {
     _grid = grid3D;
 }
 
@@ -44,7 +44,6 @@ void Scene::render(Context *context) {
     context->pushLight(_light);
     context->program().stopUsing();
 }
-
 
 void Scene::setLight(Light &light) {
     this->_light = light;

@@ -26,6 +26,10 @@ void RenderableCube::render(Context *context) {
     glm::mat4x4 model = glm::translate(glm::mat4x4(), glm::tvec3<float>(this->_x, this->_y, this->_z));
     context->program().setUniformMatrix4((GLchar*)"model", model);
 
+    // Wood shininess
+    context->program().setUniform1f((GLchar*)"materialShininess", 80.0);
+    context->program().setUniform3f((GLchar*)"materialSpecularColor", 1.0f, 1.0f, 1.0f);
+
     context->pushMaterial(this->_material);
 
     glBindVertexArray(this->_gVAO);
@@ -136,8 +140,8 @@ void RenderableCube::buildModelData(Context *context) {
     glBindBuffer(GL_ARRAY_BUFFER, _normalBuffer);
         glBufferData(GL_ARRAY_BUFFER, normBufferSize * sizeof(GLfloat), normals, GL_STATIC_DRAW);
 
-        glEnableVertexAttribArray((GLuint)context->program().attrib("vertNorm"));
-        glVertexAttribPointer((GLuint)context->program().attrib("vertNorm"), 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+        glEnableVertexAttribArray((GLuint)context->program().attrib("vertNormal"));
+        glVertexAttribPointer((GLuint)context->program().attrib("vertNormal"), 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
 
     // Tex coords

@@ -28,7 +28,24 @@ Simulation::Simulation(int sizeX, int sizeY, int sizeZ, Color colorInit) {
     _grid = std::make_shared<Grid3D>(sizeX, sizeY, sizeZ, colorInit);
     _scene = std::make_unique<Scene>(_grid);
 
-    Light light(10, 10, 10);
+    Light light;
+    glm::vec3 position[2] = {/*{10, 10, 10},
+                             {0,  10, 1},
+                             {10, 0,  1},
+                             {10, 10, 0},
+                             {0,  0,  1},
+                             {0,  10, 0},*/
+                             {10, 0,  0},
+                             {0,  0,  0}};
+
+    glm::vec3 color(2, 2, 2); // strong white light
+    GLfloat attenuation = 0.1f;
+    GLfloat ambientCoeff = 0.2f;
+
+    for(auto pos : position) {
+        light.addLight(pos, color, attenuation, ambientCoeff);
+    }
+
     _scene->setLight(light);
 }
 

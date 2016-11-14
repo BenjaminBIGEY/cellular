@@ -196,8 +196,8 @@ void Camera::setCameraView(Context *context) {
     glm::mat4 camera = glm::lookAt(glm::vec3(_eyeX, _eyeY, _eyeZ), glm::vec3(_centerX, _centerY, _centerZ), glm::vec3(_upX, _upY, _upZ));
 
     if (context != nullptr) {
-        context->program().setUniform3f("cameraPos", _eyeX, _eyeY, _eyeZ);
-        context->program().setUniformMatrix4("projection", projection);
-        context->program().setUniformMatrix4("camera", camera);
+        context->program().setUniform3f((GLchar*)"cameraPosition", _eyeX, _eyeY, _eyeZ);
+        context->program().setUniformMatrix4((GLchar*)"projection", projection);
+        context->program().setUniformMatrix4((GLchar*)"camera", camera);
     }
 }
