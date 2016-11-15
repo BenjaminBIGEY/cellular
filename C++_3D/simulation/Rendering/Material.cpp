@@ -15,14 +15,6 @@ Material::Material(float diffuseR, float diffuseG, float diffuseB, float specula
 
 }
 
-void Material::removeAllTextures() {
-    this->textures.clear();
-}
-
-void Material::addTexture(Texture texture) {
-    this->textures.push_back(texture);
-}
-
 void Material::setDiffuse(float r, float g, float b) {
     _diffuseR = r;
     _diffuseG = g;
@@ -51,15 +43,7 @@ void Material::setShininess(float shininess) {
 }
 
 void Material::pushMaterial(Context * context) {
-    glActiveTexture(GL_TEXTURE0);
-    if (this->textures.size() >= 1) {
-        glBindTexture(GL_TEXTURE_2D, this->textures[0].getID());
-        context->program().setUniform1i((GLchar*)"useTextures", 1);
-    }
-    else {
-        glBindTexture(GL_TEXTURE_2D, 0);
-        context->program().setUniform1i((GLchar*)"useTextures", 0);
-    }
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     context->program().setUniform3f((GLchar*)"material.ambientColor", _ambientR, _ambientG, _ambientB);
     context->program().setUniform3f((GLchar*)"material.diffuseColor", _diffuseR, _diffuseG, _diffuseB);

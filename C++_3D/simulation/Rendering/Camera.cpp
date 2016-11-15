@@ -21,7 +21,7 @@ Traveling::Traveling(Camera &camera, float eyeX, float eyeY, float eyeZ, float c
 
     auto startEye = camera.getEye();
     auto startCenter = camera.getCenter();
-    auto startUp = camera.getUp(); //EXCELLENT !
+    auto startUp = camera.getUp();
 
     _startEyeX = startEye.x;
     _startEyeY = startEye.y;

@@ -10,12 +10,11 @@
 #include <iostream>
 #include <sstream>
 
-#include "Display/FileBuffer.h"
-#include "Display/Rendering/RenderableCube.h"
+#include "Rendering/RenderableCube.h"
 #include "Elements/Unit.h"
 
 struct Cube {
-    Cube(std::string name, std::shared_ptr<Unit> unit, std::shared_ptr<RenderableCube> render);
+    Cube(std::shared_ptr<Unit> unit, std::shared_ptr<RenderableCube> render);
     void nextColor();
     void setColor(Color c);
     Color getColor();
@@ -25,12 +24,10 @@ struct Cube {
     glm::vec3 getGraphicalPos();
 
 
-
     std::shared_ptr<RenderableCube> _render = nullptr;
-    FileBuffer _buffer;
+
 private:
     std::shared_ptr<Unit> _unit = nullptr;
-
 };
 
 

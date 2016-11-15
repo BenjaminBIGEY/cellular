@@ -45,7 +45,6 @@ public :
     glm::vec3 getPosition();
 
     void setMaterial(Material &material);
-    void addTexturePath(std::string path);
 
     Material & getMaterial() {
         return this->_material;
@@ -55,19 +54,14 @@ protected :
 
     virtual void regenerateBuffers();
 
-    /** Recharge les textures et envoie les données à
-     * openGL*/
-    virtual void loadTextures();
-
     //Fields
 
     GLfloat _x, _y, _z;
     Material _material;
-    std::vector<std::string> _texturePaths;
 
     GLuint _vertexBuffer = 0;
     GLuint _normalBuffer = 0;
-    GLuint _texCoordBuffer = 0;
+    GLuint _colorCoordBuffer = 0;
 };
 
 

@@ -15,7 +15,6 @@ class Context;
 struct lightInfos {
     glm::vec3 _position;
     glm::vec3 _color;
-    float _attenuation;
     float _ambientCoeff;
 };
 
@@ -23,8 +22,8 @@ class Light {
 public :
     Light(){}
     void addLight(lightInfos light);
-    void addLight(GLfloat x, GLfloat y, GLfloat z, GLfloat r, GLfloat g, GLfloat b, float attenuation, float ambientCoeff);
-    void addLight(glm::vec3 position, glm::vec3 color, float attenuation, float ambientCoeff);
+    void addLight(GLfloat x, GLfloat y, GLfloat z, GLfloat r, GLfloat g, GLfloat b, float ambientCoeff);
+    void addLight(glm::vec3 position, glm::vec3 color, float ambientCoeff);
 
     void pushLight(Context *context);
 

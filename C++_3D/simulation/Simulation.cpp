@@ -29,21 +29,21 @@ Simulation::Simulation(int sizeX, int sizeY, int sizeZ, Color colorInit) {
     _scene = std::make_unique<Scene>(_grid);
 
     Light light;
-    glm::vec3 position[2] = {/*{10, 10, 10},
-                             {0,  10, 1},
-                             {10, 0,  1},
-                             {10, 10, 0},
-                             {0,  0,  1},
-                             {0,  10, 0},*/
-                             {10, 0,  0},
-                             {0,  0,  0}};
+    const glm::vec3 position[2] = {/*{10, 10, 10},
+                                  {0,  10, 10},
+                                  {10, 0,  10},
+                                  {10, 10, 0},
+                                  {0,  0,  10},
+                                  {0,  10, 0},*/
+                                  {10, 1, 5}, // {10, 0, 0},
+                                  {0,  0,  0}};
 
-    glm::vec3 color(2, 2, 2); // strong white light
-    GLfloat attenuation = 0.1f;
-    GLfloat ambientCoeff = 0.2f;
+    glm::vec3 color(5, 5, 5); // strong white light
+    //glm::vec3 color(0.4, 0.3, 0.1) // weak yellowish light
+    GLfloat ambientCoeff = 0.06f; //0.2f or 1.0
 
     for(auto pos : position) {
-        light.addLight(pos, color, attenuation, ambientCoeff);
+        light.addLight(pos, color, ambientCoeff);
     }
 
     _scene->setLight(light);
@@ -179,4 +179,8 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
 
 void Simulation::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
     _scene->getCamera().zoom((float) pow(1.2, - yoffset));
+}
+
+void Simulation::setColor(int x, int y, int z, Color color) {
+    _grid->setColor(x, y, z, color);
 }

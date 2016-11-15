@@ -11,13 +11,12 @@ void Light::addLight(lightInfos light) {
     _listLights.push_back(light);
 }
 
-void Light::addLight(GLfloat x, GLfloat y, GLfloat z, GLfloat r, GLfloat g, GLfloat b, float attenuation, float ambientCoeff) {
-    addLight({glm::vec3(x, y, z), glm::vec3(r, g, b), attenuation, ambientCoeff});
+void Light::addLight(GLfloat x, GLfloat y, GLfloat z, GLfloat r, GLfloat g, GLfloat b, float ambientCoeff) {
+    addLight({glm::vec3(x, y, z), glm::vec3(r, g, b), ambientCoeff});
 }
 
-void Light::addLight(glm::vec3 position, glm::vec3 color, float attenuation, float ambientCoeff) {
-    addLight({position, color, attenuation, ambientCoeff});
-    glm::vec4 a;
+void Light::addLight(glm::vec3 position, glm::vec3 color, float ambientCoeff) {
+    addLight({position, color, ambientCoeff});
 }
 
 void Light::pushLight(Context *context) {
@@ -27,7 +26,6 @@ void Light::pushLight(Context *context) {
     for(int i = 0 ; i < numLights ; i++) {
         setLightUniform(context, "position",     i, _listLights[i]._position);
         setLightUniform(context, "color",        i, _listLights[i]._color);
-        setLightUniform(context, "attenuation",  i, _listLights[i]._attenuation);
         setLightUniform(context, "ambientCoeff", i, _listLights[i]._ambientCoeff);
     }
 }

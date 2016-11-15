@@ -14,7 +14,7 @@
 #include "Light.h"
 #include "Program.h"
 #include "Renderable.h"
-#include "../../Grid3D.h"
+#include "../Grid3D.h"
 
 
 class Camera;

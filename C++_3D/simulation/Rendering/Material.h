@@ -5,9 +5,10 @@
 #ifndef LANGTON3D_MATERIAL_H
 #define LANGTON3D_MATERIAL_H
 
-
+#include <glad/glad.h>
+#include <memory>
 #include <vector>
-#include "Texture.h"
+
 
 class Context;
 
@@ -18,8 +19,6 @@ public :
         float specularR = 1.0f, float specularG = 1.0f, float specularB = 1.0f,
         float ambientR = 0.2f, float ambientG = 0.2f, float ambientB = 0.2f);
 
-    void removeAllTextures();
-    void addTexture(Texture texture);
 
     void setDiffuse(float r, float g, float b);
 
@@ -33,8 +32,6 @@ public :
     void pushMaterial(Context * context);
 
 private :
-    std::vector<Texture> textures;
-
     float _diffuseR, _diffuseG, _diffuseB;
     float _specularR, _specularG, _specularB;
     float _ambientR, _ambientG, _ambientB;

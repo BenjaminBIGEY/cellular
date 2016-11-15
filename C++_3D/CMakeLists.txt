@@ -33,4 +33,4 @@ link_directories(/usr/local/lib/)
 
 add_custom_command(TARGET langton3D PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/simulation/Display/Rendering/Shaders $<TARGET_FILE_DIR:langton3D>/Shaders)
+        ${CMAKE_SOURCE_DIR}/simulation/Rendering/Shaders $<TARGET_FILE_DIR:langton3D>/Shaders)

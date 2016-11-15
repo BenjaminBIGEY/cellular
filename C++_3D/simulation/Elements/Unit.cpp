@@ -12,6 +12,20 @@ Color Unit::getColor() {
     return _color;
 }
 
+glm::vec4 Unit::getColor(Color color, float alpha) {
+    switch(color) {
+        case Color::WHITE: return glm::vec4(1, 1, 1, alpha);
+        case Color::BLACK: return glm::vec4(0, 0, 0, alpha);
+        case Color::GREEN: return glm::vec4(0, 1, 0, alpha);
+        case Color::RED: return glm::vec4(1, 0, 0, alpha);
+        case Color::BLUE: return glm::vec4(0, 0, 1, alpha);
+        case Color::YELLOW: return glm::vec4(1, 1, 0, alpha);
+        case Color::ORANGE: return glm::vec4(1, 165/255, 0, alpha);
+        //case Color::MAGENTA: return glm::vec4(1, 0, 1, alpha);
+        default: return glm::vec4(0, 0, 0, alpha); // black unit
+    }
+}
+
 void Unit::setColor(Color c) {
     _color = c;
 }

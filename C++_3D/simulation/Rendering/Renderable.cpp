@@ -9,7 +9,6 @@
 #include "Scene.h"
 #include "Renderable.h"
 #include "Context.h"
-#include "Texture.h"
 #include "Program.h"
 
 
@@ -66,17 +65,12 @@ void RenderableModel::setMaterial(Material &material) {
     this->_compiled = false;
 }
 
-void RenderableModel::addTexturePath(std::string path) {
-    this->_texturePaths.push_back(path);
-    this->_compiled = false;
-}
-
 void RenderableModel::regenerateBuffers() {
     Renderable::regenerateBuffers();
 
     glGenBuffers(1, &this->_vertexBuffer);
     glGenBuffers(1, &this->_normalBuffer);
-    glGenBuffers(1, &this->_texCoordBuffer);
+    glGenBuffers(1, &this->_colorCoordBuffer);
 }
 
 void RenderableModel::deleteBuffers() {
@@ -92,16 +86,8 @@ void RenderableModel::deleteBuffers() {
         this->_normalBuffer = 0;
     }
 
-    if (this->_texCoordBuffer != 0) {
-        glDeleteBuffers(1, &this->_texCoordBuffer);
-        this->_texCoordBuffer = 0;
-    }
-}
-
-void RenderableModel::loadTextures() {
-    this->_material.removeAllTextures();
-
-    for (std::string & path : this->_texturePaths) {
-        this->_material.addTexture(Texture::load(path));
+    if (this->_colorCoordBuffer != 0) {
+        glDeleteBuffers(1, &this->_colorCoordBuffer);
+        this->_colorCoordBuffer = 0;
     }
 }

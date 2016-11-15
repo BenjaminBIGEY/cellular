@@ -8,9 +8,9 @@
 #include <unistd.h>
 
 #include "Grid3D.h"
-#include "Display/Rendering/Context.h"
-#include "Display/Rendering/Scene.h"
-#include "Display/Rendering/Window.h"
+#include "Rendering/Context.h"
+#include "Rendering/Scene.h"
+#include "Rendering/Window.h"
 #include "Elements/Ant.h"
 
 class EventListener;
@@ -40,6 +40,8 @@ public:
     void addAnt(int x, int y, int z);
 
     void start(int fps = 60);
+
+    void setColor(int x, int y, int z, Color color);
 
 private:
     void mainLoop();
