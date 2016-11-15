@@ -39,12 +39,10 @@ vec3 ApplyLight(Light light, vec3 color, vec3 normal, vec3 position, vec3 surfac
     vec3 diffuse = vec3(diffuseCoefficient) * color.rgb * light.color;
 
     // Specular
-    float specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(- lightVector, normal))), material.shininess);
-    vec3 specular = vec3(specularCoefficient * material.specularColor * light.color);
+    //vec3 specular = (diffuseCoefficient != 0.0 ? vec3(pow(max(0.0, dot(surfaceToCamera, reflect(- lightVector, normal))), material.shininess)) : vec3(0.0)) * material.specularColor * material.specularIntensity;
 
     // Linear color (color before gamma correction)
-    //return (ambient + diffuse + specular);
-    return ambient + diffuse; // + specular;
+    return ambient + diffuse;// + specular;
 }
 
 
