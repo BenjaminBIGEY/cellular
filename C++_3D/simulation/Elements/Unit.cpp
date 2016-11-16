@@ -20,7 +20,7 @@ glm::vec4 Unit::getColor(Color color, float alpha) {
         case Color::RED: return glm::vec4(1, 0, 0, alpha);
         case Color::BLUE: return glm::vec4(0, 0, 1, alpha);
         case Color::YELLOW: return glm::vec4(1, 1, 0, alpha);
-        case Color::ORANGE: return glm::vec4(1, 165/255, 0, alpha);
+        case Color::ORANGE: return glm::vec4(1, 165.0f/255, 0, alpha);
         //case Color::MAGENTA: return glm::vec4(1, 0, 1, alpha);
         default: return glm::vec4(0, 0, 0, alpha); // black unit
     }

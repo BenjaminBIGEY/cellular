@@ -35,7 +35,7 @@ Simulation::Simulation(int sizeX, int sizeY, int sizeZ, Color colorInit) {
                                   {10, 10, 0},
                                   {0,  0,  10},
                                   {0,  10, 0},*/
-                                  {10, 1, 5}, // {10, 0, 0},
+                                  {10, 0, 0},
                                   {0,  0,  0}};
 
     glm::vec3 color(5, 5, 5); // strong white light
