@@ -4,9 +4,14 @@
 
 #include "Simulation.h"
 
+EventListener* EventListener::lulz = NULL;
+
 void EventListener::init(Window * window) {
-    window->setKeyCallback(glfwKeyCallback);
-    window->setScrollCallback(glfwScrollCallback);
+  //window->setKeyCallback(glfwKeyCallback);
+    EventListener::lulz = this;
+    window->setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
+              EventListener::lulz->glfwScrollCallback(window, xoffset, yoffset);
+    });
 }
 
 void EventListener::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
@@ -21,6 +26,10 @@ void EventListener::glfwScrollCallback(GLFWwindow* window, double xoffset, doubl
     for (auto &listener : _listListeners) {
         listener->scrollCallback(window, xoffset, yoffset);
     }
+}
+
+void EventListener::addEventListener(std::shared_ptr<EventListener> event) {
+    _listListeners.push_back(event);
 }
 
 Simulation::Simulation(int sizeX, int sizeY, int sizeZ, Color colorInit) {
@@ -47,6 +56,9 @@ Simulation::Simulation(int sizeX, int sizeY, int sizeZ, Color colorInit) {
     }
 
     _scene->setLight(light);
+
+    std::shared_ptr<EventListener> event(this);
+    addEventListener(event);
 }
 
 Simulation::~Simulation() {

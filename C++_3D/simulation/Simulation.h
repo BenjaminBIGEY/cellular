@@ -13,23 +13,23 @@
 #include "Rendering/Window.h"
 #include "Elements/Ant.h"
 
-class EventListener;
-static std::vector<std::shared_ptr<EventListener>> _listListeners;
-
 class EventListener {
 public:
-    static void init(Window * window);
+    void init(Window * window);
 
     virtual void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) = 0;
     virtual void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) = 0;
+
+    void addEventListener(std::shared_ptr<EventListener> event);
 /*
     static int getSizeListeners() {return (int)_listListeners.size();}
     static std::vector<std::shared_ptr<EventListener>> getListListener() {return _listListeners;}
 */
-private:
-    static void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
-
-    static void glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
+    std::vector<std::shared_ptr<EventListener>> _listListeners;
+    static EventListener *lulz;
+protected:
+    void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
+    void glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 };
 
 
@@ -59,6 +59,7 @@ private:
     std::unique_ptr<Window> _window = nullptr;
     std::shared_ptr<Grid3D> _grid = nullptr;
     std::vector<std::unique_ptr<Ant>> _listAnts;
+
 
     int _count = 0;
 
