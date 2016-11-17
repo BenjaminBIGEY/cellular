@@ -1,10 +1,11 @@
 #include <iostream>
 #include "Simulation.h"
+#include <map>
 
 int main(int argc, char** argv) {
-    Simulation simu(5, 5, 5);
+    Simulation simu;
 
-    //simu.addAnt(10, 10, 10);
+    simu.addAnt(10, 10, 10);
 
     simu.setColor(2, 1, 1, Color::RED);
 

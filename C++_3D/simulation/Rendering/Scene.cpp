@@ -27,19 +27,7 @@ void Scene::render(Context *context) {
     this->_camera.updateCamera();
     this->_camera.setCameraView(context);
 
-    glm::vec3 cubeGraphicalPos;
-
-    for(int x = 0 ; x < _grid->getSizeX() ; x++) {
-        for(int y = 0 ; y < _grid->getSizeY() ; y++) {
-            for(int z = 0 ; z < _grid->getSizeZ() ; z++) {
-                cubeGraphicalPos = _grid->getGraphicalPos(x, y, z);
-                // TODO : laisser?
-                _camera.moveCameraByCenterPoint(cubeGraphicalPos.x, cubeGraphicalPos.y, cubeGraphicalPos.z);
-
-                _grid->render(context, x, y, z);
-            }
-        }
-    }
+    _grid->render(context);
 
     context->pushLight(_light);
     context->program().stopUsing();

@@ -32,9 +32,9 @@ void EventListener::addEventListener(std::shared_ptr<EventListener> event) {
     _listListeners.push_back(event);
 }
 
-Simulation::Simulation(int sizeX, int sizeY, int sizeZ, Color colorInit) {
+Simulation::Simulation(Color colorInit, float alpha) {
     // Scene creation
-    _grid = std::make_shared<Grid3D>(sizeX, sizeY, sizeZ, colorInit);
+    _grid = std::make_shared<Grid3D>(colorInit, alpha);
     _scene = std::make_unique<Scene>(_grid);
 
     Light light;
@@ -68,7 +68,7 @@ Simulation::~Simulation() {
 void Simulation::mainLoop() {
     // Update of the simulation
     for(int i = 0 ; i < _listAnts.size() ; i++) {
-        glm::vec3 pos = _listAnts[i]->getPosition();
+        Vector3 pos = _listAnts[i]->getPosition();
         _listAnts[i]->update(_grid->getColor(pos));
 
         _grid->update(pos, _count);
@@ -141,13 +141,13 @@ void Simulation::input() {
 }
 
 void Simulation::addAnt(int x, int y, int z) {
-    std::unique_ptr<Ant> ant;
-    if(x > _grid->getSizeX() || y > _grid->getSizeY() || z > _grid->getSizeZ()) {
-        std::cerr << "Init position of the ant out of range\n" << std::endl;
-        ant = std::make_unique<Ant>(_grid->getSizeX() / 2, _grid->getSizeY() / 2, _grid->getSizeZ() / 2, Orientation::FRONT);
-    } else
-        ant = std::make_unique<Ant>(x, y, z, Orientation::FRONT);
+    addAnt(Vector3(x, y, z));
+}
 
+void Simulation::addAnt(Vector3 position) {
+    _grid->createCube(position);
+
+    std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, Orientation::FRONT);
     _listAnts.push_back(std::move(ant));
 }
 
@@ -194,5 +194,13 @@ void Simulation::scrollCallback(GLFWwindow* window, double xoffset, double yoffs
 }
 
 void Simulation::setColor(int x, int y, int z, Color color) {
-    _grid->setColor(x, y, z, color);
+    setColor(Vector3(x, y, z), color);
+}
+
+void Simulation::setColor(Vector3 position, Color color) {
+    _grid->setColor(position, color);
+}
+
+void Simulation::setAlpha(Color color) {
+    _grid->setAlpha(color, ALPHA_DEFAULT);
 }

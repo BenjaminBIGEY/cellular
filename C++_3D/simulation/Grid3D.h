@@ -5,54 +5,38 @@
 #ifndef LANGTON3D_GRID3D_H
 #define LANGTON3D_GRID3D_H
 
-#include <deque>
 #include <glm/glm.hpp>
 #include <iostream>
 #include <sstream>
 
-#include "Rendering/RenderableCube.h"
-#include "Elements/Unit.h"
+#include "CubeMap.h"
 
-struct Cube {
-    Cube(std::shared_ptr<Unit> unit, std::shared_ptr<RenderableCube> render);
-    void nextColor();
-    void setColor(Color c);
-    Color getColor();
-
-    void render(Context *context);
-
-    glm::vec3 getGraphicalPos();
-
-
-    std::shared_ptr<RenderableCube> _render = nullptr;
-
-private:
-    std::shared_ptr<Unit> _unit = nullptr;
-};
 
 
 class Grid3D {
 public:
-    Grid3D(int sizeX, int sizeY, int sizeZ, Color colorInit = (Color)0);
-    ~Grid3D();
+    Grid3D(Color colorInit, float alpha);
+    ~Grid3D() {};
 
-    void update(glm::vec3 position, int count);
+    void createCube(Vector3 position);
 
-    int getSizeX();
-    int getSizeY();
-    int getSizeZ();
+    void update(Vector3 position, int count);
 
-    void render(Context* context, int x, int y, int z);
-    glm::vec3 getGraphicalPos(int x, int y, int z);
+    void render(Context* context);
 
-    Color getColor(glm::vec3 position);
-    Color getColor(int x, int y, int z);
+    Color getColor(Vector3 position);
 
-    void setColor(glm::vec3 position, Color color);
-    void setColor(int x, int y, int z, Color color);
+    void setColor(Vector3 position, Color color);
+
+    void setAlpha(Color color, float alpha);
 
 private:
-    std::deque<std::deque<std::deque<Cube>>> _grid;
+    // Container of the 3D grid of cubes
+    CubeMap _cubeMap;
+    // List of Cube ptr for optimization
+    std::shared_ptr<Cube> _cubesPtr[Color::NBR];
+
+    Color _colorInit;
 };
 
 

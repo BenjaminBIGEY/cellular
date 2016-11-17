@@ -18,7 +18,7 @@ file(GLOB_RECURSE
         SOURCE_FILES
         simulation/*.cpp)
 
-set(GLAD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/glad/src/glad.c)
+set(GLAD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/glad/src/glad.c simulation/CubeMap.cpp simulation/CubeMap.h)
 
 find_package(glfw3 3.2 REQUIRED)
 

@@ -19,7 +19,7 @@ class Renderable {
 public :
     virtual ~Renderable();
 
-    virtual void render(Context *context) = 0;
+    virtual void render(Context *context, glm::vec3 position) = 0;
 
 
 protected :
@@ -41,9 +41,6 @@ public :
     RenderableModel();
     ~RenderableModel();
 
-    void setPosition(GLfloat x, GLfloat y, GLfloat z);
-    glm::vec3 getPosition();
-
     void setMaterial(Material &material);
 
     Material & getMaterial() {
@@ -54,9 +51,8 @@ protected :
 
     virtual void regenerateBuffers();
 
-    //Fields
+    // Fields
 
-    GLfloat _x, _y, _z;
     Material _material;
 
     GLuint _vertexBuffer = 0;

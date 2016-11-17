@@ -15,10 +15,11 @@ public :
     RenderableCube(glm::vec4 color);
 
 
-    virtual void render(Context *context) override;
+    virtual void render(Context *context, glm::vec3 position) override;
 
     void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 0.8);
     void setColor(glm::vec4 c);
+    glm::vec4 getColor();
 
 private :
     void buildModelData(Context *context);

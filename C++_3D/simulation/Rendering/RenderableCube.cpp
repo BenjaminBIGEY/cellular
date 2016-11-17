@@ -21,11 +21,11 @@ RenderableCube::RenderableCube(GLfloat r, GLfloat g, GLfloat b, GLfloat a) : Ren
 
 RenderableCube::RenderableCube(glm::vec4 c) : RenderableCube(c.r, c.g, c.b, c.a) {}
 
-void RenderableCube::render(Context *context) {
+void RenderableCube::render(Context *context, glm::vec3 position) {
     if (!_compiled) buildModelData(context);
 
     //Translation
-    glm::mat4x4 model = glm::translate(glm::mat4x4(), glm::tvec3<float>(this->_x, this->_y, this->_z));
+    glm::mat4x4 model = glm::translate(glm::mat4x4(), glm::tvec3<float>(position));
     context->program().setUniformMatrix4((GLchar*)"model", model);
 
     // Wood shininess
@@ -216,4 +216,8 @@ void RenderableCube::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
 
 void RenderableCube::setColor(glm::vec4 c) {
     setColor(c.r, c.g, c.b, c.a);
+}
+
+glm::vec4 RenderableCube::getColor() {
+    return glm::vec4(_r, _g, _b, _a);
 }

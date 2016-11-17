@@ -5,6 +5,7 @@
 #ifndef C_3D_UNIT_H
 #define C_3D_UNIT_H
 
+#include <glm/detail/type_vec3.hpp>
 #include <glm/detail/type_vec4.hpp>
 
 enum Color {
@@ -30,7 +31,7 @@ public:
     Color operator++(int);
 
     // Get float values of each Color // TODO change with the ant rules
-    static glm::vec4 getColor(Color color, float alpha = 0.8f);
+    static glm::vec3 getColor(Color color);
 
 private:
     Color _color;
