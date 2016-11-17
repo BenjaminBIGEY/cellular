@@ -5,9 +5,10 @@
 #ifndef C_3D_ANT_H
 #define C_3D_ANT_H
 
-#include "Unit.h"
 #include <array>
-#include <glm/glm.hpp>
+
+#include "../CubeMap.h"
+#include "Unit.h"
 
 /*********
  * RULES *
@@ -53,9 +54,9 @@ enum Orientation {
 
 class Ant {
 public:
-    Ant(glm::vec3 position, Orientation orientation);
+    Ant(Vector3 position, Orientation orientation);
 
-    glm::vec3 getPosition();
+    Vector3 getPosition();
     Orientation getOrientation();
 
     void update(Color color);
@@ -65,7 +66,7 @@ protected:
     void move(int incrementing);
 
 private:
-    glm::vec3 _position;
+    Vector3 _position;
 
     Orientation _orientation;
 };

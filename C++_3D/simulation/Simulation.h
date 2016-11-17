@@ -6,6 +6,7 @@
 #define LANGTON3D_SIMULATION_H
 
 #include <unistd.h>
+#include <vector>
 
 #include "Grid3D.h"
 #include "Rendering/Context.h"
@@ -33,17 +34,20 @@ private:
 };
 
 
+const float ALPHA_DEFAULT = 0.8f;
+
 class Simulation : public EventListener {
+
 public:
     Simulation(Color colorInit = (Color)0, float alpha = ALPHA_DEFAULT);
     ~Simulation();
     void addAnt(int x, int y, int z);
-    void addAnt(glm::vec3 position);
+    void addAnt(Vector3 position);
 
     void start(int fps = 60);
 
     void setColor(int x, int y, int z, Color color);
-    void setColor(glm::vec3 position, Color color);
+    void setColor(Vector3 position, Color color);
 
     // change alpha component for each cube at the argument color
     void setAlpha(Color color);
@@ -74,8 +78,6 @@ private:
     int _downKey;
     int _plusKey;
     int _minusKey;
-
-    const float ALPHA_DEFAULT = 0.8f;
 };
 
 

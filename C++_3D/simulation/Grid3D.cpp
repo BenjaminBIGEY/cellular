@@ -14,14 +14,14 @@ Grid3D::Grid3D(Color colorInit, float alpha) {
 }
 
 
-void Grid3D::createCube(glm::vec3 position) {
+void Grid3D::createCube(Vector3 position) {
     // Check if the cube exists
     if(_cubeMap.find(position) == _cubeMap.end()) {
         _cubeMap[position] = _cubesPtr[_colorInit];
     }
 }
 
-void Grid3D::update(glm::vec3 position, int count) {
+void Grid3D::update(Vector3 position, int count) {
     // No existing cube : we create it
     if(_cubeMap.find(position) == _cubeMap.end()) {
         createCube(position);
@@ -39,7 +39,7 @@ void Grid3D::render(Context *context) {
     }
 }
 
-Color Grid3D::getColor(glm::vec3 pos) {
+Color Grid3D::getColor(Vector3 pos) {
     if(_cubeMap.find(pos) != _cubeMap.end())
         return _cubeMap[pos]->_color;
 
@@ -47,7 +47,7 @@ Color Grid3D::getColor(glm::vec3 pos) {
     return _colorInit;
 }
 
-void Grid3D::setColor(glm::vec3 pos, Color color) {
+void Grid3D::setColor(Vector3 pos, Color color) {
     _cubeMap[pos] = _cubesPtr[(int)color];
 }
 

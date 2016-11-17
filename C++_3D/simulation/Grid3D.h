@@ -18,15 +18,15 @@ public:
     Grid3D(Color colorInit, float alpha);
     ~Grid3D() {};
 
-    void createCube(glm::vec3 position);
+    void createCube(Vector3 position);
 
-    void update(glm::vec3 position, int count);
+    void update(Vector3 position, int count);
 
     void render(Context* context);
 
-    Color getColor(glm::vec3 position);
+    Color getColor(Vector3 position);
 
-    void setColor(glm::vec3 position, Color color);
+    void setColor(Vector3 position, Color color);
 
     void setAlpha(Color color, float alpha);
 

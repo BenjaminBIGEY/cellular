@@ -14,22 +14,37 @@
 
 
 struct Cube;
-class Vec3Comparator;
+struct Vector3;
 
-typedef std::map<glm::vec3, std::shared_ptr<Cube>, Vec3Comparator> CubeMap;
+
+typedef std::map<Vector3, std::shared_ptr<Cube>> CubeMap;
 typedef CubeMap::iterator CubeMapIterator;
 
+struct Vector3 {
+    Vector3(const int posX, const int posY, const int posZ);
 
-class Vec3Comparator {
-public:
-    bool operator()(const glm::vec3 & u, const glm::vec3 & v) const {
-        // distance egal beetween origin and u / v : comparison of x, y, z components
-        if(u.length() == v.length()) {
-            return u.x < v.x ? true : u.y < v.y ? true : u.z < v.z;
-        }
-        return u.length() < v.length();
-    }
+    int squareLength() const {return x*x + y*y + z*z;}
+
+    bool less(const Vector3 &other) const;
+
+    bool equal(const Vector3 &other) const;
+
+    Vector3& operator+=(const Vector3 &other);
+
+    glm::vec3 toGlmVec3() {return glm::vec3(x, y, z);}
+
+    int x, y, z;
 };
+
+constexpr bool operator==(Vector3 const& u, Vector3 const& v) {return u.equal(v);}
+constexpr bool operator!=(Vector3 const& u, Vector3 const& v) {return !(u==v);}
+constexpr bool operator< (Vector3 const& u, Vector3 const& v) {return u.less(v);}
+constexpr bool operator<=(Vector3 const& u, Vector3 const& v) {return u<v || u==v;}
+constexpr bool operator>=(Vector3 const& u, Vector3 const& v) {return !(u<v);}
+constexpr bool operator> (Vector3 const& u, Vector3 const& v) {return u>=v && u!=v;}
+//Vector3 operator+(Vector3 const& u, Vector3 const& v){Vector3 r=u; r+=v; return r;}
+
+
 
 struct Cube {
     static Color nextColor(Color color);
@@ -39,8 +54,7 @@ struct Cube {
          glm::vec3 diffuse  = glm::vec3(0.85f, 0.75f, 0.1f),
          glm::vec3 specular = glm::vec3(0.0f,  0.0f, 0.0f));
 
-    void render(Context *context, glm::vec3 position);
-
+    void render(Context *context, Vector3 position);
 
     std::shared_ptr<RenderableCube> _render = nullptr;
 

@@ -4,11 +4,11 @@
 
 #include "Ant.h"
 
-Ant::Ant(glm::vec3 position, Orientation orientation) : _position(position) {
+Ant::Ant(Vector3 position, Orientation orientation) : _position(position) {
     _orientation = orientation;
 }
 
-glm::vec3 Ant::getPosition() {
+Vector3 Ant::getPosition() {
     return _position;
 }
 

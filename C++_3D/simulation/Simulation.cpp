@@ -56,7 +56,7 @@ Simulation::~Simulation() {
 void Simulation::mainLoop() {
     // Update of the simulation
     for(int i = 0 ; i < _listAnts.size() ; i++) {
-        glm::vec3 pos = _listAnts[i]->getPosition();
+        Vector3 pos = _listAnts[i]->getPosition();
         _listAnts[i]->update(_grid->getColor(pos));
 
         _grid->update(pos, _count);
@@ -129,10 +129,10 @@ void Simulation::input() {
 }
 
 void Simulation::addAnt(int x, int y, int z) {
-    addAnt(glm::vec3(x, y, z));
+    addAnt(Vector3(x, y, z));
 }
 
-void Simulation::addAnt(glm::vec3 position) {
+void Simulation::addAnt(Vector3 position) {
     _grid->createCube(position);
 
     std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, Orientation::FRONT);
@@ -182,13 +182,13 @@ void Simulation::scrollCallback(GLFWwindow* window, double xoffset, double yoffs
 }
 
 void Simulation::setColor(int x, int y, int z, Color color) {
-    setColor(glm::vec3(x, y, z), color);
+    setColor(Vector3(x, y, z), color);
 }
 
-void Simulation::setColor(glm::vec3 position, Color color) {
+void Simulation::setColor(Vector3 position, Color color) {
     _grid->setColor(position, color);
 }
 
 void Simulation::setAlpha(Color color) {
-    _grid->setAlpha(color);
+    _grid->setAlpha(color, ALPHA_DEFAULT);
 }
