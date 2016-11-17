@@ -16,18 +16,17 @@
 
 class EventListener {
 public:
-    void init(Window * window);
+    void init(Window * mainWindow);
 
     virtual void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) = 0;
     virtual void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) = 0;
 
-    void addEventListener(std::shared_ptr<EventListener> event);
+    void setEventListener(EventListener* eventListener);
 /*
     static int getSizeListeners() {return (int)_listListeners.size();}
     static std::vector<std::shared_ptr<EventListener>> getListListener() {return _listListeners;}
 */
-    std::vector<std::shared_ptr<EventListener>> _listListeners;
-    static EventListener *lulz;
+    static EventListener *listener;
 protected:
     void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     void glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
@@ -71,6 +70,7 @@ private:
 
 
     int _count = 0;
+    bool _pause = false;
 
     // Controls
     int _rightKey;
@@ -79,6 +79,13 @@ private:
     int _downKey;
     int _plusKey;
     int _minusKey;
+
+    int _keyA; // +Y
+    int _keyZ; // +Z
+    int _keyE; // -Y
+    int _keyQ; // -X
+    int _keyS; // -Z
+    int _keyD; // +X
 };
 
 

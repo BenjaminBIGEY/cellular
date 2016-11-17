@@ -4,32 +4,30 @@
 
 #include "Simulation.h"
 
-EventListener* EventListener::lulz = NULL;
+EventListener* EventListener::listener = NULL;
 
-void EventListener::init(Window * window) {
-  //window->setKeyCallback(glfwKeyCallback);
-    EventListener::lulz = this;
-    window->setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
-              EventListener::lulz->glfwScrollCallback(window, xoffset, yoffset);
+void EventListener::init(Window * mainWindow) {
+    EventListener::listener = this;
+
+    mainWindow->setKeyCallback([](GLFWwindow* window, int key, int scancode, int action, int mods) {
+        EventListener::listener->glfwKeyCallback(window, key, scancode, action, mods);
+    });
+
+    mainWindow->setScrollCallback([](GLFWwindow* window, double xoffset, double yoffset) {
+        EventListener::listener->glfwScrollCallback(window, xoffset, yoffset);
     });
 }
 
 void EventListener::glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    //for(int i = 0 ; i < getSizeListeners() ; i++) {
-    //    _listListeners[i]->keyCallback(window, key, scancode, action, mods);
-    for (auto &listener : _listListeners) {
-        listener->keyCallback(window, key, scancode, action, mods);
-    }
+    listener->keyCallback(window, key, scancode, action, mods);
 }
 
 void EventListener::glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
-    for (auto &listener : _listListeners) {
-        listener->scrollCallback(window, xoffset, yoffset);
-    }
+    listener->scrollCallback(window, xoffset, yoffset);
 }
 
-void EventListener::addEventListener(std::shared_ptr<EventListener> event) {
-    _listListeners.push_back(event);
+void EventListener::setEventListener(EventListener* eventListener) {
+    listener = eventListener;
 }
 
 Simulation::Simulation(Color colorInit, float alpha) {
@@ -57,8 +55,8 @@ Simulation::Simulation(Color colorInit, float alpha) {
 
     _scene->setLight(light);
 
-    std::shared_ptr<EventListener> event(this);
-    addEventListener(event);
+    //EventListener* event = this;
+    setEventListener(this);
 }
 
 Simulation::~Simulation() {
@@ -66,14 +64,16 @@ Simulation::~Simulation() {
 }
 
 void Simulation::mainLoop() {
-    // Update of the simulation
-    for(int i = 0 ; i < _listAnts.size() ; i++) {
-        Vector3 pos = _listAnts[i]->getPosition();
-        _listAnts[i]->update(_grid->getColor(pos));
+    if(!_pause) {
+        // Update of the simulation
+        for (int i = 0; i < _listAnts.size(); i++) {
+            Vector3 pos = _listAnts[i]->getPosition();
+            _listAnts[i]->update(_grid->getColor(pos));
 
-        _grid->update(pos, _count);
+            _grid->update(pos);
+        }
+        _count++;
     }
-    _count++;
 
     // Update of the display
     _window->setupFrame();
@@ -116,7 +116,7 @@ void Simulation::input() {
     createControlKeys();
 
     if(cameraUp.x == 0 && cameraUp.y == 0) {
-        /// Arrow keys
+        /// Arrow keys : rotation control
         if(_rightKey == GLFW_PRESS && _leftKey != GLFW_PRESS) {
             _scene->getCamera().rotateZ(180.0f / 70.0f);
         } else if(_leftKey == GLFW_PRESS && _rightKey != GLFW_PRESS) {
@@ -129,12 +129,40 @@ void Simulation::input() {
             _scene->getCamera().rotateUpDown(-180.0f / 70.0f);
         }
 
-        /// Plus and Minus keys
-        if(_plusKey == GLFW_PRESS && _minusKey != GLFW_PRESS) {
+        /// Plus and Minus keys : zoom control
+        /*if(_plusKey == GLFW_PRESS && _minusKey != GLFW_PRESS) {
             _scene->getCamera().zoom(0.5f);
         } else if(_minusKey == GLFW_PRESS && _plusKey != GLFW_PRESS) {
             _scene->getCamera().zoom(-0.5f);
+        }*/
+
+        /// ZQSD keys : traveling control
+        glm::vec3 eyePos = _scene->getCamera().getEye();
+        float duration = 0.2f;
+        if(_keyD == GLFW_PRESS && _keyQ != GLFW_PRESS) {
+            _listAnts[0]->setOrientation(Orientation::RIGHT);
+            //_scene->getCamera().travelEye((eyePos + glm::vec3(0, 1, 0)), duration);
+        } else if(_keyQ == GLFW_PRESS && _keyD != GLFW_PRESS) {
+            _listAnts[0]->setOrientation(Orientation::LEFT);
+            //_scene->getCamera().travelEye((eyePos + glm::vec3(0, -1, 0)), duration);
         }
+
+        if(_keyZ == GLFW_PRESS && _keyS != GLFW_PRESS) {
+            _listAnts[0]->setOrientation(Orientation::UP);
+            //_scene->getCamera().travelEye((eyePos + glm::vec3(1, 0, 0)), duration);
+        } else if(_keyS == GLFW_PRESS && _keyZ != GLFW_PRESS) {
+            _listAnts[0]->setOrientation(Orientation::DOWN);
+            //_scene->getCamera().travelEye((eyePos + glm::vec3(-1, 0, 0)), duration);
+        }
+
+        if(_keyA == GLFW_PRESS && _keyE != GLFW_PRESS) {
+            _listAnts[0]->setOrientation(Orientation::FRONT);
+            //_scene->getCamera().travelEye((eyePos + glm::vec3(0, 0, 1)), duration);
+        } else if(_keyE == GLFW_PRESS && _keyA != GLFW_PRESS) {
+            _listAnts[0]->setOrientation(Orientation::BACK);
+            //_scene->getCamera().travelEye((eyePos + glm::vec3(0, 0, -1)), duration);
+        }
+
     } else if(cameraUp.z == 0) {
         // TODO
     }
@@ -156,18 +184,29 @@ void Simulation::createWindow() {
 
     EventListener::init(_window.get());
 
-    // Set the required callback functions
-    //_window->setKeyCallback(EventListener::glfwKeyCallback);
-    //_window->setScrollCallback(glfwScrollCallback);
+    
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 }
 
 void Simulation::createControlKeys() {
+    /// Rotation control
     _rightKey = glfwGetKey(_window->window(), GLFW_KEY_RIGHT);
-    _leftKey = glfwGetKey(_window->window(), GLFW_KEY_LEFT);
-    _upKey = glfwGetKey(_window->window(), GLFW_KEY_UP);
-    _downKey = glfwGetKey(_window->window(), GLFW_KEY_DOWN);
+    _leftKey  = glfwGetKey(_window->window(), GLFW_KEY_LEFT);
+    _upKey    = glfwGetKey(_window->window(), GLFW_KEY_UP);
+    _downKey  = glfwGetKey(_window->window(), GLFW_KEY_DOWN);
+
+    /// Zoom control
+    //_plusKey = glfwGetKey(_window->window(), GLFW_KEY_PLUS);
+    //_minusKey = glfwGetKey(_window->window(), GLFW_KEY_MINUS);
+
+    /// Traveling control
+    _keyA = glfwGetKey(_window->window(), GLFW_KEY_A);
+    _keyZ = glfwGetKey(_window->window(), GLFW_KEY_Z);
+    _keyE = glfwGetKey(_window->window(), GLFW_KEY_E);
+    _keyQ = glfwGetKey(_window->window(), GLFW_KEY_Q);
+    _keyS = glfwGetKey(_window->window(), GLFW_KEY_S);
+    _keyD = glfwGetKey(_window->window(), GLFW_KEY_D);
 }
 
 /*
@@ -175,10 +214,11 @@ void Simulation::createControlKeys() {
  */
 void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
 
-    if (action == GLFW_PRESS) {
-        if (key == GLFW_KEY_ESCAPE)
+    if(action == GLFW_PRESS) {
+        if(key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, GL_TRUE);
-        _scene->getCamera().rotateUpDown(50.0f);
+        else if(key == GLFW_KEY_SPACE)
+            _pause = !_pause;
         /*else if (key == GLFW_KEY_0) {
             auto traveling = std::make_unique<Traveling>(
                     _scene->getCamera(), 0, 0, 30, 0, 0, 0, 0, 1, 0

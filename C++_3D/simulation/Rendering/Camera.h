@@ -64,6 +64,7 @@ public :
      * position indiquée. Le déplacement dure le nombre de secondes
      * passé en paramètres. */
     void travelEye(float eyeX, float eyeY, float eyeZ, float seconds);
+    void travelEye(glm::vec3 eyePosition, float seconds);
 
     /** Indique si la caméra est actuellement en cours de
      * déplacement. */

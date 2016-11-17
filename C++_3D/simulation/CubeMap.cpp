@@ -29,12 +29,6 @@ Vector3& Vector3::operator+=(const Vector3 &other) {
 
     return *this;
 }
-/*
-Vector3 CubeMap::operator+(Vector3 const& u, Vector3 const& v) {
-    Vector3 result = u;
-    result += v;
-    return result;
-}*/
 
 Color Cube::nextColor(Color color) {
     Color next_color = (Color)((int)color + 1);

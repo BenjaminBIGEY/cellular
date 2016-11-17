@@ -20,7 +20,7 @@ public:
 
     void createCube(Vector3 position);
 
-    void update(Vector3 position, int count);
+    void update(Vector3 position);
 
     void render(Context* context);
 

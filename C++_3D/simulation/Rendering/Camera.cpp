@@ -172,6 +172,10 @@ void Camera::travelEye(float eyeX, float eyeY, float eyeZ, float seconds) {
     this->traveling(traveling);
 }
 
+void Camera::travelEye(glm::vec3 eyePosition, float seconds) {
+    travelEye(eyePosition.x, eyePosition.y, eyePosition.z, seconds);
+}
+
 void Camera::traveling(std::unique_ptr<Traveling> &traveling) {
     this->_traveling = std::move(traveling);
 }

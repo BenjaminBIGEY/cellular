@@ -57,7 +57,9 @@ public:
     Ant(Vector3 position, Orientation orientation);
 
     Vector3 getPosition();
+
     Orientation getOrientation();
+    void setOrientation(Orientation orientation);
 
     void update(Color color);
 

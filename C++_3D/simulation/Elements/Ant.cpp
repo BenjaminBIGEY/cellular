@@ -16,6 +16,10 @@ Orientation Ant::getOrientation() {
     return _orientation;
 }
 
+void Ant::setOrientation(Orientation orientation) {
+    _orientation = orientation;
+}
+
 // TODO
 void Ant::turn(Color color) {
     /*switch(ANT_RULES[(int)color].rotation) {

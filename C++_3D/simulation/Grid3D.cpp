@@ -10,7 +10,9 @@ Grid3D::Grid3D(Color colorInit, float alpha) {
     // Construction of each cube with the specific color
     for(int i = 0 ; i < Color::NBR ; i++) {
         _cubesPtr[i] = std::make_shared<Cube>((Color)i, alpha);
+        std::cout  << _cubesPtr[i] << "  ";
     }
+    std::cout << "\n\n\n";
 }
 
 
@@ -21,12 +23,13 @@ void Grid3D::createCube(Vector3 position) {
     }
 }
 
-void Grid3D::update(Vector3 position, int count) {
+void Grid3D::update(Vector3 position) {
     // No existing cube : we create it
     if(_cubeMap.find(position) == _cubeMap.end()) {
         createCube(position);
     } else {
-        _cubeMap[position] = _cubesPtr[(int)Cube::nextColor(getColor(position))];
+        setColor(position, Cube::nextColor(getColor(position)));
+        //_cubeMap[position] = _cubesPtr[(int)Cube::nextColor(getColor(position))];
     }
 }
 
@@ -40,10 +43,10 @@ void Grid3D::render(Context *context) {
 }
 
 Color Grid3D::getColor(Vector3 pos) {
-    if(_cubeMap.find(pos) != _cubeMap.end())
+    if(_cubeMap.find(pos) != _cubeMap.end()) {
         return _cubeMap[pos]->_color;
+    }
 
-    std::cerr << "ERROR : the unit at ("  << pos.x << "," << pos.y << "," << pos.z << ") position doesn't exists" << std::endl;
     return _colorInit;
 }
 
