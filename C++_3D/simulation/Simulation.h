@@ -35,13 +35,18 @@ private:
 
 class Simulation : public EventListener {
 public:
-    Simulation(int sizeX, int sizeY, int sizeZ, Color colorInit = (Color)0);
+    Simulation(Color colorInit = (Color)0, float alpha = ALPHA_DEFAULT);
     ~Simulation();
     void addAnt(int x, int y, int z);
+    void addAnt(glm::vec3 position);
 
     void start(int fps = 60);
 
     void setColor(int x, int y, int z, Color color);
+    void setColor(glm::vec3 position, Color color);
+
+    // change alpha component for each cube at the argument color
+    void setAlpha(Color color);
 
 private:
     void mainLoop();
@@ -69,6 +74,8 @@ private:
     int _downKey;
     int _plusKey;
     int _minusKey;
+
+    const float ALPHA_DEFAULT = 0.8f;
 };
 
 

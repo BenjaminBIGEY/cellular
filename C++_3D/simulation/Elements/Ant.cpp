@@ -4,12 +4,12 @@
 
 #include "Ant.h"
 
-Ant::Ant(int x, int y, int z, Orientation orientation) : _pos{x, y, z} {
+Ant::Ant(glm::vec3 position, Orientation orientation) : _position(position) {
     _orientation = orientation;
 }
 
 glm::vec3 Ant::getPosition() {
-    return _pos;
+    return _position;
 }
 
 Orientation Ant::getOrientation() {
@@ -27,22 +27,22 @@ void Ant::turn(Color color) {
 void Ant::move(int incrementing) {
     switch (getOrientation()) {
         case FRONT:
-            _pos.y+=incrementing;
+            _position.y+=incrementing;
             break;
         case RIGHT:
-            _pos.x+=incrementing;
+            _position.x+=incrementing;
             break;
         case BACK:
-            _pos.y-=incrementing;
+            _position.y-=incrementing;
             break;
         case LEFT:
-            _pos.x-=incrementing;
+            _position.x-=incrementing;
             break;
         case UP:
-            _pos.z+=incrementing;
+            _position.z+=incrementing;
             break;
         case DOWN:
-            _pos.z-=incrementing;
+            _position.z-=incrementing;
             break;
     }
 }

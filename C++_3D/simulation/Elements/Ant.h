@@ -53,7 +53,7 @@ enum Orientation {
 
 class Ant {
 public:
-    Ant(int x, int y, int z, Orientation orientation);
+    Ant(glm::vec3 position, Orientation orientation);
 
     glm::vec3 getPosition();
     Orientation getOrientation();
@@ -65,7 +65,7 @@ protected:
     void move(int incrementing);
 
 private:
-    glm::vec3 _pos;
+    glm::vec3 _position;
 
     Orientation _orientation;
 };
