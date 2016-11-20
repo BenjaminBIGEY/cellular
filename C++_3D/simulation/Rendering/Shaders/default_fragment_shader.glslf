@@ -62,5 +62,6 @@ void main() {
 
     // Final color (after gamma correction)
     vec3 gamma = vec3(1.0/2.2);
-    finalColor = vec4(pow(linearColor/numLights, gamma), surfaceColor.a);
+    //finalColor = vec4(pow(linearColor/numLights, gamma), surfaceColor.a);
+    finalColor = surfaceColor;
 }

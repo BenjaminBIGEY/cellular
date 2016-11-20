@@ -17,8 +17,8 @@
 // Rule of each color : ant turn at left or right after the colored square?
 enum Move {
     GO_FRONT,
-    GO_RIGHT,
     GO_BACK,
+    GO_RIGHT,
     GO_LEFT,
     GO_UP,
     GO_DOWN
@@ -45,8 +45,8 @@ const std::array<Rule, (int)Color::NBR> ANT_RULES = {{
 // Orientation of the ant at the instant t
 enum Orientation {
     FRONT = 0,  // +Y
-    RIGHT,      // +X
     BACK,       // -Y
+    RIGHT,      // +X
     LEFT,       // -X
     UP,         // +Z
     DOWN        // -Z
