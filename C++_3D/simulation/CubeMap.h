@@ -23,8 +23,6 @@ typedef CubeMap::iterator CubeMapIterator;
 struct Vector3 {
     Vector3(const int posX, const int posY, const int posZ);
 
-    int squareLength() const {return x*x + y*y + z*z;}
-
     bool less(const Vector3 &other) const;
 
     bool equal(const Vector3 &other) const;
@@ -42,17 +40,13 @@ constexpr bool operator< (Vector3 const& u, Vector3 const& v) {return u.less(v);
 constexpr bool operator<=(Vector3 const& u, Vector3 const& v) {return u<v || u==v;}
 constexpr bool operator>=(Vector3 const& u, Vector3 const& v) {return !(u<v);}
 constexpr bool operator> (Vector3 const& u, Vector3 const& v) {return u>=v && u!=v;}
-//Vector3 operator+(Vector3 const& u, Vector3 const& v){Vector3 r=u; r+=v; return r;}
 
 
 
 struct Cube {
     static Color nextColor(Color color);
 
-    Cube(Color color, float alpha,
-         glm::vec3 ambient  = glm::vec3(0.85f, 0.25f, 0.1f),
-         glm::vec3 diffuse  = glm::vec3(0.85f, 0.75f, 0.1f),
-         glm::vec3 specular = glm::vec3(0.0f,  0.0f, 0.0f));
+    Cube(Color color, float alpha);
 
     void render(Context *context, Vector3 position);
 

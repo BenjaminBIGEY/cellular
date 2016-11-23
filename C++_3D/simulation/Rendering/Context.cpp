@@ -6,8 +6,6 @@
 #include <glad/glad.h>
 
 #include "Context.h"
-#include "Light.h"
-#include "Material.h"
 #include "Shader.h"
 #include "Program.h"
 
@@ -25,14 +23,6 @@ void Context::setWindow(GLFWwindow *window) {
 
 void Context::getWindowDimensions(int &width, int &height) {
     glfwGetFramebufferSize(this->_window, &width, &height);
-}
-
-void Context::pushLight(Light &light) {
-    light.pushLight(this);
-}
-
-void Context::pushMaterial(Material &material) {
-    material.pushMaterial(this);
 }
 
 void Context::setCurrentProgram(std::string currentProgramID) {

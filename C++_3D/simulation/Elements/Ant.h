@@ -31,23 +31,23 @@ struct Rule {
 };
 
 const std::array<Rule, (int)Color::NBR> ANT_RULES = {{
-        Rule{Color::WHITE, GO_DOWN, 1},
-        Rule{Color::BLACK, GO_RIGHT, 1},
-        Rule{Color::GREEN, GO_LEFT, 1},
+        Rule{Color::WHITE, GO_LEFT, 1},
+        Rule{Color::RED, GO_RIGHT, 1},
+        /*Rule{Color::GREEN, GO_LEFT, 1},
         Rule{Color::RED, GO_RIGHT, 1},
         Rule{Color::BLUE, GO_BACK, 1},
         Rule{Color::YELLOW, GO_UP, 1},
-        Rule{Color::ORANGE, GO_FRONT, 1},
+        Rule{Color::ORANGE, GO_FRONT, 1},*/
 }};
 
 /************************************************************************/
 
 // Orientation of the ant at the instant t
 enum Orientation {
-    FRONT = 0,  // +Y
-    BACK,       // -Y
-    RIGHT,      // +X
-    LEFT,       // -X
+    FRONT = 0,  // +X
+    BACK,       // -X
+    RIGHT,      // +Y
+    LEFT,       // -Y
     UP,         // +Z
     DOWN        // -Z
 };

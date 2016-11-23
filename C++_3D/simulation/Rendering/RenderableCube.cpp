@@ -25,14 +25,9 @@ void RenderableCube::render(Context *context, glm::vec3 position) {
     if (!_compiled) buildModelData(context);
 
     //Translation
-    glm::mat4x4 model = glm::translate(glm::mat4x4(), glm::tvec3<float>(position));
+    glm::mat4x4 model = glm::translate(glm::mat4x4(), glm::tvec3<float>(position * glm::vec3(2)));
     context->program().setUniformMatrix4((GLchar*)"model", model);
 
-    // Wood shininess
-    context->program().setUniform1f((GLchar*)"materialShininess", 80.0);
-    context->program().setUniform3f((GLchar*)"materialSpecularColor", 1.0f, 1.0f, 1.0f);
-
-    context->pushMaterial(this->_material);
 
     glBindVertexArray(this->_gVAO);
 
@@ -51,12 +46,10 @@ void RenderableCube::buildModelData(Context *context) {
     const int size = nbrFaces * trianglePerFace * vertPerTriangle;
 
     const int floatPerVert = 3;
-    const int floatPerNorm = 3;
     const int floatPerColor = 4;
 
     // Calculation of points on the cube
     const int vertBufferSize = floatPerVert * size;
-    const int normBufferSize = floatPerNorm * size;
     const int colorBufferSize = floatPerColor * size;
 
 
@@ -111,56 +104,6 @@ void RenderableCube::buildModelData(Context *context) {
             1.0f,  1.0f,  1.0f
     };
 
-    const GLfloat normals[normBufferSize] = {
-            //    Normal
-            // bottom
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-            0.0f, -1.0f, 0.0f,
-
-            // top
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-
-            // front
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-
-            // back
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-            0.0f, 0.0f, -1.0f,
-
-            // left
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-            -1.0f, 0.0f, 0.0f,
-
-            // right
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f
-    };
 
     GLfloat* colors = new GLfloat[colorBufferSize];
     for(int i = 0 ; i < colorBufferSize ; i++) {
@@ -179,14 +122,6 @@ void RenderableCube::buildModelData(Context *context) {
         glEnableVertexAttribArray((GLuint)context->program().attrib("vert"));
         glVertexAttribPointer((GLuint)context->program().attrib("vert"), 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 
-    // Normals
-    glBindBuffer(GL_ARRAY_BUFFER, _normalBuffer);
-        glBufferData(GL_ARRAY_BUFFER, normBufferSize * sizeof(GLfloat), normals, GL_STATIC_DRAW);
-
-        glEnableVertexAttribArray((GLuint)context->program().attrib("vertNormal"));
-        glVertexAttribPointer((GLuint)context->program().attrib("vertNormal"), 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-
-
     // Colors
     glBindBuffer(GL_ARRAY_BUFFER, _colorCoordBuffer);
         glBufferData(GL_ARRAY_BUFFER, colorBufferSize * sizeof(GLfloat), colors, GL_STATIC_DRAW);
@@ -198,13 +133,10 @@ void RenderableCube::buildModelData(Context *context) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    //delete[] normals;
     delete[] colors;
 
 
     _compiled = true;
-
-    //this->loadTextures();
 }
 
 void RenderableCube::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {

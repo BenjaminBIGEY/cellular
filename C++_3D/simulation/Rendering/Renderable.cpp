@@ -50,16 +50,10 @@ RenderableModel::~RenderableModel() {
 
 }
 
-void RenderableModel::setMaterial(Material &material) {
-    this->_material = material;
-    this->_compiled = false;
-}
-
 void RenderableModel::regenerateBuffers() {
     Renderable::regenerateBuffers();
 
     glGenBuffers(1, &this->_vertexBuffer);
-    glGenBuffers(1, &this->_normalBuffer);
     glGenBuffers(1, &this->_colorCoordBuffer);
 }
 
@@ -69,11 +63,6 @@ void RenderableModel::deleteBuffers() {
     if (this->_vertexBuffer != 0) {
         glDeleteBuffers(1, &this->_vertexBuffer);
         this->_vertexBuffer = 0;
-    }
-
-    if (this->_normalBuffer != 0) {
-        glDeleteBuffers(1, &this->_normalBuffer);
-        this->_normalBuffer = 0;
     }
 
     if (this->_colorCoordBuffer != 0) {

@@ -3,7 +3,6 @@
 //
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 
 #include "Scene.h"
@@ -29,10 +28,5 @@ void Scene::render(Context *context) {
 
     _grid->render(context);
 
-    context->pushLight(_light);
     context->program().stopUsing();
-}
-
-void Scene::setLight(Light &light) {
-    this->_light = light;
 }

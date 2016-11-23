@@ -4,6 +4,8 @@
 
 #include "Grid3D.h"
 
+//const std::shared_ptr<Cube> _cubesPtr[Color::NBR];
+
 Grid3D::Grid3D(Color colorInit, float alpha) {
     _colorInit = colorInit;
 
@@ -29,7 +31,6 @@ void Grid3D::update(Vector3 position) {
         createCube(position);
     } else {
         setColor(position, Cube::nextColor(getColor(position)));
-        //_cubeMap[position] = _cubesPtr[(int)Cube::nextColor(getColor(position))];
     }
 }
 
@@ -56,4 +57,20 @@ void Grid3D::setColor(Vector3 pos, Color color) {
 
 void Grid3D::setAlpha(Color color, float alpha) {
     _cubesPtr[(int)color]->setAlpha(alpha);
+}
+
+void Grid3D::debug() {
+    std::cout << "cube blanc : " << _cubesPtr[0] << "\ncube rouge : " << _cubesPtr[1] << "\n\n";
+    CubeMapIterator it;
+    for(it = _cubeMap.begin() ; it != _cubeMap.end() ; ++it) {
+        // first <=> key : glm::vec3 (cubePosition)
+        // second <=> mapped_type : std::shared_ptr<Cube>
+        std::cout << "(" << it->first.x << "," << it->first.y << "," << it->first.z << ") contient ";
+        if(it->second == _cubesPtr[0])
+            std::cout << "BLANC\n";
+        else if(it->second == _cubesPtr[1])
+            std::cout << "ROUGE\n";
+        else
+            std::cerr << "NI ROUGE NI BLANC\n\n";
+      }
 }

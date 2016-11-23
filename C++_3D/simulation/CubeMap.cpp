@@ -3,6 +3,7 @@
 //
 
 #include "CubeMap.h"
+#include <iostream>
 
 Vector3::Vector3(const int posX, const int posY, const int posZ) {
     x = posX;
@@ -11,11 +12,7 @@ Vector3::Vector3(const int posX, const int posY, const int posZ) {
 }
 
 bool Vector3::less(const Vector3 &other) const {
-    if(this->squareLength() == other.squareLength()) {
-        // distance egal beetween origin and u / v : comparison of x, y, z components
-        return this->x < other.x ? true : this->y < other.y ? true : this->z < other.z;
-    }
-    return this->squareLength() < other.squareLength();
+    return std::tie(this->x, this->y, this->z) < std::tie(other.x, other.y, other.z);
 }
 
 bool Vector3::equal(const Vector3 &other) const {
@@ -40,14 +37,11 @@ Color Cube::nextColor(Color color) {
     }
 }
 
-Cube::Cube(Color color, float alpha, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) {
+Cube::Cube(Color color, float alpha) {
     _color = color;
 
     // Graphic part
     _render = std::make_shared<RenderableCube>(glm::vec4(Unit::getColor(color), alpha));
-    _render->getMaterial().setAmbient(ambient.x, ambient.y, ambient.z);
-    _render->getMaterial().setDiffuse(diffuse.x, diffuse.y, diffuse.z);
-    _render->getMaterial().setSpecular(specular.x, specular.y, specular.z);
 }
 
 void Cube::render(Context *context, Vector3 position) {

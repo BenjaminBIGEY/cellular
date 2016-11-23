@@ -15,12 +15,12 @@ Color Unit::getColor() {
 glm::vec3 Unit::getColor(Color color) {
     switch(color) {
         case Color::WHITE: return glm::vec3(1.0, 1.0, 1.0);
-        case Color::BLACK: return glm::vec3(0, 0, 0);
-        case Color::GREEN: return glm::vec3(0, 1, 0);
+        case Color::RED: return glm::vec3(1, 0, 0);
+        /*case Color::GREEN: return glm::vec3(0, 1, 0);
         case Color::RED: return glm::vec3(1, 0, 0);
         case Color::BLUE: return glm::vec3(0, 0, 1);
         case Color::YELLOW: return glm::vec3(1, 1, 0);
-        case Color::ORANGE: return glm::vec3(1, 165.0f/255, 0);
+        case Color::ORANGE: return glm::vec3(1, 165.0f/255, 0);*/
         //case Color::MAGENTA: return glm::vec4(1, 0, 1, alpha);
         default: return glm::vec3(0, 0, 0); // black unit
     }

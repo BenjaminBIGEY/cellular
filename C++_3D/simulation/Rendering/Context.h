@@ -9,11 +9,8 @@
 #include <GLFW/glfw3.h>
 #include <memory>
 #include <map>
-#include "Program.h"
 
 class Program;
-class Light;
-class Material;
 
 class Context {
 
@@ -22,8 +19,6 @@ public :
     void setWindow(GLFWwindow * window);
     void getWindowDimensions(int &width, int &height);
 
-    void pushLight(Light &light);
-    void pushMaterial(Material &material);
 
     /** Charge le programme composé des shaders passés en paramètres.
      * @param vertexShader le chemin du vertex shader

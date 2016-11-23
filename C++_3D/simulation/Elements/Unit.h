@@ -10,14 +10,14 @@
 
 enum Color {
     WHITE = 0,
-    BLACK = 1,
-    GREEN = 2,
+    RED = 1,
+    /*GREEN = 2,
     RED = 3,
     BLUE = 4,
     YELLOW = 5,
-    ORANGE = 6,
+    ORANGE = 6,*/
 
-    NBR = 7,
+    NBR = 2,
 };
 
 class Unit {

@@ -6,7 +6,7 @@
 #define LANGTON3D_RENDERABLE_H
 
 
-#include "Material.h"
+#include <glad/glad.h>
 
 #ifndef BUFFER_OFFSET
 #define BUFFER_OFFSET(offset) ((char*)NULL + (offset))
@@ -41,11 +41,6 @@ public :
     RenderableModel();
     ~RenderableModel();
 
-    void setMaterial(Material &material);
-
-    Material & getMaterial() {
-        return this->_material;
-    }
 protected :
     virtual void deleteBuffers();
 
@@ -53,10 +48,7 @@ protected :
 
     // Fields
 
-    Material _material;
-
     GLuint _vertexBuffer = 0;
-    GLuint _normalBuffer = 0;
     GLuint _colorCoordBuffer = 0;
 };
 

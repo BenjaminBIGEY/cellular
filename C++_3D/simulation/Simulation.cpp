@@ -35,27 +35,6 @@ Simulation::Simulation(Color colorInit, float alpha) {
     _grid = std::make_shared<Grid3D>(colorInit, alpha);
     _scene = std::make_unique<Scene>(_grid);
 
-    Light light;
-    const glm::vec3 position[2] = {/*{10, 10, 10},
-                                  {0,  10, 10},
-                                  {10, 0,  10},
-                                  {10, 10, 0},
-                                  {0,  0,  10},
-                                  {0,  10, 0},*/
-                                  {10, 0, 0},
-                                  {0,  0,  0}};
-
-    glm::vec3 color(5, 5, 5); // strong white light
-    //glm::vec3 color(0.4, 0.3, 0.1) // weak yellowish light
-    GLfloat ambientCoeff = 0.06f; //0.2f or 1.0
-
-    for(auto pos : position) {
-        light.addLight(pos, color, ambientCoeff);
-    }
-
-    _scene->setLight(light);
-
-    //EventListener* event = this;
     setEventListener(this);
 }
 
@@ -84,15 +63,17 @@ void Simulation::mainLoop() {
         input();
     }
 
-
     _window->finalizeFrame();
 }
 
-void Simulation::start(int fps) {
+void Simulation::start(int updatePerSecond) {
+    _updatePerSecond = updatePerSecond;
     createWindow();
 
-    double frameRate = 100.0 / fps; // 1000 ms / frames per seconds
+    //double frameRate = 100.0 / fps; // 1000 ms / frames per seconds
     double beginLoop(0), endLoop(0), timeElapsed(0);
+
+    _time1Update = 1 / _updatePerSecond;
 
     while(_window->isWindowOpened()) {
         beginLoop = glfwGetTime();
@@ -102,8 +83,9 @@ void Simulation::start(int fps) {
         // Maintenance of the good FPS
         endLoop = glfwGetTime();
         timeElapsed = endLoop - beginLoop;
-        if(timeElapsed < frameRate)
-            usleep(frameRate - timeElapsed);
+        //usleep(5000000);
+        if(timeElapsed < _time1Update)
+            usleep(_time1Update - timeElapsed);
         else
             std::cerr << "FPS low : " << 1.0 / timeElapsed << '\n';
     }
@@ -128,13 +110,6 @@ void Simulation::input() {
         } else if(_downKey == GLFW_PRESS && _upKey != GLFW_PRESS) {
             _scene->getCamera().rotateUpDown(-180.0f / 70.0f);
         }
-
-        /// Plus and Minus keys : zoom control
-        /*if(_plusKey == GLFW_PRESS && _minusKey != GLFW_PRESS) {
-            _scene->getCamera().zoom(0.5f);
-        } else if(_minusKey == GLFW_PRESS && _plusKey != GLFW_PRESS) {
-            _scene->getCamera().zoom(-0.5f);
-        }*/
 
         /// ZQSD keys : traveling control
         glm::vec3 eyePos = _scene->getCamera().getEye();
@@ -177,13 +152,13 @@ void Simulation::addAnt(Vector3 position) {
 
     std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, Orientation::FRONT);
     _listAnts.push_back(std::move(ant));
+    _grid->setColor(position, (Color)1);
 }
 
 void Simulation::createWindow() {
     _window = std::make_unique<Window>();
 
     EventListener::init(_window.get());
-
 
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -195,10 +170,6 @@ void Simulation::createControlKeys() {
     _leftKey  = glfwGetKey(_window->window(), GLFW_KEY_LEFT);
     _upKey    = glfwGetKey(_window->window(), GLFW_KEY_UP);
     _downKey  = glfwGetKey(_window->window(), GLFW_KEY_DOWN);
-
-    /// Zoom control
-    //_plusKey = glfwGetKey(_window->window(), GLFW_KEY_PLUS);
-    //_minusKey = glfwGetKey(_window->window(), GLFW_KEY_MINUS);
 
     /// Traveling control
     _keyA = glfwGetKey(_window->window(), GLFW_KEY_A);
@@ -219,13 +190,42 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
             glfwSetWindowShouldClose(window, GL_TRUE);
         else if(key == GLFW_KEY_SPACE)
             _pause = !_pause;
-        /*else if (key == GLFW_KEY_0) {
-            auto traveling = std::make_unique<Traveling>(
-                    _scene->getCamera(), 0, 0, 30, 0, 0, 0, 0, 1, 0
-            );
-            traveling->setDuration(0.5f);
-            _scene->getCamera().traveling(traveling);
-        }*/
+        else if(key == GLFW_KEY_ENTER)
+            std::cout << "Time of simulation : " << _count << " steps." << std::endl;
+        else if(key == GLFW_KEY_9) {
+            _updatePerSecond += 500;
+            _time1Update = 1 / _updatePerSecond;
+        } else if(key == GLFW_KEY_8) {
+            _updatePerSecond += 100;
+            _time1Update = 1 / _updatePerSecond;
+        } else if(key == GLFW_KEY_7) {
+            _updatePerSecond += 50;
+            _time1Update = 1 / _updatePerSecond;
+        } else if(key == GLFW_KEY_6) {
+            _updatePerSecond += 10;
+            _time1Update = 1 / _updatePerSecond;
+        } else if(key == GLFW_KEY_5) {
+            _updatePerSecond += 1;
+            _time1Update = 1 / _updatePerSecond;
+        } else if(key == GLFW_KEY_4) {
+            _updatePerSecond -= 1;
+            _time1Update = 1 / _updatePerSecond;
+        } else if(key == GLFW_KEY_3) {
+            _updatePerSecond -= 10;
+            _time1Update = 1 / _updatePerSecond;
+        } else if(key == GLFW_KEY_2) {
+            _updatePerSecond -= 50;
+            _time1Update = 1 / _updatePerSecond;
+        } else if(key == GLFW_KEY_1) {
+            _updatePerSecond -= 100;
+            _time1Update = 1 / _updatePerSecond;
+        } else if(key == GLFW_KEY_0) {
+            _updatePerSecond -= 500;
+            _time1Update = 1 / _updatePerSecond;
+        }
+        else if(key == GLFW_KEY_X) {
+            _grid->debug();
+        }
     }
 }
 

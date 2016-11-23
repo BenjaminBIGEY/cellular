@@ -22,10 +22,7 @@ public:
     virtual void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) = 0;
 
     void setEventListener(EventListener* eventListener);
-/*
-    static int getSizeListeners() {return (int)_listListeners.size();}
-    static std::vector<std::shared_ptr<EventListener>> getListListener() {return _listListeners;}
-*/
+
     static EventListener *listener;
 protected:
     void glfwKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
@@ -43,7 +40,7 @@ public:
     void addAnt(int x, int y, int z);
     void addAnt(Vector3 position);
 
-    void start(int fps = 60);
+    void start(int updatePerSecond = 100);
 
     void setColor(int x, int y, int z, Color color);
     void setColor(Vector3 position, Color color);
@@ -70,6 +67,9 @@ private:
 
 
     int _count = 0;
+    int _updatePerSecond;
+    double _time1Update;
+
     bool _pause = false;
 
     // Controls

@@ -12,7 +12,6 @@
 #include "CubeMap.h"
 
 
-
 class Grid3D {
 public:
     Grid3D(Color colorInit, float alpha);
@@ -29,6 +28,11 @@ public:
     void setColor(Vector3 position, Color color);
 
     void setAlpha(Color color, float alpha);
+
+    void debug();
+
+    int getSize(){return _cubeMap.size();}
+    //static const std::shared_ptr<Cube> _cubesPtr[Color::NBR];
 
 private:
     // Container of the 3D grid of cubes
