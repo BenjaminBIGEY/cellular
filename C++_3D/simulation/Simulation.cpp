@@ -83,7 +83,6 @@ void Simulation::start(int updatePerSecond) {
         // Maintenance of the good FPS
         endLoop = glfwGetTime();
         timeElapsed = endLoop - beginLoop;
-        //usleep(5000000);
         if(timeElapsed < _time1Update)
             usleep(_time1Update - timeElapsed);
         else
@@ -143,14 +142,14 @@ void Simulation::input() {
     }
 }
 
-void Simulation::addAnt(int x, int y, int z) {
-    addAnt(Vector3(x, y, z));
+void Simulation::addAnt(int x, int y, int z, Orientation orientation) {
+    addAnt(Vector3(x, y, z), orientation);
 }
 
-void Simulation::addAnt(Vector3 position) {
+void Simulation::addAnt(Vector3 position, Orientation orientation) {
     _grid->createCube(position);
 
-    std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, Orientation::FRONT);
+    std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, orientation);
     _listAnts.push_back(std::move(ant));
     _grid->setColor(position, (Color)1);
 }
@@ -225,6 +224,9 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
         }
         else if(key == GLFW_KEY_X) {
             _grid->debug();
+        }
+        else if(key == GLFW_KEY_N) {
+            std::cout << "Composition of the grid : " << _grid->getSize() << " cubes.\n" << std::endl;
         }
     }
 }

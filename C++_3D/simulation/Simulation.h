@@ -37,8 +37,8 @@ class Simulation : public EventListener {
 public:
     Simulation(Color colorInit = (Color)0, float alpha = ALPHA_DEFAULT);
     ~Simulation();
-    void addAnt(int x, int y, int z);
-    void addAnt(Vector3 position);
+    void addAnt(int x, int y, int z, Orientation orientation = Orientation::FRONT);
+    void addAnt(Vector3 position, Orientation orientation = Orientation::FRONT);
 
     void start(int updatePerSecond = 100);
 
@@ -77,8 +77,6 @@ private:
     int _leftKey;
     int _upKey;
     int _downKey;
-    int _plusKey;
-    int _minusKey;
 
     int _keyA; // +Y
     int _keyZ; // +Z

@@ -22,51 +22,51 @@ void Ant::setOrientation(Orientation orientation) {
 
 void Ant::turn(Color color) {
     switch (ANT_RULES[(int) color].rotation) {
-        /*case Move::GO_FRONT:
-            switch(this->getOrientation()) {
+        case Move::GO_FRONT:
+            switch (this->getOrientation()) {
                 case Orientation::FRONT:
-                    this->setOrientation();
+                    this->setOrientation(DOWN);
                     break;
                 case Orientation::BACK:
-                    this->setOrientation();
+                    this->setOrientation(UP);
                     break;
                 case Orientation::RIGHT:
-                    this->setOrientation();
+                    this->setOrientation(FRONT);
                     break;
                 case Orientation::LEFT:
-                    this->setOrientation();
+                    this->setOrientation(BACK);
                     break;
                 case Orientation::UP:
-                    this->setOrientation();
+                    this->setOrientation(FRONT);
                     break;
                 case Orientation::DOWN:
-                    this->setOrientation();
+                    this->setOrientation(BACK);
                     break;
             }
             break;
 
         case Move::GO_BACK:
-            switch(this->getOrientation()) {
+            switch (this->getOrientation()) {
                 case Orientation::FRONT:
-                    this->setOrientation();
+                    this->setOrientation(UP);
                     break;
                 case Orientation::BACK:
-                    this->setOrientation();
+                    this->setOrientation(DOWN);
                     break;
                 case Orientation::RIGHT:
-                    this->setOrientation();
+                    this->setOrientation(BACK);
                     break;
                 case Orientation::LEFT:
-                    this->setOrientation();
+                    this->setOrientation(FRONT);
                     break;
                 case Orientation::UP:
-                    this->setOrientation();
+                    this->setOrientation(BACK);
                     break;
                 case Orientation::DOWN:
-                    this->setOrientation();
+                    this->setOrientation(FRONT);
                     break;
             }
-            break;*/
+            break;
 
         case Move::GO_RIGHT:
             switch (this->getOrientation()) {
@@ -82,12 +82,12 @@ void Ant::turn(Color color) {
                 case Orientation::LEFT:
                     this->setOrientation(FRONT);
                     break;
-                    /*case Orientation::UP:
-                        this->setOrientation();
-                        break;
-                    case Orientation::DOWN:
-                        this->setOrientation();
-                        break;*/
+                case Orientation::UP:
+                    this->setOrientation(RIGHT);
+                    break;
+                case Orientation::DOWN:
+                    this->setOrientation(LEFT);
+                    break;
             }
             break;
 
@@ -105,61 +105,60 @@ void Ant::turn(Color color) {
                 case Orientation::LEFT:
                     this->setOrientation(BACK);
                     break;
-                    /*case Orientation::UP:
-                        this->setOrientation();
-                        break;
-                    case Orientation::DOWN:
-                        this->setOrientation();
-                        break;*/
-            }
-            break;
-/*
-        case Move::GO_UP:
-            switch(this->getOrientation()) {
-                case Orientation::FRONT:
-                    this->setOrientation();
-                    break;
-                case Orientation::BACK:
-                    this->setOrientation();
-                    break;
-                case Orientation::RIGHT:
-                    this->setOrientation();
-                    break;
-                case Orientation::LEFT:
-                    this->setOrientation();
-                    break;
                 case Orientation::UP:
-                    this->setOrientation();
+                    this->setOrientation(LEFT);
                     break;
                 case Orientation::DOWN:
-                    this->setOrientation();
+                    this->setOrientation(RIGHT);
+                    break;
+            }
+            break;
+
+        case Move::GO_UP:
+            switch (this->getOrientation()) {
+                case Orientation::FRONT:
+                    this->setOrientation(UP);
+                    break;
+                case Orientation::BACK:
+                    this->setOrientation(DOWN);
+                    break;
+                case Orientation::RIGHT:
+                    this->setOrientation(UP);
+                    break;
+                case Orientation::LEFT:
+                    this->setOrientation(DOWN);
+                    break;
+                case Orientation::UP:
+                    this->setOrientation(LEFT);
+                    break;
+                case Orientation::DOWN:
+                    this->setOrientation(RIGHT);
                     break;
             }
             break;
 
         case Move::GO_DOWN:
-            switch(this->getOrientation()) {
+            switch (this->getOrientation()) {
                 case Orientation::FRONT:
-                    this->setOrientation();
+                    this->setOrientation(DOWN);
                     break;
                 case Orientation::BACK:
-                    this->setOrientation();
+                    this->setOrientation(UP);
                     break;
                 case Orientation::RIGHT:
-                    this->setOrientation();
+                    this->setOrientation(DOWN);
                     break;
                 case Orientation::LEFT:
-                    this->setOrientation();
+                    this->setOrientation(UP);
                     break;
                 case Orientation::UP:
-                    this->setOrientation();
+                    this->setOrientation(RIGHT);
                     break;
                 case Orientation::DOWN:
-                    this->setOrientation();
+                    this->setOrientation(LEFT);
                     break;
             }
             break;
-    }*/
     }
 }
 
