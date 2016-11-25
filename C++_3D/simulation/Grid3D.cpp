@@ -18,6 +18,10 @@ Grid3D::Grid3D(Color colorInit, float alpha) {
 }
 
 
+void Grid3D::clear() {
+    _cubeMap.clear();
+}
+
 void Grid3D::createCube(Vector3 position) {
     // Check if the cube exists
     if(_cubeMap.find(position) == _cubeMap.end()) {

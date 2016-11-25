@@ -12,6 +12,7 @@
 
 Context::Context(GLFWwindow *window) : _window(window) {
     loadProgram("default", "Shaders/default_vertex_shader.glslv", "Shaders/default_fragment_shader.glslf");
+    loadProgram("lighted", "Shaders/lighted_vertex_shader.glslv", "Shaders/lighted_fragment_shader.glslf");
 
     setCurrentProgram("default");
 }

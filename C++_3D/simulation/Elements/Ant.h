@@ -31,14 +31,14 @@ struct Rule {
 };
 
 const std::array<Rule, (int)Color::NBR> ANT_RULES = {{
-        Rule{Color::WHITE, GO_RIGHT, 1},
-        Rule{Color::RED, GO_LEFT, 1},
-        Rule{Color::GREEN, GO_RIGHT, 1},
-        Rule{Color::BLACK, GO_LEFT, 1},
+        Rule{Color::WHITE, GO_UP, 1},
+        Rule{Color::RED, GO_DOWN, 1},
+        Rule{Color::GREEN, GO_FRONT, 1},
+        Rule{Color::BLACK, GO_BACK, 1},
         Rule{Color::BLUE, GO_RIGHT, 1},
         Rule{Color::YELLOW, GO_LEFT, 1},
-        Rule{Color::ORANGE, GO_RIGHT, 1},
-        Rule{Color::MAGENTA, GO_LEFT, 1}
+        Rule{Color::ORANGE, GO_DOWN, 1},
+        Rule{Color::MAGENTA, GO_BACK, 1}
 }};
 
 /************************************************************************/

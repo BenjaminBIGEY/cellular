@@ -30,12 +30,34 @@ void EventListener::setEventListener(EventListener* eventListener) {
     listener = eventListener;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 Simulation::Simulation(Color colorInit, float alpha) {
     // Scene creation
     _grid = std::make_shared<Grid3D>(colorInit, alpha);
     _scene = std::make_unique<Scene>(_grid);
 
     setEventListener(this);
+
+    createWindow();
+}
+
+void Simulation::initialize() {
+    std::cout << "Initialization of the simulation" << std::endl;
+    _grid->clear();
+
+    _listAnts.clear();
+
+    for(auto antInfos : _antsPosition) {
+        Vector3 position = antInfos.first;
+        Orientation orientation = antInfos.second;
+
+        _grid->createCube(position);
+
+        std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, orientation);
+        _listAnts.push_back(std::move(ant));
+        _grid->setColor(position, (Color)((int)Color::NBR - 1));
+    }
 }
 
 Simulation::~Simulation() {
@@ -66,14 +88,13 @@ void Simulation::mainLoop() {
     _window->finalizeFrame();
 }
 
-void Simulation::start(int updatePerSecond) {
-    _updatePerSecond = updatePerSecond;
-    createWindow();
+void Simulation::start() {
+    _updateFrequency = DEFAULT_UPDATE_FREQUENCY;
+    initialize();
 
-    //double frameRate = 100.0 / fps; // 1000 ms / frames per seconds
     double beginLoop(0), endLoop(0), timeElapsed(0);
 
-    _time1Update = 1 / _updatePerSecond;
+    _time1Update = 1.0 / _updateFrequency;
 
     while(_window->isWindowOpened()) {
         beginLoop = glfwGetTime();
@@ -84,9 +105,10 @@ void Simulation::start(int updatePerSecond) {
         endLoop = glfwGetTime();
         timeElapsed = endLoop - beginLoop;
         if(timeElapsed < _time1Update)
-            usleep(_time1Update - timeElapsed);
-        else
-            std::cerr << "FPS low : " << 1.0 / timeElapsed << '\n';
+            usleep((_time1Update - timeElapsed) * 1000000);
+        std::cout << (_time1Update - timeElapsed) * 1000000 << '\n';
+       // else
+            //std::cerr << "FPS low : " << 1.0 / timeElapsed << '\n';
     }
 }
 
@@ -147,11 +169,7 @@ void Simulation::addAnt(int x, int y, int z, Orientation orientation) {
 }
 
 void Simulation::addAnt(Vector3 position, Orientation orientation) {
-    _grid->createCube(position);
-
-    std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, orientation);
-    _listAnts.push_back(std::move(ant));
-    _grid->setColor(position, (Color)1);
+    _antsPosition.push_back(std::make_pair(position, orientation));
 }
 
 void Simulation::createWindow() {
@@ -192,41 +210,56 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
         else if(key == GLFW_KEY_ENTER)
             std::cout << "Time of simulation : " << _count << " steps." << std::endl;
         else if(key == GLFW_KEY_9) {
-            _updatePerSecond += 500;
-            _time1Update = 1 / _updatePerSecond;
+            _updateFrequency += 500;
+            _time1Update = 1 / _updateFrequency;
         } else if(key == GLFW_KEY_8) {
-            _updatePerSecond += 100;
-            _time1Update = 1 / _updatePerSecond;
+            _updateFrequency += 100;
+            _time1Update = 1 / _updateFrequency;
         } else if(key == GLFW_KEY_7) {
-            _updatePerSecond += 50;
-            _time1Update = 1 / _updatePerSecond;
+            _updateFrequency += 50;
+            _time1Update = 1 / _updateFrequency;
         } else if(key == GLFW_KEY_6) {
-            _updatePerSecond += 10;
-            _time1Update = 1 / _updatePerSecond;
+            _updateFrequency += 10;
+            _time1Update = 1 / _updateFrequency;
         } else if(key == GLFW_KEY_5) {
-            _updatePerSecond += 1;
-            _time1Update = 1 / _updatePerSecond;
+            _updateFrequency += 1;
+            _time1Update = 1 / _updateFrequency;
         } else if(key == GLFW_KEY_4) {
-            _updatePerSecond -= 1;
-            _time1Update = 1 / _updatePerSecond;
+            _updateFrequency -= 1;
+            _time1Update = 1 / _updateFrequency;
         } else if(key == GLFW_KEY_3) {
-            _updatePerSecond -= 10;
-            _time1Update = 1 / _updatePerSecond;
+            _updateFrequency -= 10;
+            _time1Update = 1 / _updateFrequency;
         } else if(key == GLFW_KEY_2) {
-            _updatePerSecond -= 50;
-            _time1Update = 1 / _updatePerSecond;
+            _updateFrequency -= 50;
+            _time1Update = 1 / _updateFrequency;
         } else if(key == GLFW_KEY_1) {
-            _updatePerSecond -= 100;
-            _time1Update = 1 / _updatePerSecond;
+            _updateFrequency -= 100;
+            _time1Update = 1 / _updateFrequency;
         } else if(key == GLFW_KEY_0) {
-            _updatePerSecond -= 500;
-            _time1Update = 1 / _updatePerSecond;
+            _updateFrequency -= 500;
+            _time1Update = 1 / _updateFrequency;
         }
         else if(key == GLFW_KEY_X) {
             _grid->debug();
         }
         else if(key == GLFW_KEY_N) {
             std::cout << "Composition of the grid : " << _grid->getSize() << " cubes.\n" << std::endl;
+        }
+        else if(key == GLFW_KEY_BACKSPACE) {
+            initialize();
+        }
+        else if(key == GLFW_KEY_H) {
+            std::cout << "\nCommands to control the 3D Langton Ant simulation :\n"
+                    "[Arrows] :    Orientate the camera\n"
+                    "[BACKSPACE] : Reinitialize the simulation\n"
+                    "[ENTER] :     Get the time of the simulation (on ant steps)\n"
+                    "[Escape] :    Quit\n"
+                    "[SCROLL] :    Zoom\n"
+                    "[SPACE] :     Pause the simulation\n"
+                    "H :           Help message\n"
+                    "N :           Get the number of cubes\n"
+                    "X :           Debug message\n" << std::endl;
         }
     }
 }

@@ -17,6 +17,8 @@ public:
     Grid3D(Color colorInit, float alpha);
     ~Grid3D() {};
 
+    void clear();
+
     void createCube(Vector3 position);
 
     void update(Vector3 position);

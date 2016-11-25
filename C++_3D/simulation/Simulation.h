@@ -14,6 +14,8 @@
 #include "Rendering/Window.h"
 #include "Elements/Ant.h"
 
+#define DEFAULT_UPDATE_FREQUENCY 10 // Hz
+
 class EventListener {
 public:
     void init(Window * mainWindow);
@@ -40,7 +42,9 @@ public:
     void addAnt(int x, int y, int z, Orientation orientation = Orientation::FRONT);
     void addAnt(Vector3 position, Orientation orientation = Orientation::FRONT);
 
-    void start(int updatePerSecond = 100);
+    void start();
+
+    void initialize();
 
     void setColor(int x, int y, int z, Color color);
     void setColor(Vector3 position, Color color);
@@ -48,7 +52,7 @@ public:
     // change alpha component for each cube at the argument color
     void setAlpha(Color color);
 
-private:
+protected:
     void mainLoop();
 
     void input();
@@ -59,15 +63,18 @@ private:
     void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) override;
     void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) override;
 
+private:
     std::unique_ptr<Scene> _scene = nullptr;
 
     std::unique_ptr<Window> _window = nullptr;
     std::shared_ptr<Grid3D> _grid = nullptr;
+
+    std::vector<std::pair<Vector3, Orientation>> _antsPosition;
     std::vector<std::unique_ptr<Ant>> _listAnts;
 
 
     int _count = 0;
-    int _updatePerSecond;
+    int _updateFrequency;
     double _time1Update;
 
     bool _pause = false;
