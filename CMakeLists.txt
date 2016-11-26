@@ -18,13 +18,13 @@ file(GLOB_RECURSE
         SOURCE_FILES
         simulation/*.cpp)
 
-set(GLAD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/glad/src/glad.c simulation/Elements/Rules.cpp simulation/Elements/Rules.h simulation/Elements/Color.cpp simulation/Elements/Color.h)
+set(GLAD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/glad/src/glad.c)
 
 find_package(glfw3 3.2 REQUIRED)
 
 
 # Principal target
-add_executable(langton3D ${SOURCE_FILES} ${GLAD_SOURCES})
+add_executable(langton3D ${SOURCE_FILES} ${GLAD_SOURCES} main.cpp)
 
 target_link_libraries(langton3D GL GLU GLEW glfw X11 pthread)
 

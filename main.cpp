@@ -1,13 +1,15 @@
-#include <iostream>
 #include "simulation/Simulation.h"
-#include <map>
 
 int main(int argc, char** argv) {
-    Simulation simu;
+    Simulation simu(PreConfiguredRules::X_Y_PLANE_2COLORS);
 
-    //simu.addAnt(10, 10, 10);
+    /*simu.resetRules();
+    simu.addRule("blue", GO_DOWN);
+    simu.addRule(YELLOW, GO_UP);
+    simu.initialize();*/
+
     simu.addAnt(0, 0, 0);
 
-    simu.start(60);
+    simu.start();
     return 0;
 }
