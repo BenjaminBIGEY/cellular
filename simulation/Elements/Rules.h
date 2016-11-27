@@ -12,6 +12,8 @@
 
 #include "Color.h"
 
+#define PRE_CONFIGURED_RULES_NUMBER 5
+
 // Orientation of the ant at the instant t
 enum Orientation {
     FRONT = 0,  // +X
@@ -24,7 +26,7 @@ enum Orientation {
 
 // Rule of each color : ant turn at left or right after the colored square?
 enum Move {
-    GO_FRONT,
+    GO_FRONT = 1,
     GO_BACK,
     GO_RIGHT,
     GO_LEFT,
@@ -33,24 +35,59 @@ enum Move {
     DO_NOTHING
 };
 
-enum PreConfiguredRules {
-    X_Y_PLANE_2COLORS = 0,
-    X_Z_PLANE_2COLORS,
-    Y_Z_PLANE_2COLORS,
-    X_Y_Z_8_COLORS,
-    STAIRS,
+struct RuleDefinition {
+    RuleDefinition(){}
+    RuleDefinition(std::vector<std::pair<Color, Move>> rules) : _list(rules) {}
 
-    NBR_RULES = 5
-    // TODO : add great rules
+    void addRule(Color color, Move move) {
+        std::pair<Color, Move> pair(color, move);
+        _list.push_back(pair);
+    }
+
+    int size() {return (int)_list.size();}
+    Color color(int id) {return _list[id].first;}
+    Move move(int id) {return _list[id].second;}
+
+private:
+    std::vector<std::pair<Color, Move>> _list;
+};
+
+const RuleDefinition preConfiguredRules[PRE_CONFIGURED_RULES_NUMBER] = {
+        // (X, Y) plane with 2 colors
+        {{{WHITE, GO_RIGHT},
+          {BLACK, GO_LEFT}}},
+
+        // (X, Z) plane with 2 colors
+        {{{WHITE, GO_FRONT},
+          {BLACK, GO_BACK}}},
+
+        // (Y, Z) place with 2 colors
+        {{{WHITE, GO_UP},
+          {BLACK, GO_DOWN}}},
+
+         // 3D simulation with 8 colors
+        {{{RED, GO_DOWN},
+          {BLACK, GO_BACK},
+          {BLUE, DO_NOTHING},
+          {MAGENTA, GO_BACK},
+          {WHITE, GO_DOWN},
+          {GREEN, GO_FRONT},
+          {ORANGE, GO_RIGHT},
+          {YELLOW, GO_LEFT}}},
+
+         // Stairs
+        {{{ORANGE, GO_BACK},
+          {WHITE, GO_UP},
+          {BLACK, GO_DOWN}}}
 };
 
 class Rules {
 public:
-    Rules(PreConfiguredRules rules);
+    Rules(RuleDefinition ruleDefinition = {{{}}});
     void add(std::string color, Move rule);
     void add(Color color, Move rule);
 
-    void loadPreConfiguredRule(PreConfiguredRules rules);
+    void loadRule(RuleDefinition rules);
 
     void reset();
 

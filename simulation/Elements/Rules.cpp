@@ -4,8 +4,8 @@
 
 #include "Rules.h"
 
-Rules::Rules(PreConfiguredRules rules) {
-    loadPreConfiguredRule(rules);
+Rules::Rules(RuleDefinition rule) {
+    loadRule(rule);
 }
 
 void Rules::add(std::string color, Move rule) {
@@ -28,40 +28,11 @@ void Rules::reset() {
     _listRules.clear();
 }
 
-void Rules::loadPreConfiguredRule(PreConfiguredRules rules) {
+void Rules::loadRule(RuleDefinition ruleDefinition) {
     reset();
 
-    switch(rules) {
-        case PreConfiguredRules::X_Y_PLANE_2COLORS:
-            add(WHITE, GO_RIGHT);
-            add(BLACK, GO_LEFT);
-            break;
-        case PreConfiguredRules::X_Z_PLANE_2COLORS:
-            add(WHITE, GO_FRONT);
-            add(BLACK, GO_BACK);
-            break;
-        case PreConfiguredRules::Y_Z_PLANE_2COLORS:
-            add(WHITE, GO_UP);
-            add(BLACK, GO_DOWN);
-            break;
-
-        case PreConfiguredRules::X_Y_Z_8_COLORS:
-            add(RED, GO_DOWN);
-            add(BLACK, GO_BACK);
-            add(BLUE, DO_NOTHING);
-            add(MAGENTA, GO_BACK);
-            add(WHITE, GO_DOWN);
-            add(GREEN, GO_FRONT);
-            add(ORANGE, GO_RIGHT);
-            add(YELLOW, GO_LEFT);
-            break;
-        case PreConfiguredRules::STAIRS:
-            add(ORANGE, GO_BACK);
-            add(WHITE, GO_UP);
-            add(BLACK, GO_DOWN);
-            break;
-        default:
-            break;
+    for(int i = 0 ; i < ruleDefinition.size() ; i++) {
+        add(ruleDefinition.color(i), ruleDefinition.move(i));
     }
 }
 

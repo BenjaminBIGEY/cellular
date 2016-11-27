@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include <vector>
+#include <sstream>
 
 #include "Grid3D.h"
 #include "Rendering/Context.h"
@@ -37,29 +38,32 @@ const float ALPHA_DEFAULT = 0.8f;
 class Simulation : public EventListener {
 
 public:
-    Simulation(PreConfiguredRules rules = (PreConfiguredRules)0, float alpha = ALPHA_DEFAULT);
+    /**
+     * @param ruleID from 1 to PRE_CONFIGURED_RULES_NUMBER
+     */
+    Simulation(int ruleID = 0, float alpha = ALPHA_DEFAULT);
+    Simulation(RuleDefinition rules, float alpha = ALPHA_DEFAULT);
     ~Simulation();
 
     void addAnt(int x, int y, int z, Orientation orientation = Orientation::FRONT);
     void addAnt(Vector3 position, Orientation orientation = Orientation::FRONT);
 
 
-
     void start();
 
     void initialize();
 
-    void setRules(int id);
-    void setRules(PreConfiguredRules rules);
-    void addRule(std::string colorName, Move move);
-    void addRule(Color color, Move move);
-    void resetRules();
+    void createRules();
+    void setRules(int ruleID);
+    void setRules(RuleDefinition rules);
 
     void setColor(int x, int y, int z, Color color);
     void setColor(Vector3 position, Color color);
 
     // change alpha component for each cube at the argument color
     void setAlpha(float alpha);
+
+    void printHelp();
 
 protected:
     void mainLoop();
@@ -82,8 +86,8 @@ private:
     std::vector<std::pair<Vector3, Orientation>> _antsPosition;
     std::vector<std::unique_ptr<Ant>> _listAnts;
 
-
     int _count = 0;
+    int _currentPreConfiguredRules = 0;
     int _updateFrequency;
     double _time1Update;
 
@@ -103,6 +107,16 @@ private:
     int _keyQ; // -X
     int _keyS; // -Z
     int _keyD; // +X
+
+    void emptyBuffer() {
+        cin.clear();
+        cin.seekg(0, ios::end);
+
+        if (cin.eof())
+            cin.ignore(numeric_limits<streamsize>::max());
+        else
+            cin.clear();
+    }
 };
 
 

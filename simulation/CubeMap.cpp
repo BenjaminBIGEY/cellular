@@ -11,6 +11,12 @@ Vector3::Vector3(const int posX, const int posY, const int posZ) {
     z = posZ;
 }
 
+Vector3::Vector3(const Vector3 &other) {
+    x = other.x;
+    y = other.y;
+    z = other.z;
+}
+
 bool Vector3::less(const Vector3 &other) const {
     return std::tie(this->x, this->y, this->z) < std::tie(other.x, other.y, other.z);
 }

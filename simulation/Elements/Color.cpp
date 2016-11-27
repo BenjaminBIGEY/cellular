@@ -59,7 +59,7 @@ void Color::setColor(AllColors c) {
     _color = c;
 }
 
-void Color::setColor(std::string color) {
+bool Color::setColor(std::string color) {
     if(color == "black")   _color = AllColors::BLACK;
     else if(color == "blue")    _color = AllColors::BLUE;
     else if(color == "green")   _color = AllColors::GREEN;
@@ -68,7 +68,8 @@ void Color::setColor(std::string color) {
     else if(color == "red")     _color = AllColors::RED;
     else if(color == "white")   _color = AllColors::WHITE;
     else if(color == "yellow")  _color = AllColors::YELLOW;
-    else std::cerr << "Unexisting color" << std::endl;
+    else {std::cerr << "Unexisting color : '" << color << "'" << std::endl;return false;}
+    return true;
 }
 
 bool Color::exists() {

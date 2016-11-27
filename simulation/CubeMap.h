@@ -22,6 +22,7 @@ typedef CubeMap::iterator CubeMapIterator;
 
 struct Vector3 {
     Vector3(const int posX, const int posY, const int posZ);
+    Vector3(const Vector3 &other);
 
     bool less(const Vector3 &other) const;
 

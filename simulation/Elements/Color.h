@@ -10,6 +10,8 @@
 #include <iostream>
 #include <string>
 
+#define COLORS_NUMBER 8
+
 enum AllColors {
     WHITE = 0,
     RED,
@@ -33,7 +35,7 @@ public:
     std::string getColorName();
 
     void setColor(AllColors c);
-    void setColor(std::string color);
+    bool setColor(std::string color);
 
     bool exists();
     bool equal(const Color &other) const;

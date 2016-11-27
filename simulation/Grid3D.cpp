@@ -40,7 +40,14 @@ void Grid3D::render(Context *context) {
     for(it = _cubeMap.begin() ; it != _cubeMap.end() ; ++it) {
         // first <=> key : glm::vec3 (cubePosition)
         // second <=> mapped_type : std::shared_ptr<Cube>
-        it->second->render(context, it->first);
+        if(_eclatedView) {
+            // TODO : write better operators
+            Vector3 vect(it->first);
+            vect += vect;
+            it->second->render(context, vect);
+        }
+        else
+            it->second->render(context, it->first);
     }
 }
 

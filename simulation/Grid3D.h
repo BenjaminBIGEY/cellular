@@ -34,7 +34,9 @@ public:
 
     void setAlpha(float alpha);
 
-    int getSize(){return _cubeMap.size();}
+    int getSize(){return (int)_cubeMap.size();}
+
+    void checkEclatedView() {_eclatedView = !_eclatedView;}
 
 private:
     // Container of the 3D grid of cubes
@@ -43,6 +45,8 @@ private:
     map<Color, std::shared_ptr<Cube>> _cubesPtr;
 
     Color _colorInit;
+
+    bool _eclatedView = false;
 };
 
 

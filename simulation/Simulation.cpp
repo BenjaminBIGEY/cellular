@@ -32,7 +32,12 @@ void EventListener::setEventListener(EventListener* eventListener) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Simulation::Simulation(PreConfiguredRules rules, float alpha) {
+Simulation::Simulation(int ruleID, float alpha) :
+        Simulation(preConfiguredRules[ruleID <= PRE_CONFIGURED_RULES_NUMBER ? ruleID - 1 : 0], alpha) {
+    _currentPreConfiguredRules = ruleID <= PRE_CONFIGURED_RULES_NUMBER ? ruleID - 1 : 0;
+}
+
+Simulation::Simulation(RuleDefinition rules, float alpha) {
     // Scene creation
     _rules = std::make_shared<Rules>(rules);
     _grid = std::make_shared<Grid3D>(_rules->getListColors(), alpha);
@@ -43,7 +48,7 @@ Simulation::Simulation(PreConfiguredRules rules, float alpha) {
                                    {0,  0,  0}};
 
     glm::vec3 color(5, 5, 5); // strong white light
-    //glm::vec3 color(0.4, 0.3, 0.1) // weak yellowish light
+    //glm::vec3 color(0.4, 0.3, 0.1); // weak yellowish light
     GLfloat ambientCoeff = 0.06f; //0.2f or 1.0
 
     for(auto pos : position) {
@@ -75,28 +80,71 @@ void Simulation::initialize() {
     }
 }
 
-void Simulation::setRules(int id) {
-    if(id < PreConfiguredRules::NBR_RULES)
-        setRules((PreConfiguredRules)id);
-    else
-        std::cout << "Rule don't implemented yet" << std::endl;
+void Simulation::createRules() {
+    _pauseSimulation = true;
+    RuleDefinition rules;
+    std::cout << "\nRules sandbox for the simulation.\n";
+
+    bool continueGetRules = true;
+
+    while(continueGetRules) {
+        Color color;
+
+        std::cout << std::endl;
+        std::cout << "To add a rule, give one of the following color :\n";
+        for(int i = 0 ; i < COLORS_NUMBER ; i++) {
+            Color c((AllColors)i);
+            std::cout << "'" << c.getColorName() << "' ";
+        }
+        std::cout << "\nOr write [end|exit|quit|stop] to quit" << std::endl;
+
+        std::string userEntry;
+        getline(cin, userEntry);
+        cin.clear();
+
+        if(userEntry == "end" || userEntry == "exit" || userEntry == "quit" || userEntry == "stop") {
+            continueGetRules = false;
+            emptyBuffer();
+        } else if(color.setColor(userEntry)) { // The user gives a correct color
+            bool moveCorrect = false;
+            int move = -1;
+            while (!moveCorrect) {
+                std::cout << "\n1 : GO_FRONT  ;  2 : GO_BACK  ;  3 : GO_RIGHT  ;  4 : GO_LEFT  ;  5 : GO_UP  ;  6 : GO_DOWN  ;  7 : DO_NOTHING" << std::endl;
+                emptyBuffer();
+
+                cin >> move;
+                cin.clear();
+
+                if (move < 1 or move > 7) {
+                    std::cerr << "Invalid integer." << std::endl;
+                } else {
+                    moveCorrect = true;
+                }
+                emptyBuffer();
+            }
+            rules.addRule(color, (Move) move);
+        }
+        emptyBuffer();
+    }
+
+    if(rules.size() > 0)
+        setRules(rules);
+    _pauseSimulation = false;
 }
 
-void Simulation::setRules(PreConfiguredRules rules) {
-    _rules->loadPreConfiguredRule(rules);
+void Simulation::setRules(int ruleID) {
+    if (ruleID <= PRE_CONFIGURED_RULES_NUMBER) {
+        _currentPreConfiguredRules = ruleID;
+    } else {
+        std::cerr << "Unexisting rule. Launching of the rule 1." << std::endl;
+        _currentPreConfiguredRules = 1;
+    }
+    setRules(preConfiguredRules[_currentPreConfiguredRules - 1]);
+}
+
+void Simulation::setRules(RuleDefinition rules) {
+    _rules->loadRule(rules);
     initialize();
-}
-
-void Simulation::addRule(std::string colorName, Move move) {
-    _rules->add(colorName, move);
-}
-
-void Simulation::addRule(Color color, Move move) {
-    _rules->add(color, move);
-}
-
-void Simulation::resetRules() {
-    _rules->reset();
 }
 
 Simulation::~Simulation() {
@@ -146,7 +194,7 @@ void Simulation::start() {
         timeElapsed = endLoop - beginLoop;
         if(timeElapsed < _time1Update)
             usleep((_time1Update - timeElapsed) * 1000000);
-       // else
+        //else
             //std::cerr << "FPS low : " << 1.0 / timeElapsed << '\n';
     }
 }
@@ -242,68 +290,79 @@ void Simulation::createControlKeys() {
 void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
 
     if(action == GLFW_PRESS) {
-        if(key == GLFW_KEY_ESCAPE)
+        // Exit the simulation
+        if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, GL_TRUE);
-        else if(key == GLFW_KEY_SPACE)
+            // Ants pause
+        else if (key == GLFW_KEY_SPACE)
             _pauseSimulation = !_pauseSimulation;
-        else if(key == GLFW_KEY_TAB)
+            // Displaying pause
+        else if (key == GLFW_KEY_TAB)
             _pauseDisplaying = !_pauseDisplaying;
-        else if(key == GLFW_KEY_ENTER)
+            // Get simulation time (in ants steps)
+        else if (key == GLFW_KEY_ENTER)
             std::cout << "Time of simulation : " << _count << " steps." << std::endl;
-
-            // TODO : add an interface to enter directly rules for simulation
-        else if(key == GLFW_KEY_0) {
-            std::cout << "Function don't implemented yet" << std::endl;
-        } else if(key == GLFW_KEY_KP_1) {
-            setRules(0);
-        } else if(key == GLFW_KEY_KP_2) {
-            setRules(1);
-        } else if(key == GLFW_KEY_KP_3) {
-            setRules(2);
-        } else if(key == GLFW_KEY_KP_4) {
-            setRules(3);
-        } else if(key == GLFW_KEY_KP_5) {
-            setRules(4);
-        } else if(key == GLFW_KEY_KP_6) {
-            setRules(5);
-        } else if(key == GLFW_KEY_KP_7) {
-            setRules(6);
-        } else if(key == GLFW_KEY_KP_8) {
-            setRules(7);
-        } else if(key == GLFW_KEY_KP_9) {
-            setRules(8);
+            // Access to the previous rule
+        else if (key == GLFW_KEY_KP_SUBTRACT) {
+            if (_currentPreConfiguredRules > 1)
+                setRules(_currentPreConfiguredRules - 1);
+            else
+                setRules(PRE_CONFIGURED_RULES_NUMBER);
         }
-
-        else if(key == GLFW_KEY_N) {
+            // Access to the next rule
+        else if (key == GLFW_KEY_KP_ADD) {
+            if (_currentPreConfiguredRules < PRE_CONFIGURED_RULES_NUMBER)
+                setRules(_currentPreConfiguredRules + 1);
+            else
+                setRules(1);
+        }
+            // User creates its own rules
+        else if (key == GLFW_KEY_KP_ENTER) {
+            createRules();
+        }
+            // Get the composition of the grid TODO : display the number of each color cubes
+        else if (key == GLFW_KEY_N) {
             std::cout << "Composition of the grid : " << _grid->getSize() << " cubes.\n" << std::endl;
         }
-        else if(key == GLFW_KEY_BACKSPACE) {
+            // Reset the simulation
+        else if (key == GLFW_KEY_BACKSPACE) {
             initialize();
         }
-        else if(key == GLFW_KEY_C) {
-            if(_colored) {
+            // Swap between colored cubes and uniformed, lighted cubes // TODO : get a better light
+        else if (key == GLFW_KEY_C) {
+            if (_colored) {
                 _colored = false;
                 _window->context()->setCurrentProgram("lighted");
             } else {
                 _colored = true;
                 _window->context()->setCurrentProgram("colored");
             }
+        } else if (key == GLFW_KEY_X) {
+            _grid->checkEclatedView();
         }
-        else if(key == GLFW_KEY_H) {
-            std::cout << "\nCommands to control the 3D Langton Ant simulation :\n"
-                    "[1->9] :      Load pre-configured rules\n"
-                    "[Arrows] :    Orientate the camera\n"
-                    "[BACKSPACE] : Reset the simulation\n"
-                    "[ENTER] :     Get the time of the simulation (on ant steps)\n"
-                    "[Escape] :    Quit\n"
-                    "[SCROLL] :    Zoom\n"
-                    "[SPACE] :     Pause the simulation\n"
-                    "[TAB] :       Pause the displaying\n"
-                    "C :           Switch between colored and lighted views\n"
-                    "H :           Help message\n"
-                    "N :           Get the number of cubes\n" << std::endl;
+            // Display an help message
+        else if (key == GLFW_KEY_H) {
+            printHelp();
         }
     }
+}
+
+void Simulation::printHelp() {
+    std::cout << "\nCommands to control the 3D Langton Ant simulation :\n"
+            "[Arrows]    : Orientate the camera\n"
+            "[BACKSPACE] : Reset the simulation\n"
+            "[ENTER]     : Get the time of the simulation (on ant steps)\n"
+            "[ENTER-KP]  : Create our own rules\n"
+            "[Escape]    : Quit\n"
+            "[SCROLL]    : Zoom\n"
+            "[SPACE]     : Pause the simulation\n"
+            "[TAB]       : Pause the displaying\n"
+            "+           : Load next pre-configured rule\n"
+            "-           : Load previous pre-configured rule\n"
+            "C           : Switch between colored and lighted views\n"
+            "H           : Help message\n"
+            "N           : Get the number of cubes\n"
+            "X           : Eclate cub xes" << std::endl;
 }
 
 void Simulation::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
