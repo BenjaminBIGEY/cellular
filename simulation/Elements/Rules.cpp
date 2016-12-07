@@ -169,5 +169,5 @@ Color Rules::nextColor(Color color) {
         if(color == listColors[i])
             return listColors[i+1];
     }
-    return Color((AllColors)0);
+    return Color(_listRules[0].first);
 }

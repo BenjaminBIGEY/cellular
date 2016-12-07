@@ -156,12 +156,19 @@ void Simulation::mainLoop() {
         // Update of the simulation
         for (int i = 0; i < _listAnts.size(); i++) {
             Vector3 pos = _listAnts[i]->getPosition();
-            _listAnts[i]->update(_grid->getColor(pos), _rules);
-
             _grid->update(pos, _rules);
+
+            _listAnts[i]->update(_grid->getColor(pos), _rules);
         }
         _count++;
     }
+    //_pauseSimulation = true;
+
+    if(!_diverge)
+        if (_grid->getSizeX() == LIMIT_SIMULATION || _grid->getSizeY() == LIMIT_SIMULATION || _grid->getSizeZ() == LIMIT_SIMULATION) {
+            _pauseSimulation = true;
+            _diverge = true;
+        }
 
     // Update of the display
     _window->setupFrame();
@@ -185,15 +192,15 @@ void Simulation::start() {
     _time1Update = 1.0 / _updateFrequency;
 
     while(_window->isWindowOpened()) {
-        beginLoop = glfwGetTime();
+        //beginLoop = glfwGetTime();
 
         mainLoop();
 
         // Maintenance of the good FPS
-        endLoop = glfwGetTime();
+        //endLoop = glfwGetTime();
         timeElapsed = endLoop - beginLoop;
-        if(timeElapsed < _time1Update)
-            usleep((_time1Update - timeElapsed) * 1000000);
+        //if(timeElapsed < _time1Update)
+            //usleep((_time1Update - timeElapsed) * 1000000);
         //else
             //std::cerr << "FPS low : " << 1.0 / timeElapsed << '\n';
     }
@@ -362,7 +369,7 @@ void Simulation::printHelp() {
             "C           : Switch between colored and lighted views\n"
             "H           : Help message\n"
             "N           : Get the number of cubes\n"
-            "X           : Eclate cub xes" << std::endl;
+            "X           : Eclate cubes" << std::endl;
 }
 
 void Simulation::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
@@ -379,4 +386,15 @@ void Simulation::setColor(Vector3 position, Color color) {
 
 void Simulation::setAlpha(float alpha) {
     _grid->setAlpha(alpha);
+}
+
+void Simulation::debug() {
+    for(int x = -10 ; x < 10 ; x+=2) {
+        for(int y = -10 ; y < 10 ; y+=2) {
+            for(int z = -10 ; z < 10 ; z+=2) {
+                _grid->createCube(Vector3(x, y, z), RED);
+
+            }
+        }
+    }
 }

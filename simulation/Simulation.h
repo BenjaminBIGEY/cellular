@@ -16,6 +16,7 @@
 #include "Elements/Ant.h"
 
 #define DEFAULT_UPDATE_FREQUENCY 100 // Hz
+#define LIMIT_SIMULATION 100 // divergence of the ant after
 
 class EventListener {
 public:
@@ -65,6 +66,9 @@ public:
 
     void printHelp();
 
+    // Initialize the 3D grid with initials cubes
+    void debug();
+
 protected:
     void mainLoop();
 
@@ -94,6 +98,7 @@ private:
     bool _pauseSimulation = false;
     bool _pauseDisplaying = false;
     bool _colored = true;
+    bool _diverge = false;
 
     // Controls
     int _rightKey;

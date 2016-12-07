@@ -49,7 +49,7 @@ bool parseArgument(int argc, char** argv, Simulation &simu) {
 }
 
 int main(int argc, char** argv) {
-    Simulation simu(3);
+    Simulation simu(1);
 
     //parseArgument(argc, argv, simu);
 
@@ -65,7 +65,12 @@ int main(int argc, char** argv) {
 
     simu.setRules(rules);*/
 
+    //simu.addAnt(0, -8, 0, FRONT);
+    //simu.addAnt(0, -4, 0, FRONT);
     simu.addAnt(0, 0, 0, FRONT);
+    //simu.debug();
+    //simu.addAnt(0, 4, 0, FRONT);
+    //simu.addAnt(0, 8, 0, FRONT);
 
     simu.start();
     return 0;

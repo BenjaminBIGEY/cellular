@@ -19,10 +19,16 @@ void Grid3D::reset(vector<Color> listColors, float alpha) {
     }
 }
 
-void Grid3D::createCube(Vector3 position) {
+void Grid3D::createCube(Vector3 position, Color color) {
     // Check if the cube exists
     if(_cubeMap.find(position) == _cubeMap.end()) {
-        _cubeMap[position] = _cubesPtr[_colorInit];
+        if(color == NULL_COLOR)
+            _cubeMap[position] = _cubesPtr[_colorInit];
+        else {
+            _cubeMap[position] = _cubesPtr[color];
+            std::cout << (_cubeMap[position] == _cubesPtr[RED]);
+            std::cout << " cube created" << std::endl;
+        }
     }
 }
 
@@ -33,6 +39,19 @@ void Grid3D::update(Vector3 position, std::shared_ptr<Rules> rules) {
     } else {
         setColor(position, rules->nextColor(getColor(position)));
     }
+
+    if(position.x > _xMax)
+        _xMax = position.x;
+    else if(position.x < _xMin)
+        _xMin = position.x;
+    if(position.y > _yMax)
+        _yMax = position.y;
+    else if(position.y < _yMin)
+        _yMin = position.y;
+    if(position.z > _zMax)
+        _zMax = position.z;
+    else if(position.z < _zMin)
+        _zMin = position.z;
 }
 
 void Grid3D::render(Context *context) {

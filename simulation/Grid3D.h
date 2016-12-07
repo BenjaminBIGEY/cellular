@@ -22,7 +22,7 @@ public:
 
     void reset(std::vector<Color> listColors, float alpha);
 
-    void createCube(Vector3 position);
+    void createCube(Vector3 position, Color color = NULL_COLOR);
 
     void update(Vector3 position, std::shared_ptr<Rules> rules);
 
@@ -35,6 +35,9 @@ public:
     void setAlpha(float alpha);
 
     int getSize(){return (int)_cubeMap.size();}
+    int getSizeX(){return max(abs(_xMin), _xMax);}
+    int getSizeY(){return max(abs(_yMin), _yMax);}
+    int getSizeZ(){return max(abs(_zMin), _zMax);}
 
     void checkEclatedView() {_eclatedView = !_eclatedView;}
 
@@ -45,6 +48,7 @@ private:
     map<Color, std::shared_ptr<Cube>> _cubesPtr;
 
     Color _colorInit;
+    int _xMin, _xMax, _yMin, _yMax, _zMin, _zMax = 0;
 
     bool _eclatedView = false;
 };
