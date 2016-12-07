@@ -78,6 +78,7 @@ void Simulation::initialize() {
         std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, orientation);
         _listAnts.push_back(std::move(ant));
     }
+    _beginSimulation = glfwGetTime();
 }
 
 void Simulation::createRules() {
@@ -127,8 +128,10 @@ void Simulation::createRules() {
         emptyBuffer();
     }
 
-    if(rules.size() > 0)
+    if(rules.size() > 0) {
         setRules(rules);
+        _window->setTitle("Langton 3D - new rules");
+    }
     _pauseSimulation = false;
 }
 
@@ -140,6 +143,8 @@ void Simulation::setRules(int ruleID) {
         _currentPreConfiguredRules = 1;
     }
     setRules(preConfiguredRules[_currentPreConfiguredRules - 1]);
+
+    _window->setTitle("Langton 3D - rule n°" + to_string(_currentPreConfiguredRules));
 }
 
 void Simulation::setRules(RuleDefinition rules) {
@@ -164,6 +169,7 @@ void Simulation::mainLoop() {
     }
     //_pauseSimulation = true;
 
+    // Stop the simulation if the ant diverges (one of the directions is more than a LIMIT)
     if(!_diverge)
         if (_grid->getSizeX() == LIMIT_SIMULATION || _grid->getSizeY() == LIMIT_SIMULATION || _grid->getSizeZ() == LIMIT_SIMULATION) {
             _pauseSimulation = true;
@@ -198,7 +204,7 @@ void Simulation::start() {
 
         // Maintenance of the good FPS
         //endLoop = glfwGetTime();
-        timeElapsed = endLoop - beginLoop;
+        //timeElapsed = endLoop - beginLoop;
         //if(timeElapsed < _time1Update)
             //usleep((_time1Update - timeElapsed) * 1000000);
         //else
@@ -267,7 +273,7 @@ void Simulation::addAnt(Vector3 position, Orientation orientation) {
 }
 
 void Simulation::createWindow() {
-    _window = std::make_unique<Window>();
+    _window = std::make_unique<Window>("Langton 3D");
 
     EventListener::init(_window.get());
 
@@ -308,7 +314,7 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
             _pauseDisplaying = !_pauseDisplaying;
             // Get simulation time (in ants steps)
         else if (key == GLFW_KEY_ENTER)
-            std::cout << "Time of simulation : " << _count << " steps." << std::endl;
+            std::cout << "Time of simulation : " << _count << " steps (since " << glfwGetTime() - _beginSimulation << " seconds)." << std::endl;
             // Access to the previous rule
         else if (key == GLFW_KEY_KP_SUBTRACT) {
             if (_currentPreConfiguredRules > 1)

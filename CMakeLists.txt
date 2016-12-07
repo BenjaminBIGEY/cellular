@@ -26,7 +26,7 @@ find_package(glfw3 3.2 REQUIRED)
 # Principal target
 add_executable(langton3D ${SOURCE_FILES} ${GLAD_SOURCES} main.cpp)
 
-target_link_libraries(langton3D GL GLU GLEW glfw X11 pthread)
+target_link_libraries(langton3D GL GLU glfw X11 pthread)
 
 link_directories(/usr/local/lib/)
 

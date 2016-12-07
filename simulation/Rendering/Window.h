@@ -14,8 +14,10 @@ class Context;
 
 class Window {
 public:
-    Window();
+    Window(std::string title);
     virtual ~Window();
+
+    void setTitle(std::string newTitle);
 
     void destroy();
 

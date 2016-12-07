@@ -16,7 +16,7 @@
 #include "Elements/Ant.h"
 
 #define DEFAULT_UPDATE_FREQUENCY 100 // Hz
-#define LIMIT_SIMULATION 100 // divergence of the ant after
+#define LIMIT_SIMULATION 1500 // divergence of the ant after
 
 class EventListener {
 public:
@@ -94,6 +94,8 @@ private:
     int _currentPreConfiguredRules = 0;
     int _updateFrequency;
     double _time1Update;
+
+    double _beginSimulation;
 
     bool _pauseSimulation = false;
     bool _pauseDisplaying = false;

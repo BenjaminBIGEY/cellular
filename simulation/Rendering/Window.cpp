@@ -11,7 +11,7 @@ void glfwErrorCallback(int error, const char* description) {
 }
 
 
-Window::Window() {
+Window::Window(std::string title) {
     std::cout << "Starting  GLFW" << std::endl;
 
     // Init GLFW
@@ -27,9 +27,9 @@ Window::Window() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_SAMPLES, 16);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    //glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
-    _window = glfwCreateWindow(800, 600, "Langton 3D", nullptr, nullptr);
+    _window = glfwCreateWindow(800, 600, title.c_str(), nullptr, nullptr);
 
     if (!_window) {
         std::cout << "Failed to create the GLFW window" << std::endl;
@@ -48,6 +48,10 @@ Window::Window() {
 
 Window::~Window() {
     destroy();
+}
+
+void Window::setTitle(std::string newTitle) {
+    glfwSetWindowTitle(_window, newTitle.c_str());
 }
 
 void Window::destroy() {
