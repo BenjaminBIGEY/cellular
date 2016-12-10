@@ -42,8 +42,8 @@ public:
     /**
      * @param ruleID from 1 to PRE_CONFIGURED_RULES_NUMBER
      */
-    Simulation(int ruleID = 0, float alpha = ALPHA_DEFAULT);
-    Simulation(RuleDefinition rules, float alpha = ALPHA_DEFAULT);
+    Simulation(int ruleID = 0);
+    Simulation(RuleDefinition rules);
     ~Simulation();
 
     void addAnt(int x, int y, int z, Orientation orientation = Orientation::FRONT);
@@ -57,12 +57,6 @@ public:
     void createRules();
     void setRules(int ruleID);
     void setRules(RuleDefinition rules);
-
-    void setColor(int x, int y, int z, Color color);
-    void setColor(Vector3 position, Color color);
-
-    // change alpha component for each cube at the argument color
-    void setAlpha(float alpha);
 
     void printHelp();
 

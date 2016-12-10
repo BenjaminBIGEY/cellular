@@ -32,15 +32,15 @@ void EventListener::setEventListener(EventListener* eventListener) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Simulation::Simulation(int ruleID, float alpha) :
-        Simulation(preConfiguredRules[ruleID <= PRE_CONFIGURED_RULES_NUMBER ? ruleID - 1 : 0], alpha) {
+Simulation::Simulation(int ruleID) :
+        Simulation(preConfiguredRules[ruleID <= PRE_CONFIGURED_RULES_NUMBER ? ruleID - 1 : 0]) {
     _currentPreConfiguredRules = ruleID <= PRE_CONFIGURED_RULES_NUMBER ? ruleID - 1 : 0;
 }
 
-Simulation::Simulation(RuleDefinition rules, float alpha) {
+Simulation::Simulation(RuleDefinition rules) {
     // Scene creation
     _rules = std::make_shared<Rules>(rules);
-    _grid = std::make_shared<Grid3D>(_rules->getListColors(), alpha);
+    _grid = std::make_shared<Grid3D>(1000);
     _scene = std::make_unique<Scene>(_grid);
 
     Light light;
@@ -65,7 +65,7 @@ Simulation::Simulation(RuleDefinition rules, float alpha) {
 void Simulation::initialize() {
     std::cout << "Initialization of the simulation" << std::endl;
     _count = 0;
-    _grid->reset(_rules->getListColors(), ALPHA_DEFAULT);
+    _grid->reset(_rules->getListColors());
 
     _listAnts.clear();
 
@@ -73,7 +73,7 @@ void Simulation::initialize() {
         Vector3 position = antInfos.first;
         Orientation orientation = antInfos.second;
 
-        _grid->createCube(position);
+        _grid->createCube(position, NULL_COLOR);
 
         std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, orientation);
         _listAnts.push_back(std::move(ant));
@@ -167,7 +167,8 @@ void Simulation::mainLoop() {
         }
         _count++;
     }
-    //_pauseSimulation = true;
+    if(_count == 500 || _count == 10000)
+        std::cout << glfwGetTime() - _beginSimulation << " seconds)." << std::endl;
 
     // Stop the simulation if the ant diverges (one of the directions is more than a LIMIT)
     if(!_diverge)
@@ -382,24 +383,11 @@ void Simulation::scrollCallback(GLFWwindow* window, double xoffset, double yoffs
     _scene->getCamera().zoom((float) pow(1.2, - yoffset));
 }
 
-void Simulation::setColor(int x, int y, int z, Color color) {
-    setColor(Vector3(x, y, z), color);
-}
-
-void Simulation::setColor(Vector3 position, Color color) {
-    _grid->setColor(position, color);
-}
-
-void Simulation::setAlpha(float alpha) {
-    _grid->setAlpha(alpha);
-}
-
 void Simulation::debug() {
     for(int x = -10 ; x < 10 ; x+=2) {
         for(int y = -10 ; y < 10 ; y+=2) {
             for(int z = -10 ; z < 10 ; z+=2) {
                 _grid->createCube(Vector3(x, y, z), RED);
-
             }
         }
     }

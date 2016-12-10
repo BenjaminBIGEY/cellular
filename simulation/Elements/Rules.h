@@ -12,7 +12,7 @@
 
 #include "Color.h"
 
-#define PRE_CONFIGURED_RULES_NUMBER 10
+#define PRE_CONFIGURED_RULES_NUMBER 11
 
 // Orientation of the ant at the instant t
 enum Orientation {
@@ -77,8 +77,10 @@ const RuleDefinition preConfiguredRules[PRE_CONFIGURED_RULES_NUMBER] = {
 
          // Stairs
         {{{ORANGE, GO_BACK},
-          {WHITE, GO_UP},
-          {BLACK, GO_DOWN}}},
+          {WHITE, GO_UP}}},
+
+        {{{ORANGE, GO_UP},
+          {BLUE, GO_BACK}}},
 
         {{{ORANGE, GO_BACK},
           {MAGENTA, GO_LEFT},

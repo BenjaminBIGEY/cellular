@@ -12,14 +12,14 @@
 #include "Context.h"
 #include "RenderableCube.h"
 
-RenderableCube::RenderableCube(GLfloat r, GLfloat g, GLfloat b, GLfloat a) : RenderableModel() {
+RenderableCube::RenderableCube(GLfloat r, GLfloat g, GLfloat b) : RenderableModel() {
     _r = r;
     _g = g;
     _b = b;
-    _a = a;
+    _a = 0.8;
 }
 
-RenderableCube::RenderableCube(glm::vec4 c) : RenderableCube(c.r, c.g, c.b, c.a) {}
+RenderableCube::RenderableCube(glm::vec3 c) : RenderableCube(c.r, c.g, c.b) {}
 
 void RenderableCube::render(Context *context, glm::vec3 position) {
     if (!_compiled) buildModelData(context);
@@ -203,15 +203,15 @@ void RenderableCube::buildModelData(Context *context) {
     _compiled = true;
 }
 
-void RenderableCube::setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
+void RenderableCube::setColor(GLfloat r, GLfloat g, GLfloat b) {
     _r = r;
     _g = g;
     _b = b;
-    _a = a;
+    _a = 0.8;
 }
 
-void RenderableCube::setColor(glm::vec4 c) {
-    setColor(c.r, c.g, c.b, c.a);
+void RenderableCube::setColor(glm::vec3 c) {
+    setColor(c.r, c.g, c.b);
 }
 
 glm::vec4 RenderableCube::getColor() {

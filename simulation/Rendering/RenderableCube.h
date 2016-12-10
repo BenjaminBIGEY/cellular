@@ -11,14 +11,14 @@
 class RenderableCube : public RenderableModel {
 public :
     // Red, Green, Blue, Alpha components for the cube color
-    RenderableCube(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 0.8);
-    RenderableCube(glm::vec4 color);
+    RenderableCube(GLfloat r, GLfloat g, GLfloat b);
+    RenderableCube(glm::vec3 color);
 
 
     virtual void render(Context *context, glm::vec3 position) override;
 
-    void setColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 0.8);
-    void setColor(glm::vec4 c);
+    void setColor(GLfloat r, GLfloat g, GLfloat b);
+    void setColor(glm::vec3 c);
     glm::vec4 getColor();
 
 private :

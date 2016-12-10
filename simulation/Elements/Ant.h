@@ -6,8 +6,9 @@
 #define C_3D_ANT_H
 
 #include <array>
+#include <memory>
 
-#include "../CubeMap.h"
+#include "../Vector3.h"
 #include "Rules.h"
 
 class Ant {

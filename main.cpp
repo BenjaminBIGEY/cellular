@@ -52,19 +52,6 @@ int main(int argc, char** argv) {
     Simulation simu(1);
 
     //parseArgument(argc, argv, simu);
-
-    //simu.createRules();
-
-    /*RuleDefinition rules;
-    rules.addRule(BLUE, GO_FRONT);
-    rules.addRule(WHITE, GO_LEFT);
-    rules.addRule(GREEN, GO_RIGHT);
-    rules.addRule(ORANGE, GO_BACK);
-    rules.addRule(RED, GO_UP);
-    rules.addRule(MAGENTA, GO_DOWN);
-
-    simu.setRules(rules);*/
-
     //simu.addAnt(0, -8, 0, FRONT);
     //simu.addAnt(0, -4, 0, FRONT);
     simu.addAnt(0, 0, 0, FRONT);
