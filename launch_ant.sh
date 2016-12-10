@@ -4,5 +4,6 @@ cd langton3D
 git clone https://github.com/BenjaminBIGEY/cellular
 mkdir cellular/build
 cd cellular/build
+cmake ..
 make
-./langton
+./langton3D &
