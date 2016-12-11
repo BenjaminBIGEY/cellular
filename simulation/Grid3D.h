@@ -17,16 +17,17 @@
 #include "Elements/Rules.h"
 #include "Rendering/RenderableCube.h"
 
+#define SIZE_SUB_CUBE 15
+
 using namespace std;
 
-struct Cube;
+struct Unit;
+struct CubeContainer;
 
 class Grid3D {
 public:
-    Grid3D(const int radiusSphere = 100);
-    ~Grid3D(){clear();};
-
-    void clear();
+    Grid3D(){};
+    ~Grid3D(){_grid3D.clear();};
 
     void reset(std::vector<Color> listColors);
 
@@ -34,38 +35,49 @@ public:
 
     void render(Context *context);
 
-    void setColor(Vector3 position, Color color);
-    void createCube(Vector3 position, Color color);
-
+    void addCube(Vector3 position, Color color);
     int getSize();
-    int getSizeX(){return max(abs(_xMin), _xMax);}
-    int getSizeY(){return max(abs(_yMin), _yMax);}
-    int getSizeZ(){return max(abs(_zMin), _zMax);}
+    int getMaxCoord();
 
-    Color getColor(Vector3 position);
+    Color getColor();
 
     void checkEclatedView();
 
-private:
-    // Container of the 3D grid of cubes
-    //CubeMap _cubeMap;
-    // List of Cube ptr
-    map<Color, std::shared_ptr<Cube>> _cubesPtr;
-    std::vector<std::map<Vector3, std::shared_ptr<Cube>>> _cubeMap;
-    std::vector<int> _normRadius;
+    void debug();
 
-    bool cubeIsExisting(const Vector3 position);
-    int getRadius(const Vector3 position);
+private:
+    // List of Cube ptr
+    map<Color, std::shared_ptr<Unit>> _cubesPtr;
+
+    // Container of the 3D grid of cubes
+    std::map<Vector3, CubeContainer> _grid3D;
+
+    // return TRUE if the generation is done ; FALSE else
+    bool generateSubCube();
+
+    bool cubeIsExisting();
+
+    void updateCube(Color color);
+
+    // position in the 3D array into the map
+    void setCubePosition(Vector3 position);
+    Vector3 _subCubePosition = Vector3(0, 0, 0);
+    Vector3 _cubePosition = Vector3(0, 0, 0);
+
+    void drawSubCubes(Context *context, std::map<Vector3, CubeContainer>::iterator it, Color color);
 
     Color _colorInit;
-    int _xMin, _xMax, _yMin, _yMax, _zMin, _zMax = 0;
 
     bool _eclatedView = false;
 };
 
-struct Cube {
+struct CubeContainer {
+    std::shared_ptr<Unit> subCube[SIZE_SUB_CUBE][SIZE_SUB_CUBE][SIZE_SUB_CUBE];
+};
 
-    Cube(Color color,
+struct Unit {
+
+    Unit(Color color,
          glm::vec3 ambient  = glm::vec3(0.85f, 0.25f, 0.1f),
          glm::vec3 diffuse  = glm::vec3(0.85f, 0.75f, 0.1f),
          glm::vec3 specular = glm::vec3(0.0f,  0.0f,  0.0f));

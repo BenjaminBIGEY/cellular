@@ -19,6 +19,7 @@ struct Vector3 {
     int norm() const;
 
     Vector3& operator+=(const Vector3 &other);
+    Vector3& operator*=(const Vector3 &other);
 
     glm::vec3 toGlmVec3() {return glm::vec3(x, y, z);}
 

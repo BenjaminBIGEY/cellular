@@ -4,123 +4,245 @@
 
 #include "Grid3D.h"
 
-
-Grid3D::Grid3D(const int radiusSphere) {
-    _normRadius.push_back(radiusSphere);
-}
-
-void Grid3D::clear() {
-    _cubeMap.clear();
-}
-
 void Grid3D::reset(vector<Color> listColors) {
-    _cubeMap.clear();
+    _grid3D.clear();
     _colorInit = listColors[0];
 
     for(auto color : listColors) {
-        _cubesPtr[color] = std::make_shared<Cube>(color);
+        _cubesPtr[color] = std::make_shared<Unit>(color);
     }
+    //debug();
 }
 
 void Grid3D::update(Vector3 position, std::shared_ptr<Rules> rules) {
-    if(cubeIsExisting(position)) {
-        setColor(position, rules->nextColor(getColor(position)));
-    } else {
-        createCube(position, NULL_COLOR);
-    }
-
-    if(position.x > _xMax)
-        _xMax = position.x;
-    else if(position.x < _xMin)
-        _xMin = position.x;
-    if(position.y > _yMax)
-        _yMax = position.y;
-    else if(position.y < _yMin)
-        _yMin = position.y;
-    if(position.z > _zMax)
-        _zMax = position.z;
-    else if(position.z < _zMin)
-        _zMin = position.z;
+    setCubePosition(position);
+    updateCube(rules->nextColor(getColor()));
 }
 
 void Grid3D::render(Context *context) {
-    for(int radius = 0 ; radius < _normRadius.size() ; radius++) {
-        std::map<Vector3, std::shared_ptr<Cube>>::iterator it;
-        for(it = _cubeMap[radius].begin() ; it != _cubeMap[radius].end() ; ++it) {
-            // first <=> key : glm::vec3 (cubePosition)
-            // second <=> mapped_type : std::shared_ptr<Cube>
-            if(_eclatedView) {
-                Vector3 vect(it->first);
+    std::map<Vector3, CubeContainer>::iterator it;
+
+    for(it = _grid3D.begin() ; it != _grid3D.end() ; it++) {
+        //drawSubCubes(context, it, RED);
+
+        for(int x = 0 ; x < SIZE_SUB_CUBE ; x++) {
+            for(int y = 0 ; y < SIZE_SUB_CUBE ; y++) {
+                for(int z = 0 ; z < SIZE_SUB_CUBE ; z++) {
+                    if(it->second.subCube[x][y][z] != nullptr) {
+                        Vector3 vect(it->first);
+                        vect *= Vector3(SIZE_SUB_CUBE, SIZE_SUB_CUBE, SIZE_SUB_CUBE);
+                        vect += Vector3(x, y, z);
+
+                        if(_eclatedView)
+                            vect += vect;
+
+                        it->second.subCube[x][y][z]->render(context, vect);
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+void Grid3D::drawSubCubes(Context *context, std::map<Vector3, CubeContainer>::iterator it, Color color) {
+    std::shared_ptr<Unit> colorPtr = std::make_shared<Unit>(color);
+
+    for(int x = 0 ; x < SIZE_SUB_CUBE ; x++) {
+        for(int y = 0 ; y < SIZE_SUB_CUBE ; y++) {
+            Vector3 vect(it->first);
+            vect *= Vector3(SIZE_SUB_CUBE, SIZE_SUB_CUBE, SIZE_SUB_CUBE);
+            vect += Vector3(x, y, 0);
+
+            if(_eclatedView)
                 vect += vect;
-                it->second->render(context, vect);
-            } else
-                it->second->render(context, it->first);
+
+            colorPtr->render(context, vect);
+            vect += Vector3(0, 0, SIZE_SUB_CUBE);
+            colorPtr->render(context, vect);
+        }
+
+        for(int z = 0 ; z < SIZE_SUB_CUBE ; z++) {
+            Vector3 vect(it->first);
+            vect *= Vector3(SIZE_SUB_CUBE, SIZE_SUB_CUBE, SIZE_SUB_CUBE);
+            vect += Vector3(x, 0, z);
+
+            if(_eclatedView)
+                vect += vect;
+
+            colorPtr->render(context, vect);
+            vect += Vector3(0, SIZE_SUB_CUBE, 0);
+            colorPtr->render(context, vect);
+        }
+    }
+
+    for(int y = 0 ; y < SIZE_SUB_CUBE ; y++) {
+        for(int z = 0 ; z < SIZE_SUB_CUBE ; z++) {
+            Vector3 vect(it->first);
+            vect *= Vector3(SIZE_SUB_CUBE, SIZE_SUB_CUBE, SIZE_SUB_CUBE);
+            vect += Vector3(0, y, z);
+
+            if(_eclatedView)
+                vect += vect;
+
+            colorPtr->render(context, vect);
+            vect += Vector3(SIZE_SUB_CUBE, 0, 0);
+            colorPtr->render(context, vect);
         }
     }
 }
 
-void Grid3D::setColor(Vector3 position, Color color) {
-    int radius = getRadius(position);
-    if(radius > _cubeMap.size())
-        _cubeMap.push_back({});
-    _cubeMap[radius][position] = _cubesPtr[color];
+void Grid3D::addCube(Vector3 position, Color color) {
+    setCubePosition(position);
+    updateCube(color);
 }
 
-void Grid3D::createCube(Vector3 position, Color color) {
-    int radius = getRadius(position);
-    if(radius >= _cubeMap.size())
-        _cubeMap.push_back({});
+void Grid3D::updateCube(Color color) {
+    generateSubCube();
     if(color == NULL_COLOR)
-        _cubeMap[radius][position] = _cubesPtr[_colorInit];
-    else
-        _cubeMap[radius][position] = _cubesPtr[color];
+        _grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z] = _cubesPtr[_colorInit];
+    else if(color == RED) {
+        std::shared_ptr<Unit> red = std::make_shared<Unit>(RED);
+        _grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z] = red;
+    } else
+        _grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z] = _cubesPtr[color];
 }
 
 int Grid3D::getSize() {
     int size = 0;
-    for(int radius = 0 ; radius < _normRadius.size() ; radius++) {
-        for(std::map<Vector3, std::shared_ptr<Cube>>::iterator it = _cubeMap[radius].begin() ; it != _cubeMap[radius].end() ; ++it) {
-            size++;
-        }
+    std::map<Vector3, CubeContainer>::iterator it;
+    for(it = _grid3D.begin() ; it != _grid3D.end() ; it++) {
+        for(int x = 0 ; x < SIZE_SUB_CUBE ; x++)
+            for(int y = 0 ; y < SIZE_SUB_CUBE ; y++)
+                for(int z = 0 ; z < SIZE_SUB_CUBE ; z++)
+                    if(it->second.subCube[x][y][z] != nullptr)
+                        size++;
     }
     return size;
 }
 
-Color Grid3D::getColor(Vector3 position) {
-    return _cubeMap[getRadius(position)][position]->_color;
-}
-
-bool Grid3D::cubeIsExisting(const Vector3 position) {
-    int radius = getRadius(position);
-    return !(_cubeMap[radius].find(position) == _cubeMap[radius].end());
-}
-
-int Grid3D::getRadius(const Vector3 position) {
-    int i = 0;
-    int norm = position.norm();
-    while(norm > _normRadius[i]) {
-        if(i == _normRadius.size() - 1) {
-            _normRadius.push_back((int)sqrt(sqrt(1.5)*(_normRadius[0] * _normRadius[0] + _normRadius[i] * _normRadius[i])));
+int Grid3D::getMaxCoord() {
+    int normMax = 0;
+    Vector3 coord(0, 0, 0);
+    std::map<Vector3, CubeContainer>::iterator it;
+    for(it = _grid3D.begin() ; it != _grid3D.end() ; it++) {
+        if(it->first.norm() > normMax) {
+            coord = it->first;
+            normMax = coord.norm();
         }
-        i++;
     }
-    return i;
+    if(coord.x > coord.y and coord.x > coord.z)
+        return (int)((coord.x + 0.5) * SIZE_SUB_CUBE);
+    else if(coord.y > coord.z)
+        return (int)((coord.y + 0.5) * SIZE_SUB_CUBE);
+    return (int)((coord.z + 0.5) * SIZE_SUB_CUBE);
+}
+
+Color Grid3D::getColor() {
+    if(cubeIsExisting())
+        return _grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z]->_color;
+    return NULL_COLOR;
+}
+
+bool Grid3D::cubeIsExisting() {
+    if(!generateSubCube())
+        return(_grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z] != nullptr);
+    return false;
+}
+
+bool Grid3D::generateSubCube() {
+    if(_grid3D.find(_subCubePosition) == _grid3D.end()) {
+        CubeContainer subCube;
+        for(int x = 0 ; x < SIZE_SUB_CUBE ; x++)
+            for(int y = 0 ; y < SIZE_SUB_CUBE ; y++)
+                for(int z = 0 ; z < SIZE_SUB_CUBE ; z++)
+                    subCube.subCube[x][y][z] = nullptr;
+
+        _grid3D[_subCubePosition] = subCube;
+
+        std::cout << "sub cube generated" << std::endl;
+        return true;
+    }
+    return false;
 }
 
 void Grid3D::checkEclatedView() {
     _eclatedView = !_eclatedView;
 }
 
+void Grid3D::debug() {
+    addCube({0, 0, 1}, RED);
+    addCube({15, 0, 1}, RED);
+    addCube({15, 15, 1}, RED);
+    addCube({-14, 0, 1}, RED);
+    addCube({-14, -14, 1}, RED);
+    addCube({-14, 15, 1}, RED);
+    addCube({15, -14, 1}, RED);
+    addCube({0, -14, 1}, RED);
+    addCube({0, 15, 1}, RED);
+    addCube({0, 30, 1}, RED);
+    addCube({15, 30, 1}, RED);
+    addCube({30, 30, 1}, RED);
+    addCube({30, 15, 1}, RED);
+    addCube({-14, 30, 1}, RED);
+    addCube({30, -14, 1}, RED);
+    addCube({30 , 0, 1}, RED);
+}
+
+void Grid3D::setCubePosition(Vector3 position) {
+    if(position.x >= 0) {
+        _cubePosition.x = position.x % SIZE_SUB_CUBE;
+        _subCubePosition.x = position.x / SIZE_SUB_CUBE;
+    } else {
+        _subCubePosition.x = (position.x + 1) / SIZE_SUB_CUBE - 1;
+        if(abs(position.x) == SIZE_SUB_CUBE)
+            _cubePosition.x = SIZE_SUB_CUBE * (position.x / SIZE_SUB_CUBE +
+                    1);
+        else
+            _cubePosition.x = SIZE_SUB_CUBE - abs(position.x % SIZE_SUB_CUBE);
+    }
+
+    if(position.y >= 0) {
+        _cubePosition.y = position.y % SIZE_SUB_CUBE;
+        _subCubePosition.y = position.y / SIZE_SUB_CUBE;
+    } else {
+        _subCubePosition.y = (position.y + 1) / SIZE_SUB_CUBE - 1;
+        if(abs(position.y) % SIZE_SUB_CUBE == 0)
+            _cubePosition.y = SIZE_SUB_CUBE * (position.y / SIZE_SUB_CUBE + 1);
+        else
+            _cubePosition.y = SIZE_SUB_CUBE - abs(position.y % SIZE_SUB_CUBE);
+    }
+
+    if(position.z >= 0) {
+        _cubePosition.z = position.z % SIZE_SUB_CUBE;
+        _subCubePosition.z = position.z / SIZE_SUB_CUBE;
+    } else {
+        _subCubePosition.z = (position.z + 1) / SIZE_SUB_CUBE - 1;
+        if(abs(position.z) % SIZE_SUB_CUBE == 0)
+            _cubePosition.y = SIZE_SUB_CUBE * (position.z / SIZE_SUB_CUBE + 1);
+        else
+            _cubePosition.z = SIZE_SUB_CUBE - abs(position.z % SIZE_SUB_CUBE);
+    }
+
+    Vector3 a = _subCubePosition;
+    Vector3 b = _cubePosition;
+    Vector3 c = a;
+    c *= Vector3(SIZE_SUB_CUBE, SIZE_SUB_CUBE, SIZE_SUB_CUBE);
+    c += b;
+    if(c != position)
+        std::cerr << "différent\n";
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Cube::Cube(Color color, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) : _color(color) {
+Unit::Unit(Color color, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) : _color(color) {
     // Graphic part
     _render = std::make_shared<RenderableCube>(color.getColorGraphic());
-    _render->getMaterial().setAmbient(ambient.x, ambient.y, ambient.z);
-    _render->getMaterial().setDiffuse(diffuse.x, diffuse.y, diffuse.z);
+    _render->getMaterial().setAmbient (ambient.x,  ambient.y,  ambient.z);
+    _render->getMaterial().setDiffuse (diffuse.x,  diffuse.y,  diffuse.z);
     _render->getMaterial().setSpecular(specular.x, specular.y, specular.z);
 }
 
-void Cube::render(Context *context, Vector3 position) {
+void Unit::render(Context *context, Vector3 position) {
     _render->render(context, position.toGlmVec3());
 }

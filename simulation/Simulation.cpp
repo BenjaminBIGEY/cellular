@@ -40,7 +40,7 @@ Simulation::Simulation(int ruleID) :
 Simulation::Simulation(RuleDefinition rules) {
     // Scene creation
     _rules = std::make_shared<Rules>(rules);
-    _grid = std::make_shared<Grid3D>(1000);
+    _grid = std::make_shared<Grid3D>();
     _scene = std::make_unique<Scene>(_grid);
 
     Light light;
@@ -73,7 +73,7 @@ void Simulation::initialize() {
         Vector3 position = antInfos.first;
         Orientation orientation = antInfos.second;
 
-        _grid->createCube(position, NULL_COLOR);
+        _grid->addCube(position, NULL_COLOR);
 
         std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, orientation);
         _listAnts.push_back(std::move(ant));
@@ -163,16 +163,14 @@ void Simulation::mainLoop() {
             Vector3 pos = _listAnts[i]->getPosition();
             _grid->update(pos, _rules);
 
-            _listAnts[i]->update(_grid->getColor(pos), _rules);
+            _listAnts[i]->update(_grid->getColor(), _rules);
         }
         _count++;
     }
-    if(_count == 500 || _count == 10000)
-        std::cout << glfwGetTime() - _beginSimulation << " seconds)." << std::endl;
 
     // Stop the simulation if the ant diverges (one of the directions is more than a LIMIT)
     if(!_diverge)
-        if (_grid->getSizeX() == LIMIT_SIMULATION || _grid->getSizeY() == LIMIT_SIMULATION || _grid->getSizeZ() == LIMIT_SIMULATION) {
+        if (_grid->getMaxCoord() == LIMIT_SIMULATION) {
             _pauseSimulation = true;
             _diverge = true;
         }
@@ -387,7 +385,7 @@ void Simulation::debug() {
     for(int x = -10 ; x < 10 ; x+=2) {
         for(int y = -10 ; y < 10 ; y+=2) {
             for(int z = -10 ; z < 10 ; z+=2) {
-                _grid->createCube(Vector3(x, y, z), RED);
+                _grid->addCube(Vector3(x, y, z), RED);
             }
         }
     }

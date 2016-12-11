@@ -163,6 +163,9 @@ Move Rules::getRule(Color color) {
 }
 
 Color Rules::nextColor(Color color) {
+    if(color == NULL_COLOR)
+        return NULL_COLOR;
+
     std::vector<Color> listColors = getListColors();
 
     for(int i = 0 ; i < listColors.size() - 1 ; i++) {
