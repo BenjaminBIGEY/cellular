@@ -11,11 +11,13 @@ void Grid3D::reset(vector<Color> listColors) {
     for(auto color : listColors) {
         _cubesPtr[color] = std::make_shared<Unit>(color);
     }
-    //debug();
 }
 
 void Grid3D::update(Vector3 position, std::shared_ptr<Rules> rules) {
     setCubePosition(position);
+    if(currentIterator->first != _subCubePosition)
+        generateSubCube();
+
     updateCube(rules->nextColor(getColor()));
 }
 
@@ -94,17 +96,14 @@ void Grid3D::drawSubCubes(Context *context, std::map<Vector3, CubeContainer>::it
 
 void Grid3D::addCube(Vector3 position, Color color) {
     setCubePosition(position);
+    generateSubCube();
     updateCube(color);
 }
 
 void Grid3D::updateCube(Color color) {
-    generateSubCube();
     if(color == NULL_COLOR)
         _grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z] = _cubesPtr[_colorInit];
-    else if(color == RED) {
-        std::shared_ptr<Unit> red = std::make_shared<Unit>(RED);
-        _grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z] = red;
-    } else
+    else
         _grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z] = _cubesPtr[color];
 }
 
@@ -131,6 +130,7 @@ int Grid3D::getMaxCoord() {
             normMax = coord.norm();
         }
     }
+
     if(coord.x > coord.y and coord.x > coord.z)
         return (int)((coord.x + 0.5) * SIZE_SUB_CUBE);
     else if(coord.y > coord.z)
@@ -139,18 +139,14 @@ int Grid3D::getMaxCoord() {
 }
 
 Color Grid3D::getColor() {
-    if(cubeIsExisting())
-        return _grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z]->_color;
-    return NULL_COLOR;
+        std::shared_ptr<Unit> unit = currentIterator->second.subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z];
+    if(unit == nullptr)
+        return NULL_COLOR;
+    else
+        return currentIterator->second.subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z]->_color;
 }
 
-bool Grid3D::cubeIsExisting() {
-    if(!generateSubCube())
-        return(_grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z] != nullptr);
-    return false;
-}
-
-bool Grid3D::generateSubCube() {
+void Grid3D::generateSubCube() {
     if(_grid3D.find(_subCubePosition) == _grid3D.end()) {
         CubeContainer subCube;
         for(int x = 0 ; x < SIZE_SUB_CUBE ; x++)
@@ -161,9 +157,18 @@ bool Grid3D::generateSubCube() {
         _grid3D[_subCubePosition] = subCube;
 
         std::cout << "sub cube generated" << std::endl;
-        return true;
     }
-    return false;
+
+    std::map<Vector3, CubeContainer>::iterator it = _grid3D.begin();
+    bool find = false;
+    while(!find and it != _grid3D.end()) {
+        if(it->first == _subCubePosition) {
+            currentIterator = it;
+            find = true;
+        }
+        ++it;
+    }
+    std::cout << "funtion generateSubCube() called" << std::endl;
 }
 
 void Grid3D::checkEclatedView() {
@@ -190,6 +195,29 @@ void Grid3D::debug() {
 }
 
 void Grid3D::setCubePosition(Vector3 position) {
+    if(position >= Vector3(0, 0, 0)) {
+        _cubePosition.x = position.x % SIZE_SUB_CUBE;
+        _subCubePosition.x = position.x / SIZE_SUB_CUBE;
+
+        _cubePosition.y = position.y % SIZE_SUB_CUBE;
+        _subCubePosition.y = position.y / SIZE_SUB_CUBE;
+
+        _cubePosition.z = position.z % SIZE_SUB_CUBE;
+        _subCubePosition.z = position.z / SIZE_SUB_CUBE;
+    } /*else {
+        std::cerr << "Warning : negative components (possible bugs)" << std::endl;
+
+        if (position.x >= 0) {
+            _cubePosition.x = position.x % SIZE_SUB_CUBE;
+            _subCubePosition.x = position.x / SIZE_SUB_CUBE;
+        } else {
+            _subCubePosition.x = (position.x + 1) / SIZE_SUB_CUBE - 1;
+            if (abs(position.x) == SIZE_SUB_CUBE)
+                _cubePosition.x = SIZE_SUB_CUBE * (position.x / SIZE_SUB_CUBE +
+                                                   1);
+            else
+                _cubePosition.x = SIZE_SUB_CUBE - abs(position.x % SIZE_SUB_CUBE);
+        }
     if(position.x >= 0) {
         _cubePosition.x = position.x % SIZE_SUB_CUBE;
         _subCubePosition.x = position.x / SIZE_SUB_CUBE;
@@ -202,6 +230,16 @@ void Grid3D::setCubePosition(Vector3 position) {
             _cubePosition.x = SIZE_SUB_CUBE - abs(position.x % SIZE_SUB_CUBE);
     }
 
+        if (position.y >= 0) {
+            _cubePosition.y = position.y % SIZE_SUB_CUBE;
+            _subCubePosition.y = position.y / SIZE_SUB_CUBE;
+        } else {
+            _subCubePosition.y = (position.y + 1) / SIZE_SUB_CUBE - 1;
+            if (abs(position.y) % SIZE_SUB_CUBE == 0)
+                _cubePosition.y = SIZE_SUB_CUBE * (position.y / SIZE_SUB_CUBE + 1);
+            else
+                _cubePosition.y = SIZE_SUB_CUBE - abs(position.y % SIZE_SUB_CUBE);
+        }
     if(position.y >= 0) {
         _cubePosition.y = position.y % SIZE_SUB_CUBE;
         _subCubePosition.y = position.y / SIZE_SUB_CUBE;
@@ -213,24 +251,25 @@ void Grid3D::setCubePosition(Vector3 position) {
             _cubePosition.y = SIZE_SUB_CUBE - abs(position.y % SIZE_SUB_CUBE);
     }
 
-    if(position.z >= 0) {
-        _cubePosition.z = position.z % SIZE_SUB_CUBE;
-        _subCubePosition.z = position.z / SIZE_SUB_CUBE;
-    } else {
-        _subCubePosition.z = (position.z + 1) / SIZE_SUB_CUBE - 1;
-        if(abs(position.z) % SIZE_SUB_CUBE == 0)
-            _cubePosition.y = SIZE_SUB_CUBE * (position.z / SIZE_SUB_CUBE + 1);
-        else
-            _cubePosition.z = SIZE_SUB_CUBE - abs(position.z % SIZE_SUB_CUBE);
-    }
+        if (position.z >= 0) {
+            _cubePosition.z = position.z % SIZE_SUB_CUBE;
+            _subCubePosition.z = position.z / SIZE_SUB_CUBE;
+        } else {
+            _subCubePosition.z = (position.z + 1) / SIZE_SUB_CUBE - 1;
+            if (abs(position.z) % SIZE_SUB_CUBE == 0)
+                _cubePosition.y = SIZE_SUB_CUBE * (position.z / SIZE_SUB_CUBE + 1);
+            else
+                _cubePosition.z = SIZE_SUB_CUBE - abs(position.z % SIZE_SUB_CUBE);
+        }
 
-    Vector3 a = _subCubePosition;
-    Vector3 b = _cubePosition;
-    Vector3 c = a;
-    c *= Vector3(SIZE_SUB_CUBE, SIZE_SUB_CUBE, SIZE_SUB_CUBE);
-    c += b;
-    if(c != position)
-        std::cerr << "différent\n";
+        Vector3 a = _subCubePosition;
+        Vector3 b = _cubePosition;
+        Vector3 c = a;
+        c *= Vector3(SIZE_SUB_CUBE, SIZE_SUB_CUBE, SIZE_SUB_CUBE);
+        c += b;
+        if (c != position)
+            std::cerr << "différent\n";
+    }*/
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////

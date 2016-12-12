@@ -26,6 +26,10 @@ glm::vec3 Color::getColorGraphic() {
         case AllColors::YELLOW: return glm::vec3(1, 1, 0);
         case AllColors::ORANGE: return glm::vec3(1, 165.0f/255, 0);
         case AllColors::MAGENTA: return glm::vec3(1, 0, 1);
+        case AllColors::BROWN: return glm::vec3(121.0f/255, 68.0f/255, 59.0f/255);
+        case AllColors::CYAN: return glm::vec3(0, 1, 1);
+        case AllColors::GREY: return glm::vec3(145.0f/255, 163.0f/255, 170.0f/255);
+        case AllColors::PURPLE: return glm::vec3(112.0f/255, 41.0f/255, 99.0f/255);
         default: return glm::vec3(0, 0, 0); // black unit
     }
 }
@@ -48,6 +52,14 @@ std::string Color::getColorName() {
             return "white";
         case AllColors::YELLOW:
             return "yellow";
+        case AllColors::PURPLE:
+            return "purple";
+        case AllColors::GREY:
+            return "grey";
+        case AllColors::CYAN:
+            return "cyan";
+        case AllColors::BROWN:
+            return "brown";
         case AllColors::NULL_COLOR:
             std::cerr << "Warning : NULL_COLOR" << std::endl;
             return "null";

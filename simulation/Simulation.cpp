@@ -78,6 +78,13 @@ void Simulation::initialize() {
         std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, orientation);
         _listAnts.push_back(std::move(ant));
     }
+    if(_antsPosition.size() > 0) {
+        Vector3 posAnt = _antsPosition[0].first;
+        _scene->getCamera().moveCameraByCenterPoint(posAnt.x, posAnt.y, posAnt.z);
+        _scene->getCamera().setCenter(posAnt.x * 2, posAnt.y * 2, posAnt.z * 2);
+        _scene->getCamera().setEye(posAnt.x * 5, posAnt.y * 5, posAnt.z * 5);
+        _scene->getCamera().zoom(0.01f);
+    }
     _beginSimulation = glfwGetTime();
 }
 
@@ -174,6 +181,8 @@ void Simulation::mainLoop() {
             _pauseSimulation = true;
             _diverge = true;
         }
+    /*if(_count == 386)
+        _pauseSimulation = true;*/
 
     // Update of the display
     _window->setupFrame();
@@ -235,27 +244,39 @@ void Simulation::input() {
         glm::vec3 eyePos = _scene->getCamera().getEye();
         float duration = 0.2f;
         if(_keyD == GLFW_PRESS && _keyQ != GLFW_PRESS) {
-            _listAnts[0]->setOrientation(Orientation::RIGHT);
-            //_scene->getCamera().travelEye((eyePos + glm::vec3(0, 1, 0)), duration);
+            glm::vec3 center = _scene->getCamera().getCenter();
+            _scene->getCamera().setCenter(center.x, center.y + 2, center.z);
+            glm::vec3 eye = _scene->getCamera().getEye();
+            _scene->getCamera().setEye(eye.x, eye.y + 2, eye.z);
         } else if(_keyQ == GLFW_PRESS && _keyD != GLFW_PRESS) {
-            _listAnts[0]->setOrientation(Orientation::LEFT);
-            //_scene->getCamera().travelEye((eyePos + glm::vec3(0, -1, 0)), duration);
+            glm::vec3 center = _scene->getCamera().getCenter();
+            _scene->getCamera().setCenter(center.x, center.y - 2, center.z);
+            glm::vec3 eye = _scene->getCamera().getEye();
+            _scene->getCamera().setEye(eye.x, eye.y - 2, eye.z);
         }
 
         if(_keyZ == GLFW_PRESS && _keyS != GLFW_PRESS) {
-            _listAnts[0]->setOrientation(Orientation::UP);
-            //_scene->getCamera().travelEye((eyePos + glm::vec3(1, 0, 0)), duration);
+            glm::vec3 center = _scene->getCamera().getCenter();
+            _scene->getCamera().setCenter(center.x + 2, center.y, center.z);
+            glm::vec3 eye = _scene->getCamera().getEye();
+            _scene->getCamera().setEye(eye.x + 2, eye.y, eye.z);
         } else if(_keyS == GLFW_PRESS && _keyZ != GLFW_PRESS) {
-            _listAnts[0]->setOrientation(Orientation::DOWN);
-            //_scene->getCamera().travelEye((eyePos + glm::vec3(-1, 0, 0)), duration);
+            glm::vec3 center = _scene->getCamera().getCenter();
+            _scene->getCamera().setCenter(center.x - 2, center.y, center.z);
+            glm::vec3 eye = _scene->getCamera().getEye();
+            _scene->getCamera().setEye(eye.x - 2, eye.y, eye.z);
         }
 
         if(_keyA == GLFW_PRESS && _keyE != GLFW_PRESS) {
-            _listAnts[0]->setOrientation(Orientation::FRONT);
-            //_scene->getCamera().travelEye((eyePos + glm::vec3(0, 0, 1)), duration);
+            glm::vec3 center = _scene->getCamera().getCenter();
+            _scene->getCamera().setCenter(center.x, center.y, center.z + 2);
+            glm::vec3 eye = _scene->getCamera().getEye();
+            _scene->getCamera().setEye(eye.x, eye.y, eye.z + 2);
         } else if(_keyE == GLFW_PRESS && _keyA != GLFW_PRESS) {
-            _listAnts[0]->setOrientation(Orientation::BACK);
-            //_scene->getCamera().travelEye((eyePos + glm::vec3(0, 0, -1)), duration);
+            glm::vec3 center = _scene->getCamera().getCenter();
+            _scene->getCamera().setCenter(center.x, center.y, center.z - 2);
+            glm::vec3 eye = _scene->getCamera().getEye();
+            _scene->getCamera().setEye(eye.x, eye.y, eye.z - 2);
         }
 
     } else if(cameraUp.z == 0) {
@@ -288,10 +309,10 @@ void Simulation::createControlKeys() {
     _downKey  = glfwGetKey(_window->window(), GLFW_KEY_DOWN);
 
     /// Traveling control
-    _keyA = glfwGetKey(_window->window(), GLFW_KEY_A);
-    _keyZ = glfwGetKey(_window->window(), GLFW_KEY_Z);
+    _keyA = glfwGetKey(_window->window(), GLFW_KEY_Q);
+    _keyZ = glfwGetKey(_window->window(), GLFW_KEY_W);
     _keyE = glfwGetKey(_window->window(), GLFW_KEY_E);
-    _keyQ = glfwGetKey(_window->window(), GLFW_KEY_Q);
+    _keyQ = glfwGetKey(_window->window(), GLFW_KEY_A);
     _keyS = glfwGetKey(_window->window(), GLFW_KEY_S);
     _keyD = glfwGetKey(_window->window(), GLFW_KEY_D);
 }

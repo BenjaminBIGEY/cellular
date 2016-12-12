@@ -17,7 +17,7 @@
 #include "Elements/Rules.h"
 #include "Rendering/RenderableCube.h"
 
-#define SIZE_SUB_CUBE 15
+#define SIZE_SUB_CUBE 30
 
 using namespace std;
 
@@ -53,9 +53,7 @@ private:
     std::map<Vector3, CubeContainer> _grid3D;
 
     // return TRUE if the generation is done ; FALSE else
-    bool generateSubCube();
-
-    bool cubeIsExisting();
+    void generateSubCube();
 
     void updateCube(Color color);
 
@@ -63,6 +61,8 @@ private:
     void setCubePosition(Vector3 position);
     Vector3 _subCubePosition = Vector3(0, 0, 0);
     Vector3 _cubePosition = Vector3(0, 0, 0);
+
+    std::map<Vector3, CubeContainer>::iterator currentIterator = _grid3D.begin();
 
     void drawSubCubes(Context *context, std::map<Vector3, CubeContainer>::iterator it, Color color);
 

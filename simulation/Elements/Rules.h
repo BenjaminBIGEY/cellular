@@ -12,7 +12,7 @@
 
 #include "Color.h"
 
-#define PRE_CONFIGURED_RULES_NUMBER 11
+#define PRE_CONFIGURED_RULES_NUMBER 12
 
 // Orientation of the ant at the instant t
 enum Orientation {
@@ -55,15 +55,15 @@ private:
 const RuleDefinition preConfiguredRules[PRE_CONFIGURED_RULES_NUMBER] = {
         // (X, Y) plane with 2 colors
         {{{WHITE, GO_RIGHT},
-          {BLACK, GO_LEFT}}},
+          {RED, GO_LEFT}}},
 
         // (X, Z) plane with 2 colors
         {{{WHITE, GO_FRONT},
-          {BLACK, GO_BACK}}},
+          {RED, GO_BACK}}},
 
         // (Y, Z) place with 2 colors
         {{{WHITE, GO_UP},
-          {BLACK, GO_DOWN}}},
+          {RED, GO_DOWN}}},
 
          // 3D simulation with 8 colors
         {{{RED, GO_DOWN},
@@ -107,7 +107,19 @@ const RuleDefinition preConfiguredRules[PRE_CONFIGURED_RULES_NUMBER] = {
           {RED, GO_FRONT},
           {GREEN, GO_FRONT},
           {BLUE, GO_BACK},
-          {YELLOW, GO_FRONT}}}
+          {YELLOW, GO_FRONT}}},
+
+        {{{RED, GO_LEFT},
+          {GREEN, GO_RIGHT},
+          {CYAN, GO_RIGHT},
+          {YELLOW, GO_RIGHT},
+          {PURPLE, GO_RIGHT},
+          {GREY, GO_LEFT},
+          {BLACK, GO_LEFT},
+          {BROWN, GO_LEFT},
+          {BLUE, GO_RIGHT},
+          {MAGENTA, GO_RIGHT},
+          {WHITE, GO_RIGHT}}}
 };
 
 class Rules {

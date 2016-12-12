@@ -10,7 +10,7 @@
 #include <iostream>
 #include <string>
 
-#define COLORS_NUMBER 8
+#define COLORS_NUMBER 12
 
 enum AllColors {
     WHITE = 0,
@@ -21,6 +21,10 @@ enum AllColors {
     YELLOW,
     ORANGE,
     MAGENTA,
+    BROWN,
+    GREY,
+    PURPLE,
+    CYAN,
 
     NULL_COLOR
 };
