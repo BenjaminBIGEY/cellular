@@ -168,7 +168,6 @@ void Grid3D::generateSubCube() {
         }
         ++it;
     }
-    std::cout << "funtion generateSubCube() called" << std::endl;
 }
 
 void Grid3D::checkEclatedView() {

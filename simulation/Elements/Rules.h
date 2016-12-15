@@ -26,7 +26,7 @@ enum Orientation {
 
 // Rule of each color : ant turn at left or right after the colored square?
 enum Move {
-    GO_FRONT = 1,
+    GO_FRONT = 0,
     GO_BACK,
     GO_RIGHT,
     GO_LEFT,
@@ -57,9 +57,9 @@ const RuleDefinition preConfiguredRules[PRE_CONFIGURED_RULES_NUMBER] = {
         {{{WHITE, GO_RIGHT},
           {RED, GO_LEFT}}},
 
-        // (X, Z) plane with 2 colors
         {{{WHITE, GO_FRONT},
-          {RED, GO_BACK}}},
+          {RED, GO_UP},
+          {GREEN, GO_DOWN}}},
 
         // (Y, Z) place with 2 colors
         {{{WHITE, GO_UP},
@@ -142,7 +142,18 @@ private:
     Move getRule(Color color);
 
     std::vector<std::pair<Color, Move>> _listRules;
+
+    // Current orientation :        Front  Back        Right  Left        Up     Down         Move
+    const Orientation ORIENTATION_CHANGES[6][6] = {{DOWN,  UP,        FRONT, BACK,      FRONT, BACK},    // GO_Front
+                                                   {UP,    DOWN,      BACK,  FRONT,     BACK,  FRONT},   // GO_Back
+
+                                                   {RIGHT, LEFT,      BACK,  FRONT,     RIGHT, LEFT},    // GO_Right
+                                                   {LEFT,  RIGHT,     FRONT, BACK,      LEFT,  RIGHT},   // GO_Left
+
+                                                   {UP,    DOWN,      UP,    DOWN,      LEFT,  RIGHT},   // GO_Up
+                                                   {DOWN,  UP,        DOWN,  UP,        RIGHT, LEFT}};   // GO_Down
 };
+
 
 
 #endif //LANGTON3D_RULES_H

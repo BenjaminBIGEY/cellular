@@ -90,6 +90,8 @@ private:
     double _time1Update;
 
     double _beginSimulation;
+    double _beginSimulationPaused = 0;
+    void pauseSimulation(bool desactivate);
 
     bool _pauseSimulation = false;
     bool _pauseDisplaying = false;

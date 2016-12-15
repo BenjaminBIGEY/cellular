@@ -69,6 +69,8 @@ void Simulation::initialize() {
 
     _listAnts.clear();
 
+    //_scene->setCubeMap("assets/mountains.png");
+
     for(auto antInfos : _antsPosition) {
         Vector3 position = antInfos.first;
         Orientation orientation = antInfos.second;
@@ -85,11 +87,15 @@ void Simulation::initialize() {
         _scene->getCamera().setEye(posAnt.x * 5, posAnt.y * 5, posAnt.z * 5);
         _scene->getCamera().zoom(0.01f);
     }
+
+    // Disable the 60 FPS limit
+    glfwSwapInterval(0);
+
     _beginSimulation = glfwGetTime();
 }
 
 void Simulation::createRules() {
-    _pauseSimulation = true;
+    pauseSimulation(true);
     RuleDefinition rules;
     std::cout << "\nRules sandbox for the simulation.\n";
 
@@ -139,7 +145,7 @@ void Simulation::createRules() {
         setRules(rules);
         _window->setTitle("Langton 3D - new rules");
     }
-    _pauseSimulation = false;
+    pauseSimulation(false);
 }
 
 void Simulation::setRules(int ruleID) {
@@ -176,13 +182,13 @@ void Simulation::mainLoop() {
     }
 
     // Stop the simulation if the ant diverges (one of the directions is more than a LIMIT)
-    if(!_diverge)
+    /*if(!_diverge)
         if (_grid->getMaxCoord() == LIMIT_SIMULATION) {
-            _pauseSimulation = true;
+            pauseSimulation(true);
             _diverge = true;
-        }
+        }*/
     /*if(_count == 386)
-        _pauseSimulation = true;*/
+        pauseSimulation(true);*/
 
     // Update of the display
     _window->setupFrame();
@@ -220,6 +226,19 @@ void Simulation::start() {
     }
 }
 
+void Simulation::pauseSimulation(bool desactivate) {
+    // pausing
+    if(!_pauseSimulation and desactivate) {
+        _pauseSimulation = true;
+        _beginSimulationPaused = glfwGetTime();
+    }
+    // already paused : relaunch
+    else if(_pauseSimulation and !desactivate) {
+        _pauseSimulation = false;
+        _beginSimulation += glfwGetTime() - _beginSimulationPaused;
+    }
+}
+
 
 void Simulation::input() {
     glm::vec3 cameraUp = _scene->getCamera().getUp();
@@ -229,15 +248,15 @@ void Simulation::input() {
     if(cameraUp.x == 0 && cameraUp.y == 0) {
         /// Arrow keys : rotation control
         if(_rightKey == GLFW_PRESS && _leftKey != GLFW_PRESS) {
-            _scene->getCamera().rotateZ(180.0f / 70.0f);
+            _scene->getCamera().rotateZ(0.8f);
         } else if(_leftKey == GLFW_PRESS && _rightKey != GLFW_PRESS) {
-            _scene->getCamera().rotateZ(-180.0f / 70.0f);
+            _scene->getCamera().rotateZ(-0.8f);
         }
 
         if(_upKey == GLFW_PRESS && _downKey != GLFW_PRESS) {
-            _scene->getCamera().rotateUpDown(180.0f / 70.0f);
+            _scene->getCamera().rotateUpDown(0.8f);
         } else if(_downKey == GLFW_PRESS && _upKey != GLFW_PRESS) {
-            _scene->getCamera().rotateUpDown(-180.0f / 70.0f);
+            _scene->getCamera().rotateUpDown(-0.8f);
         }
 
         /// ZQSD keys : traveling control
@@ -245,38 +264,38 @@ void Simulation::input() {
         float duration = 0.2f;
         if(_keyD == GLFW_PRESS && _keyQ != GLFW_PRESS) {
             glm::vec3 center = _scene->getCamera().getCenter();
-            _scene->getCamera().setCenter(center.x, center.y + 2, center.z);
+            _scene->getCamera().setCenter(center.x, center.y + 0.5f, center.z);
             glm::vec3 eye = _scene->getCamera().getEye();
-            _scene->getCamera().setEye(eye.x, eye.y + 2, eye.z);
+            _scene->getCamera().setEye(eye.x, eye.y + 0.5f, eye.z);
         } else if(_keyQ == GLFW_PRESS && _keyD != GLFW_PRESS) {
             glm::vec3 center = _scene->getCamera().getCenter();
-            _scene->getCamera().setCenter(center.x, center.y - 2, center.z);
+            _scene->getCamera().setCenter(center.x, center.y - 0.5f, center.z);
             glm::vec3 eye = _scene->getCamera().getEye();
-            _scene->getCamera().setEye(eye.x, eye.y - 2, eye.z);
+            _scene->getCamera().setEye(eye.x, eye.y - 0.5f, eye.z);
         }
 
         if(_keyZ == GLFW_PRESS && _keyS != GLFW_PRESS) {
             glm::vec3 center = _scene->getCamera().getCenter();
-            _scene->getCamera().setCenter(center.x + 2, center.y, center.z);
+            _scene->getCamera().setCenter(center.x + 0.5f, center.y, center.z);
             glm::vec3 eye = _scene->getCamera().getEye();
-            _scene->getCamera().setEye(eye.x + 2, eye.y, eye.z);
+            _scene->getCamera().setEye(eye.x + 0.5f, eye.y, eye.z);
         } else if(_keyS == GLFW_PRESS && _keyZ != GLFW_PRESS) {
             glm::vec3 center = _scene->getCamera().getCenter();
-            _scene->getCamera().setCenter(center.x - 2, center.y, center.z);
+            _scene->getCamera().setCenter(center.x - 0.5f, center.y, center.z);
             glm::vec3 eye = _scene->getCamera().getEye();
-            _scene->getCamera().setEye(eye.x - 2, eye.y, eye.z);
+            _scene->getCamera().setEye(eye.x - 0.5f, eye.y, eye.z);
         }
 
         if(_keyA == GLFW_PRESS && _keyE != GLFW_PRESS) {
             glm::vec3 center = _scene->getCamera().getCenter();
-            _scene->getCamera().setCenter(center.x, center.y, center.z + 2);
+            _scene->getCamera().setCenter(center.x, center.y, center.z + 0.5f);
             glm::vec3 eye = _scene->getCamera().getEye();
-            _scene->getCamera().setEye(eye.x, eye.y, eye.z + 2);
+            _scene->getCamera().setEye(eye.x, eye.y, eye.z + 0.5f);
         } else if(_keyE == GLFW_PRESS && _keyA != GLFW_PRESS) {
             glm::vec3 center = _scene->getCamera().getCenter();
-            _scene->getCamera().setCenter(center.x, center.y, center.z - 2);
+            _scene->getCamera().setCenter(center.x, center.y, center.z - 0.5f);
             glm::vec3 eye = _scene->getCamera().getEye();
-            _scene->getCamera().setEye(eye.x, eye.y, eye.z - 2);
+            _scene->getCamera().setEye(eye.x, eye.y, eye.z - 0.5f);
         }
 
     } else if(cameraUp.z == 0) {
@@ -328,7 +347,7 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
             glfwSetWindowShouldClose(window, GL_TRUE);
             // Ants pause
         else if (key == GLFW_KEY_SPACE)
-            _pauseSimulation = !_pauseSimulation;
+            pauseSimulation(!_pauseSimulation);
             // Displaying pause
         else if (key == GLFW_KEY_TAB)
             _pauseDisplaying = !_pauseDisplaying;

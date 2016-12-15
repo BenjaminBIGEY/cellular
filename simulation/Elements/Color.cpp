@@ -80,6 +80,10 @@ bool Color::setColor(std::string color) {
     else if(color == "red")     _color = AllColors::RED;
     else if(color == "white")   _color = AllColors::WHITE;
     else if(color == "yellow")  _color = AllColors::YELLOW;
+    else if(color == "purple") _color = AllColors::PURPLE;
+    else if(color == "grey") _color = AllColors::GREY;
+    else if(color == "cyan") _color = AllColors::CYAN;
+    else if(color == "BROWN") _color = AllColors::BROWN;
     else {std::cerr << "Unexisting color : '" << color << "'" << std::endl;return false;}
     return true;
 }
