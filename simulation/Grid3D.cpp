@@ -43,7 +43,6 @@ void Grid3D::render(Context *context) {
                 }
             }
         }
-
     }
 }
 
@@ -155,8 +154,6 @@ void Grid3D::generateSubCube() {
                     subCube.subCube[x][y][z] = nullptr;
 
         _grid3D[_subCubePosition] = subCube;
-
-        std::cout << "sub cube generated" << std::endl;
     }
 
     std::map<Vector3, CubeContainer>::iterator it = _grid3D.begin();

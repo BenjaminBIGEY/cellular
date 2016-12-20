@@ -22,6 +22,8 @@ void Rules::add(Color color, Move rule) {
 
     if(!existingColor)
         _listRules.push_back({color, rule});
+    else
+        std::cerr << "Warning : the color '" << color.getColorName() << "' already exists." << std::endl;
 }
 
 void Rules::reset() {
@@ -70,4 +72,36 @@ Color Rules::nextColor(Color color) {
             return _listRules[i+1].first;
     }
     return Color(_listRules[0].first);
+}
+
+std::string Rules::getRules() {
+    std::string rules;
+    std::string color;
+    int sizeMax = 0;
+    for(int i = 0 ; i < _listRules.size() ; i++) {
+        if(_listRules[i].first.getColorName().size() > sizeMax)
+            sizeMax = (int)_listRules[i].first.getColorName().size();
+    }
+
+    for(int i = 0 ; i < _listRules.size() ; i++) {
+        color = _listRules[i].first.getColorName();
+        rules += color;
+        for(int k = 0 ; k < sizeMax - color.size() ; k++)
+            rules += ' ';
+        rules += " : " + getMoveName(_listRules[i].second) + "\n";
+    }
+
+    return rules;
+}
+
+std::string Rules::getMoveName(Move move) {
+    switch(move) {
+        case Move::GO_FRONT: return "GO_front";
+        case Move::GO_BACK: return "GO_back";
+        case Move::GO_RIGHT: return "GO_right";
+        case Move::GO_LEFT: return "GO_left";
+        case Move::GO_UP: return "GO_up";
+        case Move::GO_DOWN: return "GO_down";
+        case Move::DO_NOTHING: return "do nothing";
+    }
 }

@@ -10,7 +10,7 @@
 
 class RenderableCube : public RenderableModel {
 public :
-    // Red, Green, Blue, Alpha components for the cube color
+    // Red, Green, Blue components for the cube color
     RenderableCube(GLfloat r, GLfloat g, GLfloat b);
     RenderableCube(glm::vec3 color);
 

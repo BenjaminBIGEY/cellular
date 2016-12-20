@@ -63,13 +63,11 @@ Simulation::Simulation(RuleDefinition rules) {
 }
 
 void Simulation::initialize() {
-    std::cout << "Initialization of the simulation" << std::endl;
+    std::cout << _BOLD(_MAGENTA("Initialization of the simulation")) << std::endl;
     _count = 0;
     _grid->reset(_rules->getListColors());
 
     _listAnts.clear();
-
-    //_scene->setCubeMap("assets/mountains.png");
 
     for(auto antInfos : _antsPosition) {
         Vector3 position = antInfos.first;
@@ -97,7 +95,7 @@ void Simulation::initialize() {
 void Simulation::createRules() {
     pauseSimulation(true);
     RuleDefinition rules;
-    std::cout << "\nRules sandbox for the simulation.\n";
+    std::cout << _UNDL(_BOLD(_BLUE("\nRules sandbox for the simulation :\n")));
 
     bool continueGetRules = true;
 
@@ -105,12 +103,12 @@ void Simulation::createRules() {
         Color color;
 
         std::cout << std::endl;
-        std::cout << "To add a rule, give one of the following color :\n";
+        std::cout << _CYAN("To add a rule, give one of the following color :\n");
         for(int i = 0 ; i < COLORS_NUMBER ; i++) {
             Color c((AllColors)i);
             std::cout << "'" << c.getColorName() << "' ";
         }
-        std::cout << "\nOr write [end|exit|quit|stop] to quit" << std::endl;
+        std::cout << _GREEN("\nOr write [end|exit|quit|stop] to quit") << std::endl;
 
         std::string userEntry;
         getline(cin, userEntry);
@@ -224,6 +222,7 @@ void Simulation::start() {
         //else
             //std::cerr << "FPS low : " << 1.0 / timeElapsed << '\n';
     }
+    std::cout << _BOLD(_MAGENTA("\nEnd of the simulation")) << std::endl;
 }
 
 void Simulation::pauseSimulation(bool desactivate) {
@@ -308,7 +307,9 @@ void Simulation::addAnt(int x, int y, int z, Orientation orientation) {
 }
 
 void Simulation::addAnt(Vector3 position, Orientation orientation) {
-    _antsPosition.push_back(std::make_pair(position, orientation));
+    Vector3 pos = position;
+    pos += Vector3(500, 500, 500);
+    _antsPosition.push_back(std::make_pair(pos, orientation));
 }
 
 void Simulation::createWindow() {
@@ -340,29 +341,32 @@ void Simulation::createControlKeys() {
  * Callbacks definition
  */
 void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-
     if(action == GLFW_PRESS) {
         // Exit the simulation
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, GL_TRUE);
             // Ants pause
-        else if (key == GLFW_KEY_SPACE)
+        else if (key == GLFW_KEY_SPACE || key == GLFW_KEY_P)
             pauseSimulation(!_pauseSimulation);
             // Displaying pause
         else if (key == GLFW_KEY_TAB)
             _pauseDisplaying = !_pauseDisplaying;
             // Get simulation time (in ants steps)
-        else if (key == GLFW_KEY_ENTER)
-            std::cout << "Time of simulation : " << _count << " steps (since " << glfwGetTime() - _beginSimulation << " seconds)." << std::endl;
+        else if (key == GLFW_KEY_ENTER) {
+            double timeSimulation = glfwGetTime() - _beginSimulation;
+            std::cout << _CYAN("Time of simulation :   ") << _count << " steps\n                       " << timeSimulation << " seconds\n"
+                         _CYAN("Frequency of updates : ") <<_count / timeSimulation << "\n" <<
+                         _YELLOW("--------------------------------------") << std::endl;
+        }
             // Access to the previous rule
-        else if (key == GLFW_KEY_KP_SUBTRACT) {
+        else if (key == GLFW_KEY_KP_SUBTRACT || key == GLFW_KEY_PAGE_DOWN) {
             if (_currentPreConfiguredRules > 1)
                 setRules(_currentPreConfiguredRules - 1);
             else
                 setRules(PRE_CONFIGURED_RULES_NUMBER);
         }
             // Access to the next rule
-        else if (key == GLFW_KEY_KP_ADD) {
+        else if (key == GLFW_KEY_KP_ADD || key == GLFW_KEY_PAGE_UP) {
             if (_currentPreConfiguredRules < PRE_CONFIGURED_RULES_NUMBER)
                 setRules(_currentPreConfiguredRules + 1);
             else
@@ -371,24 +375,17 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
             // User creates its own rules
         else if (key == GLFW_KEY_KP_ENTER) {
             createRules();
+        } // display the current rules
+        else if (key == GLFW_KEY_R) {
+            std::cout << _BOLD(_BLUE("List of all the rules :\n")) << _rules->getRules() << std::endl;
         }
             // Get the composition of the grid TODO : display the number of each color cubes
         else if (key == GLFW_KEY_N) {
-            std::cout << "Composition of the grid : " << _grid->getSize() << " cubes.\n" << std::endl;
+            std::cout << _BOLD(_BLUE("Composition of the grid : ")) << _grid->getSize() << _BOLD(_BLUE(" cubes.\n")) << std::endl;
         }
             // Reset the simulation
         else if (key == GLFW_KEY_BACKSPACE) {
             initialize();
-        }
-            // Swap between colored cubes and uniformed, lighted cubes // TODO : get a better light
-        else if (key == GLFW_KEY_C) {
-            if (_colored) {
-                _colored = false;
-                _window->context()->setCurrentProgram("lighted");
-            } else {
-                _colored = true;
-                _window->context()->setCurrentProgram("colored");
-            }
         } else if (key == GLFW_KEY_X) {
             _grid->checkEclatedView();
         }
@@ -400,21 +397,21 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
 }
 
 void Simulation::printHelp() {
-    std::cout << "\nCommands to control the 3D Langton Ant simulation :\n"
-            "[Arrows]    : Orientate the camera\n"
-            "[BACKSPACE] : Reset the simulation\n"
-            "[ENTER]     : Get the time of the simulation (on ant steps)\n"
-            "[ENTER-KP]  : Create our own rules\n"
-            "[Escape]    : Quit\n"
-            "[SCROLL]    : Zoom\n"
-            "[SPACE]     : Pause the simulation\n"
-            "[TAB]       : Pause the displaying\n"
-            "+           : Load next pre-configured rule\n"
-            "-           : Load previous pre-configured rule\n"
-            "C           : Switch between colored and lighted views\n"
-            "H           : Help message\n"
-            "N           : Get the number of cubes\n"
-            "X           : Eclate cubes" << std::endl;
+    std::cout << _BOLD(_BLUE("\nCommands to control the 3D Langton's Ant simulation :\n"))
+            _CYAN("[Arrows]    ")                       _YELLOW(": ") "Orientate the camera\n"
+            _CYAN("[BACKSPACE] ")                       _YELLOW(": ") "Reset the simulation\n"
+            _CYAN("[ENTER]     ")                       _YELLOW(": ") "Get the time of the simulation (on ant steps)\n"
+            _CYAN("[ENTER-KP]  ")                       _YELLOW(": ") "Create our own rules\n"
+            _CYAN("[Escape]    ")                       _YELLOW(": ") "Quit\n"
+            _CYAN("[SCROLL]    ")                       _YELLOW(": ") "Zoom\n"
+            _CYAN("[SPACE] ") _YELLOW("| ") _CYAN("P ") _YELLOW(": ") "Pause the simulation\n"
+            _CYAN("[TAB]       ")                       _YELLOW(": ") "Pause the displaying\n"
+            _CYAN("PageUp  ") _YELLOW("| ") _CYAN("+ ") _YELLOW(": ") "Load next pre-configured rule\n"
+            _CYAN("PageDwn ") _YELLOW("| ") _CYAN("- ") _YELLOW(": ") "Load previous pre-configured rule\n"
+            _CYAN("H           ")                       _YELLOW(": ") "Help message\n"
+            _CYAN("N           ")                       _YELLOW(": ") "Get the number of cubes\n"
+            _CYAN("R           ")                       _YELLOW(": ") "Display the current rules\n"
+            _CYAN("X           ")                       _YELLOW(": ") "Eclate cubes" << std::endl;
 }
 
 void Simulation::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {

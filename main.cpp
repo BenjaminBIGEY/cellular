@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
     //parseArgument(argc, argv, simu);
     //simu.addAnt(0, -8, 0, FRONT);
     //simu.addAnt(0, -4, 0, FRONT);
-    simu.addAnt(500, 500, 500, FRONT);
+    simu.addAnt(0, 0, 0, FRONT);
     //simu.debug();
     //simu.addAnt(0, 4, 0, FRONT);
     //simu.addAnt(0, 8, 0, FRONT);

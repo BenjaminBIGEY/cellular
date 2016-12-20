@@ -12,7 +12,7 @@
 
 #include "Color.h"
 
-#define PRE_CONFIGURED_RULES_NUMBER 12
+#define PRE_CONFIGURED_RULES_NUMBER 14
 
 // Orientation of the ant at the instant t
 enum Orientation {
@@ -62,8 +62,8 @@ const RuleDefinition preConfiguredRules[PRE_CONFIGURED_RULES_NUMBER] = {
           {GREEN, GO_DOWN}}},
 
         // (Y, Z) place with 2 colors
-        {{{WHITE, GO_UP},
-          {RED, GO_DOWN}}},
+        {{{WHITE, GO_DOWN},
+          {RED, DO_NOTHING}}},
 
          // 3D simulation with 8 colors
         {{{RED, GO_DOWN},
@@ -76,11 +76,17 @@ const RuleDefinition preConfiguredRules[PRE_CONFIGURED_RULES_NUMBER] = {
           {YELLOW, GO_LEFT}}},
 
          // Stairs
-        {{{ORANGE, GO_BACK},
-          {WHITE, GO_UP}}},
+        {{{BLUE, GO_BACK},
+          {YELLOW, GO_UP},
+          {GREY, GO_BACK}}},
 
         {{{ORANGE, GO_UP},
           {BLUE, GO_BACK}}},
+
+        {{{MAGENTA, GO_DOWN},
+          {RED, GO_UP},
+          {ORANGE, GO_LEFT},
+          {CYAN, DO_NOTHING}}},
 
         {{{ORANGE, GO_BACK},
           {MAGENTA, GO_LEFT},
@@ -119,7 +125,12 @@ const RuleDefinition preConfiguredRules[PRE_CONFIGURED_RULES_NUMBER] = {
           {BROWN, GO_LEFT},
           {BLUE, GO_RIGHT},
           {MAGENTA, GO_RIGHT},
-          {WHITE, GO_RIGHT}}}
+          {WHITE, GO_RIGHT}}},
+
+        {{{RED, GO_LEFT},
+          {GREEN, GO_DOWN},
+          {BLUE, GO_FRONT},
+          {ORANGE, GO_RIGHT}}}
 };
 
 class Rules {
@@ -138,6 +149,8 @@ public:
 
     Color nextColor(Color color);
 
+    std::string getRules();
+
 private:
     Move getRule(Color color);
 
@@ -152,6 +165,8 @@ private:
 
                                                    {UP,    DOWN,      UP,    DOWN,      LEFT,  RIGHT},   // GO_Up
                                                    {DOWN,  UP,        DOWN,  UP,        RIGHT, LEFT}};   // GO_Down
+
+    std::string getMoveName(Move move);
 };
 
 

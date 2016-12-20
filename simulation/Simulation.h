@@ -10,6 +10,7 @@
 #include <sstream>
 
 #include "Grid3D.h"
+#include "Message_Colors.h"
 #include "Rendering/Context.h"
 #include "Rendering/Scene.h"
 #include "Rendering/Window.h"
@@ -33,8 +34,6 @@ protected:
     void glfwScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 };
 
-
-const float ALPHA_DEFAULT = 0.8f;
 
 class Simulation : public EventListener {
 
