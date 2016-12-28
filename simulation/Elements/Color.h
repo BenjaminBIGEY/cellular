@@ -7,8 +7,8 @@
 
 #include <glm/detail/type_vec3.hpp>
 #include <glm/detail/type_vec4.hpp>
-#include <iostream>
-#include <string>
+
+#include "../Message_Colors.h"
 
 #define COLORS_NUMBER 12
 

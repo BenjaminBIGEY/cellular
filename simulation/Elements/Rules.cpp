@@ -23,7 +23,7 @@ void Rules::add(Color color, Move rule) {
     if(!existingColor)
         _listRules.push_back({color, rule});
     else
-        std::cerr << "Warning : the color '" << color.getColorName() << "' already exists." << std::endl;
+        std::cerr << _RED("Warning : the color '" + color.getColorName() + "' already exists.") << std::endl;
 }
 
 void Rules::reset() {
@@ -59,7 +59,7 @@ Move Rules::getRule(Color color) {
         if(color == _listRules[i].first)
             return _listRules[i].second;
     }
-    std::cerr << "Unexisting rule color" << std::endl;
+    std::cerr << _RED("Unexisting rule color") << std::endl;
     return DO_NOTHING;
 }
 

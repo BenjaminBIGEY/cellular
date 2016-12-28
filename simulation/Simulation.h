@@ -7,14 +7,13 @@
 
 #include <unistd.h>
 #include <vector>
-#include <sstream>
 
+#include "Elements/Ant.h"
 #include "Grid3D.h"
 #include "Message_Colors.h"
 #include "Rendering/Context.h"
 #include "Rendering/Scene.h"
 #include "Rendering/Window.h"
-#include "Elements/Ant.h"
 
 #define DEFAULT_UPDATE_FREQUENCY 100 // Hz
 #define LIMIT_SIMULATION 1500 // divergence of the ant after

@@ -5,10 +5,11 @@
 #ifndef LANGTON3D_WINDOW_H
 #define LANGTON3D_WINDOW_H
 
-#include <iostream>
 #include <bits/unique_ptr.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include "../Message_Colors.h"
 
 class Context;
 

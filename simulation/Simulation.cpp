@@ -108,7 +108,7 @@ void Simulation::createRules() {
             Color c((AllColors)i);
             std::cout << "'" << c.getColorName() << "' ";
         }
-        std::cout << _GREEN("\nOr write [end|exit|quit|stop] to quit") << std::endl;
+        std::cout << _CYAN("\nOr write [end|exit|quit|stop] to quit") << std::endl;
 
         std::string userEntry;
         getline(cin, userEntry);
@@ -128,7 +128,7 @@ void Simulation::createRules() {
                 cin.clear();
 
                 if (move < 1 or move > 7) {
-                    std::cerr << "Invalid integer." << std::endl;
+                    std::cerr << _RED("Invalid integer.") << std::endl;
                 } else {
                     moveCorrect = true;
                 }
@@ -138,6 +138,7 @@ void Simulation::createRules() {
         }
         emptyBuffer();
     }
+    std::cout << '\n' << std::endl;
 
     if(rules.size() > 0) {
         setRules(rules);
@@ -150,7 +151,7 @@ void Simulation::setRules(int ruleID) {
     if (ruleID <= PRE_CONFIGURED_RULES_NUMBER) {
         _currentPreConfiguredRules = ruleID;
     } else {
-        std::cerr << "Unexisting rule. Launching of the rule 1." << std::endl;
+        std::cerr << _RED("Unexisting rule. Launching of the rule 1.") << std::endl;
         _currentPreConfiguredRules = 1;
     }
     setRules(preConfiguredRules[_currentPreConfiguredRules - 1]);

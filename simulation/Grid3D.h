@@ -6,13 +6,12 @@
 #define LANGTON3D_GRID3D_H
 
 #include <glm/glm.hpp>
-#include <iostream>
 #include <map>
 #include <vector>
-#include <sstream>
 #include <map>
 #include <math.h>
 
+#include "Message_Colors.h"
 #include "Vector3.h"
 #include "Elements/Rules.h"
 #include "Rendering/RenderableCube.h"

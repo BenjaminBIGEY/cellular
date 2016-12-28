@@ -5,14 +5,13 @@
 #ifndef LANGTON3D_RULES_H
 #define LANGTON3D_RULES_H
 
-#include <iostream>
-#include <string>
 #include <vector>
 #include <map>
 
+#include "../Message_Colors.h"
 #include "Color.h"
 
-#define PRE_CONFIGURED_RULES_NUMBER 14
+#define PRE_CONFIGURED_RULES_NUMBER 15
 
 // Orientation of the ant at the instant t
 enum Orientation {
@@ -54,83 +53,88 @@ private:
 
 const RuleDefinition preConfiguredRules[PRE_CONFIGURED_RULES_NUMBER] = {
         // (X, Y) plane with 2 colors
-        {{{WHITE, GO_RIGHT},
-          {RED, GO_LEFT}}},
+        {{{WHITE,   GO_RIGHT},
+          {RED,     GO_LEFT}}},
 
-        {{{WHITE, GO_FRONT},
-          {RED, GO_UP},
-          {GREEN, GO_DOWN}}},
+        {{{WHITE,   GO_FRONT},
+          {RED,     GO_UP},
+          {GREEN,   GO_DOWN}}},
 
         // (Y, Z) place with 2 colors
-        {{{WHITE, GO_DOWN},
-          {RED, DO_NOTHING}}},
+        {{{WHITE,   GO_DOWN},
+          {RED,     DO_NOTHING}}},
 
          // 3D simulation with 8 colors
-        {{{RED, GO_DOWN},
-          {BLACK, GO_BACK},
-          {BLUE, DO_NOTHING},
+        {{{RED,     GO_DOWN},
+          {BLACK,   GO_BACK},
+          {BLUE,    DO_NOTHING},
           {MAGENTA, GO_BACK},
-          {WHITE, GO_DOWN},
-          {GREEN, GO_FRONT},
-          {ORANGE, GO_RIGHT},
-          {YELLOW, GO_LEFT}}},
+          {WHITE,   GO_DOWN},
+          {GREEN,   GO_FRONT},
+          {ORANGE,  GO_RIGHT},
+          {YELLOW,  GO_LEFT}}},
 
          // Stairs
-        {{{BLUE, GO_BACK},
-          {YELLOW, GO_UP},
-          {GREY, GO_BACK}}},
+        {{{BLUE,    GO_BACK},
+          {YELLOW,  GO_UP},
+          {GREY,    GO_BACK}}},
 
-        {{{ORANGE, GO_UP},
-          {BLUE, GO_BACK}}},
+        {{{ORANGE,  GO_UP},
+          {BLUE,    GO_BACK}}},
 
         {{{MAGENTA, GO_DOWN},
-          {RED, GO_UP},
-          {ORANGE, GO_LEFT},
-          {CYAN, DO_NOTHING}}},
+          {RED,     GO_UP},
+          {ORANGE,  GO_LEFT},
+          {CYAN,    DO_NOTHING}}},
 
-        {{{ORANGE, GO_BACK},
+        {{{ORANGE,  GO_BACK},
           {MAGENTA, GO_LEFT},
-          {GREEN, DO_NOTHING},
-          {BLACK, GO_UP}}},
+          {GREEN,   DO_NOTHING},
+          {BLACK,   GO_UP}}},
 
-        {{{ORANGE, GO_BACK},
-          {BLUE, GO_LEFT},
-          {BLACK, GO_DOWN}}},
+        {{{ORANGE,  GO_BACK},
+          {BLUE,    GO_LEFT},
+          {BLACK,   GO_DOWN}}},
 
-        {{{WHITE, GO_FRONT},
-          {RED, GO_BACK},
-          {GREEN, GO_BACK}}},
+        {{{WHITE,   GO_FRONT},
+          {RED,     GO_BACK},
+          {GREEN,   GO_BACK}}},
 
-        {{{WHITE, GO_FRONT},
-          {RED, GO_FRONT},
-          {GREEN, GO_FRONT},
-          {BLUE, GO_BACK},
-          {YELLOW, GO_FRONT},
+        {{{WHITE,   GO_FRONT},
+          {RED,     GO_FRONT},
+          {GREEN,   GO_FRONT},
+          {BLUE,    GO_BACK},
+          {YELLOW,  GO_FRONT},
           {MAGENTA, GO_BACK},
-          {BLACK, GO_FRONT}}},
+          {BLACK,   GO_FRONT}}},
 
-        {{{WHITE, GO_FRONT},
-          {RED, GO_FRONT},
-          {GREEN, GO_FRONT},
-          {BLUE, GO_BACK},
-          {YELLOW, GO_FRONT}}},
+        {{{WHITE,   GO_FRONT},
+          {RED,     GO_FRONT},
+          {GREEN,   GO_FRONT},
+          {BLUE,    GO_BACK},
+          {YELLOW,  GO_FRONT}}},
 
-        {{{RED, GO_LEFT},
-          {GREEN, GO_RIGHT},
-          {CYAN, GO_RIGHT},
-          {YELLOW, GO_RIGHT},
-          {PURPLE, GO_RIGHT},
-          {GREY, GO_LEFT},
-          {BLACK, GO_LEFT},
-          {BROWN, GO_LEFT},
-          {BLUE, GO_RIGHT},
+        {{{RED,     GO_LEFT},
+          {GREEN,   GO_RIGHT},
+          {CYAN,    GO_RIGHT},
+          {YELLOW,  GO_RIGHT},
+          {PURPLE,  GO_RIGHT},
+          {GREY,    GO_LEFT},
+          {BLACK,   GO_LEFT},
+          {BROWN,   GO_LEFT},
+          {BLUE,    GO_RIGHT},
           {MAGENTA, GO_RIGHT},
-          {WHITE, GO_RIGHT}}},
+          {WHITE,   GO_RIGHT}}},
 
-        {{{RED, GO_LEFT},
-          {GREEN, GO_DOWN},
-          {BLUE, GO_FRONT},
-          {ORANGE, GO_RIGHT}}}
+        {{{RED,     GO_LEFT},
+          {GREEN,   GO_DOWN},
+          {BLUE,    GO_FRONT},
+          {ORANGE,  GO_RIGHT}}},
+
+	{{{YELLOW,  GO_FRONT},
+          {RED,     GO_ROGHT},
+	  {GREEN,   DO_NOTHING},
+	  {BLACK,   GO_BACK}}}
 };
 
 class Rules {

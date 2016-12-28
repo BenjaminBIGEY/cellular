@@ -5,6 +5,10 @@
 #ifndef LANGTON3D_MESSAGE_COLORS_H
 #define LANGTON3D_MESSAGE_COLORS_H
 
+#include <iostream>
+#include <sstream>
+#include <string>
+
 #define RST        "\x1B[0m"
 
 #define _BOLD(x)    "\x1B[1m" x RST

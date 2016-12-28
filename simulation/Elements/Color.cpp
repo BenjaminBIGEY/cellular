@@ -61,7 +61,7 @@ std::string Color::getColorName() {
         case AllColors::BROWN:
             return "brown";
         case AllColors::NULL_COLOR:
-            std::cerr << "Warning : NULL_COLOR" << std::endl;
+            std::cerr << _RED("Warning : NULL_COLOR") << std::endl;
             return "null";
     }
 }
@@ -84,7 +84,7 @@ bool Color::setColor(std::string color) {
     else if(color == "grey") _color = AllColors::GREY;
     else if(color == "cyan") _color = AllColors::CYAN;
     else if(color == "BROWN") _color = AllColors::BROWN;
-    else {std::cerr << "Unexisting color : '" << color << "'" << std::endl;return false;}
+    else {std::cerr << _RED("Unexisting color : '" + color + "'") << std::endl;return false;}
     return true;
 }
 

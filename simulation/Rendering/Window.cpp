@@ -7,7 +7,7 @@
 
 
 void glfwErrorCallback(int error, const char* description) {
-    std::cerr << "There was a glfw error : " << description << " (" << error << ')' << std::endl;
+    std::cerr << _RED("There was a glfw error : ") << description << _RED(" (" + std::to_string(error) + ")") << std::endl;
 }
 
 
