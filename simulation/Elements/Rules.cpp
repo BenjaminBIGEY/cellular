@@ -94,6 +94,19 @@ std::string Rules::getRules() {
     return rules;
 }
 
+Orientation Rules::getInitOrientation() {
+    switch(_listRules[0].second) {
+        case Move::GO_FRONT: return UP;
+        case Move::GO_BACK:  return DOWN;
+        case Move::GO_UP:    return RIGHT;
+        case Move::GO_DOWN:  return LEFT;
+        case Move::GO_RIGHT: return FRONT;
+        case Move::GO_LEFT:  return BACK;
+
+        case Move::DO_NOTHING: return FRONT;
+    }
+}
+
 std::string Rules::getMoveName(Move move) {
     switch(move) {
         case Move::GO_FRONT: return "GO_front";

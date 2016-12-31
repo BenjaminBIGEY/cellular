@@ -10,7 +10,7 @@
 
 #include "../Message_Colors.h"
 
-#define COLORS_NUMBER 12
+#define COLORS_NUMBER 16
 
 enum AllColors {
     WHITE = 0,
@@ -25,6 +25,10 @@ enum AllColors {
     GREY,
     PURPLE,
     CYAN,
+    PINK,
+    BRONZE,
+    COFFEE,
+    CORAL,
 
     NULL_COLOR
 };

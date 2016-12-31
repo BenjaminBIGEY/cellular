@@ -11,7 +11,7 @@
 #include "../Message_Colors.h"
 #include "Color.h"
 
-#define PRE_CONFIGURED_RULES_NUMBER 15
+#define PRE_CONFIGURED_RULES_NUMBER 14
 
 // Orientation of the ant at the instant t
 enum Orientation {
@@ -129,12 +129,7 @@ const RuleDefinition preConfiguredRules[PRE_CONFIGURED_RULES_NUMBER] = {
         {{{RED,     GO_LEFT},
           {GREEN,   GO_DOWN},
           {BLUE,    GO_FRONT},
-          {ORANGE,  GO_RIGHT}}},
-
-	{{{YELLOW,  GO_FRONT},
-          {RED,     GO_ROGHT},
-	  {GREEN,   DO_NOTHING},
-	  {BLACK,   GO_BACK}}}
+          {ORANGE,  GO_RIGHT}}}
 };
 
 class Rules {
@@ -155,12 +150,14 @@ public:
 
     std::string getRules();
 
+    Orientation getInitOrientation();
+
 private:
     Move getRule(Color color);
 
     std::vector<std::pair<Color, Move>> _listRules;
 
-    // Current orientation :        Front  Back        Right  Left        Up     Down         Move
+    // Current orientation :                       Front  Back        Right  Left        Up     Down         Move
     const Orientation ORIENTATION_CHANGES[6][6] = {{DOWN,  UP,        FRONT, BACK,      FRONT, BACK},    // GO_Front
                                                    {UP,    DOWN,      BACK,  FRONT,     BACK,  FRONT},   // GO_Back
 
