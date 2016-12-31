@@ -40,12 +40,12 @@ public:
     /**
      * @param ruleID from 1 to PRE_CONFIGURED_RULES_NUMBER
      */
-    Simulation(int ruleID = 0);
+    Simulation(int ruleID = 1);
     Simulation(RuleDefinition rules);
     ~Simulation();
 
-    void addAnt(int x, int y, int z, Orientation orientation = Orientation::FRONT);
-    void addAnt(Vector3 position, Orientation orientation = Orientation::FRONT);
+    void addAnt(int x, int y, int z);
+    void addAnt(Vector3 position);
 
 
     void start();
@@ -79,7 +79,7 @@ private:
     std::shared_ptr<Grid3D> _grid = nullptr;
     std::shared_ptr<Rules> _rules = nullptr;
 
-    std::vector<std::pair<Vector3, Orientation>> _antsPosition;
+    std::vector<Vector3> _antsPosition;
     std::vector<std::unique_ptr<Ant>> _listAnts;
 
     int _count = 0;
@@ -90,10 +90,11 @@ private:
     double _beginSimulation;
     double _beginSimulationPaused = 0;
     void pauseSimulation(bool desactivate);
+    std::vector<int> _checkpointsList;
+    void addCheckpoints();
 
     bool _pauseSimulation = false;
     bool _pauseDisplaying = false;
-    bool _colored = true;
     bool _diverge = false;
 
     // Controls
@@ -108,6 +109,8 @@ private:
     int _keyQ; // -X
     int _keyS; // -Z
     int _keyD; // +X
+
+    void centerCamera();
 
     void emptyBuffer() {
         cin.clear();

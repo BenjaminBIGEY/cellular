@@ -40,8 +40,6 @@ public:
 
     Color getColor();
 
-    void checkEclatedView();
-
     void debug();
 
 private:
@@ -66,8 +64,6 @@ private:
     void drawSubCubes(Context *context, std::map<Vector3, CubeContainer>::iterator it, Color color);
 
     Color _colorInit;
-
-    bool _eclatedView = false;
 };
 
 struct CubeContainer {

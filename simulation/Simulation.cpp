@@ -43,20 +43,6 @@ Simulation::Simulation(RuleDefinition rules) {
     _grid = std::make_shared<Grid3D>();
     _scene = std::make_unique<Scene>(_grid);
 
-    Light light;
-    const glm::vec3 position[2] = {{10, 0, 0},
-                                   {0,  0,  0}};
-
-    glm::vec3 color(5, 5, 5); // strong white light
-    //glm::vec3 color(0.4, 0.3, 0.1); // weak yellowish light
-    GLfloat ambientCoeff = 0.06f; //0.2f or 1.0
-
-    for(auto pos : position) {
-        light.addLight(pos, color, ambientCoeff);
-    }
-
-    _scene->setLight(light);
-
     setEventListener(this);
 
     createWindow();
@@ -69,21 +55,13 @@ void Simulation::initialize() {
 
     _listAnts.clear();
 
-    for(auto antInfos : _antsPosition) {
-        Vector3 position = antInfos.first;
-        Orientation orientation = antInfos.second;
+    for(int i = 0 ; i < _antsPosition.size() ; i++) {
+        Vector3 position = _antsPosition[i];
 
         _grid->addCube(position, NULL_COLOR);
 
-        std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, orientation);
+        std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, _rules->getInitOrientation());
         _listAnts.push_back(std::move(ant));
-    }
-    if(_antsPosition.size() > 0) {
-        Vector3 posAnt = _antsPosition[0].first;
-        _scene->getCamera().moveCameraByCenterPoint(posAnt.x, posAnt.y, posAnt.z);
-        _scene->getCamera().setCenter(posAnt.x * 2, posAnt.y * 2, posAnt.z * 2);
-        _scene->getCamera().setEye(posAnt.x * 5, posAnt.y * 5, posAnt.z * 5);
-        _scene->getCamera().zoom(0.01f);
     }
 
     // Disable the 60 FPS limit
@@ -114,7 +92,7 @@ void Simulation::createRules() {
         getline(cin, userEntry);
         cin.clear();
 
-        if(userEntry == "end" || userEntry == "exit" || userEntry == "quit" || userEntry == "stop") {
+        if(userEntry == "end" || userEntry == "exit" || userEntry == "quit" || userEntry == "stop" || userEntry == "e") {
             continueGetRules = false;
             emptyBuffer();
         } else if(color.setColor(userEntry)) { // The user gives a correct color
@@ -180,14 +158,16 @@ void Simulation::mainLoop() {
         _count++;
     }
 
+    for(int step : _checkpointsList) {
+        if(_count == step)
+            pauseSimulation(true);
+    }
     // Stop the simulation if the ant diverges (one of the directions is more than a LIMIT)
     /*if(!_diverge)
         if (_grid->getMaxCoord() == LIMIT_SIMULATION) {
             pauseSimulation(true);
             _diverge = true;
         }*/
-    /*if(_count == 386)
-        pauseSimulation(true);*/
 
     // Update of the display
     _window->setupFrame();
@@ -204,7 +184,8 @@ void Simulation::mainLoop() {
 
 void Simulation::start() {
     _updateFrequency = DEFAULT_UPDATE_FREQUENCY;
-    initialize();
+
+    centerCamera();
 
     double beginLoop(0), endLoop(0), timeElapsed(0);
 
@@ -237,6 +218,51 @@ void Simulation::pauseSimulation(bool desactivate) {
         _pauseSimulation = false;
         _beginSimulation += glfwGetTime() - _beginSimulationPaused;
     }
+}
+
+void Simulation::addCheckpoints() {
+    pauseSimulation(true);
+    std::cout << _BOLD(_BLUE("\nCheckpoints sandbox of the simulation\n")) <<
+              _CYAN("Delete existing checkpoints : [init|delete|null]\n"
+                    "Add a new checkpoint        : [INT|now]\n"
+                    "Get the  checkpoint list    : [get]\n"
+                    "Quit                        : [end|exit|quit|stop]\n");
+
+    bool continueGetChekpoints = true;
+
+    while(continueGetChekpoints) {
+        std::string userEntry;
+        getline(cin, userEntry);
+        cin.clear();
+
+        if(userEntry == "end" || userEntry == "exit" || userEntry == "quit" || userEntry == "stop" || userEntry == "e") {
+            continueGetChekpoints = false;
+            emptyBuffer();
+        } else if(userEntry == "init" || userEntry == "delete" || userEntry == "null") {
+            _checkpointsList.clear();
+            std::cout << _YELLOW("Deletion of all checkpoints\n");
+        } else if(userEntry == "get") {
+            if(_checkpointsList.size() == 0)
+                std::cout << _CYAN("No existing checkpoint\n");
+            else {
+                std::cout << _CYAN("Checkpoints : ");
+                for (int checkpoint : _checkpointsList)
+                    std::cout << checkpoint << ' ';
+                std::cout << '\n';
+            }
+        } else if(userEntry == "now") {
+            _checkpointsList.push_back(_count);
+        } else if(std::atoi(userEntry.c_str()) > 0) {
+            _checkpointsList.push_back(std::atoi(userEntry.c_str()));
+        } else {
+            _RED("Bad entry\n");
+        }
+        emptyBuffer();
+    }
+
+    std::cout << _BOLD(_BLUE("Leaving of the checkpoints sandbox\n")) << std::endl;
+    emptyBuffer();
+    pauseSimulation(false);
 }
 
 
@@ -303,14 +329,14 @@ void Simulation::input() {
     }
 }
 
-void Simulation::addAnt(int x, int y, int z, Orientation orientation) {
-    addAnt(Vector3(x, y, z), orientation);
+void Simulation::addAnt(int x, int y, int z) {
+    addAnt(Vector3(x, y, z));
 }
 
-void Simulation::addAnt(Vector3 position, Orientation orientation) {
+void Simulation::addAnt(Vector3 position) {
     Vector3 pos = position;
     pos += Vector3(500, 500, 500);
-    _antsPosition.push_back(std::make_pair(pos, orientation));
+    _antsPosition.push_back(pos);
 }
 
 void Simulation::createWindow() {
@@ -338,6 +364,16 @@ void Simulation::createControlKeys() {
     _keyD = glfwGetKey(_window->window(), GLFW_KEY_D);
 }
 
+void Simulation::centerCamera() {
+    if(_antsPosition.size() > 0) {
+        Vector3 posAnt = _antsPosition[0];
+        _scene->getCamera().moveCameraByCenterPoint(posAnt.x, posAnt.y, posAnt.z);
+        _scene->getCamera().setCenter(posAnt.x * 2, posAnt.y * 2, posAnt.z * 2);
+        _scene->getCamera().setEye(posAnt.x * 5, posAnt.y * 5, posAnt.z * 5);
+        _scene->getCamera().zoom(0.01f);
+    }
+}
+
 /*
  * Callbacks definition
  */
@@ -347,7 +383,7 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, GL_TRUE);
             // Ants pause
-        else if (key == GLFW_KEY_SPACE || key == GLFW_KEY_P)
+        else if (key == GLFW_KEY_SPACE)
             pauseSimulation(!_pauseSimulation);
             // Displaying pause
         else if (key == GLFW_KEY_TAB)
@@ -387,8 +423,10 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
             // Reset the simulation
         else if (key == GLFW_KEY_BACKSPACE) {
             initialize();
-        } else if (key == GLFW_KEY_X) {
-            _grid->checkEclatedView();
+        } else if (key == GLFW_KEY_C) {
+            centerCamera();
+        } else if (key == GLFW_KEY_P) {
+            addCheckpoints();
         }
             // Display an help message
         else if (key == GLFW_KEY_H) {
@@ -400,19 +438,29 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
 void Simulation::printHelp() {
     std::cout << _BOLD(_BLUE("\nCommands to control the 3D Langton's Ant simulation :\n"))
             _CYAN("[Arrows]    ")                       _YELLOW(": ") "Orientate the camera\n"
+            _CYAN("A           ")                       _YELLOW(": ") "Moving of the camera : +Y\n"
+            _CYAN("Z           ")                       _YELLOW(": ") "Moving of the camera : +Z\n"
+            _CYAN("E           ")                       _YELLOW(": ") "Moving of the camera : -Y\n"
+            _CYAN("Q           ")                       _YELLOW(": ") "Moving of the camera : -X\n"
+            _CYAN("S           ")                       _YELLOW(": ") "Moving of the camera : -Z\n"
+            _CYAN("D           ")                       _YELLOW(": ") "Moving of the camera : +X\n\n"
+
             _CYAN("[BACKSPACE] ")                       _YELLOW(": ") "Reset the simulation\n"
             _CYAN("[ENTER]     ")                       _YELLOW(": ") "Get the time of the simulation (on ant steps)\n"
             _CYAN("[ENTER-KP]  ")                       _YELLOW(": ") "Create our own rules\n"
             _CYAN("[Escape]    ")                       _YELLOW(": ") "Quit\n"
             _CYAN("[SCROLL]    ")                       _YELLOW(": ") "Zoom\n"
-            _CYAN("[SPACE] ") _YELLOW("| ") _CYAN("P ") _YELLOW(": ") "Pause the simulation\n"
-            _CYAN("[TAB]       ")                       _YELLOW(": ") "Pause the displaying\n"
+            _CYAN("[SPACE]     ")                       _YELLOW(": ") "Pause the simulation\n"
+            _CYAN("[TAB]       ")                       _YELLOW(": ") "Pause the displaying\n\n"
+
             _CYAN("PageUp  ") _YELLOW("| ") _CYAN("+ ") _YELLOW(": ") "Load next pre-configured rule\n"
-            _CYAN("PageDwn ") _YELLOW("| ") _CYAN("- ") _YELLOW(": ") "Load previous pre-configured rule\n"
+            _CYAN("PageDwn ") _YELLOW("| ") _CYAN("- ") _YELLOW(": ") "Load previous pre-configured rule\n\n"
+
+            _CYAN("C           ")                       _YELLOW(": ") "Center the camera on the ant\n"
             _CYAN("H           ")                       _YELLOW(": ") "Help message\n"
             _CYAN("N           ")                       _YELLOW(": ") "Get the number of cubes\n"
-            _CYAN("R           ")                       _YELLOW(": ") "Display the current rules\n"
-            _CYAN("X           ")                       _YELLOW(": ") "Eclate cubes" << std::endl;
+            _CYAN("P           ")                       _YELLOW(": ") "Add checkpoints in the simulation\n"
+            _CYAN("R           ")                       _YELLOW(": ") "Display the current rules\n" << std::endl;
 }
 
 void Simulation::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {

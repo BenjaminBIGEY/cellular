@@ -1,64 +1,54 @@
 #include "simulation/Simulation.h"
-#include "getopt.h"
+
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
 
 using namespace std;
 
 void printHelp() {
-    cout << "Usage : langton3D --rules [[int]|new] --speed [int]" << endl;
-}
+    cout << "Usage : " _CYAN("langton3D " _BOLD("--rules [[int]|new]\n"))
+             _YELLOW(TOSTRING(PRE_CONFIGURED_RULES_NUMBER)) " rules existing" << endl;
 
-bool parseArgument(int argc, char** argv, Simulation &simu) {
-    int arg;
-    static struct option long_options[] = {
-            {"rules", required_argument, 0, 'r'},
-            {"speed", required_argument, 0, 's'},
-            {0, 0, 0, 0}
-    };
-
-    int long_index = 0;
-    while ((arg = getopt_long(argc, argv, "r:s:", long_options, &long_index)) != -1) {
-
-        switch (arg) {
-            case 'r' :
-                if (std::string(optarg) == "new") {
-                    simu.createRules();
-                } else if(std::atoi(optarg) < PRE_CONFIGURED_RULES_NUMBER) {
-                    simu.setRules(std::atoi(optarg));
-                } else {
-                    printHelp();
-                }
-                break;
-            /*case 'c' :
-                if (std::string(optarg) == "yellow") {
-                    color = Constantes::RobotColor::Yellow;
-                }
-                else if (std::string(optarg) == "blue") {
-                    color = Constantes::RobotColor::Blue;
-                }
-                break;
-            case 'w' :
-                if (std::string(optarg) == "off") {
-                    world = false;
-                }*/
-                //break;*/
-            default :
-                printHelp();
-                return false;
-        }
-    }
+    exit(0);
 }
 
 int main(int argc, char** argv) {
-    Simulation simu(1);
+    int rule = -1;
 
-    //parseArgument(argc, argv, simu);
-    //simu.addAnt(0, -8, 0, FRONT);
-    //simu.addAnt(0, -4, 0, FRONT);
-    simu.addAnt(0, 0, 0, FRONT);
-    //simu.debug();
-    //simu.addAnt(0, 4, 0, FRONT);
-    //simu.addAnt(0, 8, 0, FRONT);
+    for(int i = 0 ; i < argc ; i++) {
+        string arg(argv[i]);
+        string param;
 
-    simu.start();
+        if(argc > i + 1 && argv[i + 1][0] != '-') {
+            param = string(argv[i + 1]);
+        }
+
+        if(arg == "--help" || arg == "-h") {
+            printHelp();
+        } else if(arg == "--rules" || arg == "-r") {
+            if (param == "new") {
+                rule = 0;
+            } else if(atoi(param.c_str()) <= PRE_CONFIGURED_RULES_NUMBER and atoi(param.c_str()) > 0) {
+                rule = atoi(param.c_str());
+            } else {
+                printHelp();
+            }
+        }
+    }
+
+    if(rule >= 0) {
+        Simulation simu;
+
+        simu.addAnt(0, 0, 0);
+
+        if(rule == 0)
+            simu.createRules();
+        else
+            simu.setRules(rule);
+
+        simu.start();
+    } else {
+        printHelp();
+    }
     return 0;
 }

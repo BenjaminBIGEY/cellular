@@ -35,9 +35,6 @@ void Grid3D::render(Context *context) {
                         vect *= Vector3(SIZE_SUB_CUBE, SIZE_SUB_CUBE, SIZE_SUB_CUBE);
                         vect += Vector3(x, y, z);
 
-                        if(_eclatedView)
-                            vect += vect;
-
                         it->second.subCube[x][y][z]->render(context, vect);
                     }
                 }
@@ -55,9 +52,6 @@ void Grid3D::drawSubCubes(Context *context, std::map<Vector3, CubeContainer>::it
             vect *= Vector3(SIZE_SUB_CUBE, SIZE_SUB_CUBE, SIZE_SUB_CUBE);
             vect += Vector3(x, y, 0);
 
-            if(_eclatedView)
-                vect += vect;
-
             colorPtr->render(context, vect);
             vect += Vector3(0, 0, SIZE_SUB_CUBE);
             colorPtr->render(context, vect);
@@ -67,9 +61,6 @@ void Grid3D::drawSubCubes(Context *context, std::map<Vector3, CubeContainer>::it
             Vector3 vect(it->first);
             vect *= Vector3(SIZE_SUB_CUBE, SIZE_SUB_CUBE, SIZE_SUB_CUBE);
             vect += Vector3(x, 0, z);
-
-            if(_eclatedView)
-                vect += vect;
 
             colorPtr->render(context, vect);
             vect += Vector3(0, SIZE_SUB_CUBE, 0);
@@ -82,9 +73,6 @@ void Grid3D::drawSubCubes(Context *context, std::map<Vector3, CubeContainer>::it
             Vector3 vect(it->first);
             vect *= Vector3(SIZE_SUB_CUBE, SIZE_SUB_CUBE, SIZE_SUB_CUBE);
             vect += Vector3(0, y, z);
-
-            if(_eclatedView)
-                vect += vect;
 
             colorPtr->render(context, vect);
             vect += Vector3(SIZE_SUB_CUBE, 0, 0);
@@ -165,10 +153,6 @@ void Grid3D::generateSubCube() {
         }
         ++it;
     }
-}
-
-void Grid3D::checkEclatedView() {
-    _eclatedView = !_eclatedView;
 }
 
 void Grid3D::debug() {
