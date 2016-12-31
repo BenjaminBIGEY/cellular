@@ -28,10 +28,5 @@ void Scene::render(Context *context) {
 
     _grid->render(context);
 
-    context->pushLight(_light);
     context->program().stopUsing();
-}
-
-void Scene::setLight(Light &light) {
-    this->_light = light;
 }

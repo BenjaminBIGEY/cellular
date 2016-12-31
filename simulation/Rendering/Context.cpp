@@ -6,18 +6,15 @@
 #include <glad/glad.h>
 
 #include "Context.h"
-#include "Light.h"
 #include "Material.h"
 #include "Shader.h"
 
 
 Context::Context(GLFWwindow *window) : _window(window) {
     loadProgram("colored", "Shaders/colored_vertex_shader.glslv", "Shaders/colored_fragment_shader.glslf");
-    //loadProgram("lighted", "Shaders/lighted_vertex_shader.glslv", "Shaders/lighted_fragment_shader.glslf");
 
     setCurrentProgram("colored");
 }
-
 
 void Context::setWindow(GLFWwindow *window) {
     this->_window = window;
@@ -25,10 +22,6 @@ void Context::setWindow(GLFWwindow *window) {
 
 void Context::getWindowDimensions(int &width, int &height) {
     glfwGetFramebufferSize(this->_window, &width, &height);
-}
-
-void Context::pushLight(Light &light) {
-    light.pushLight(this);
 }
 
 void Context::pushMaterial(Material &material) {

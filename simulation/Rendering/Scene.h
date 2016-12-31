@@ -11,14 +11,12 @@
 
 #include "Camera.h"
 #include "Context.h"
-#include "Light.h"
 #include "Program.h"
 #include "Renderable.h"
 #include "../Grid3D.h"
 
 
 class Camera;
-class Light;
 class Context;
 class Renderable;
 
@@ -29,14 +27,11 @@ public :
 
     Camera& getCamera() {return _camera;}
 
-    void setLight(Light &light);
-
     void render(Context *context);
 
 private :
     std::shared_ptr<Grid3D> _grid;
     Camera _camera;
-    Light _light;
 };
 
 
