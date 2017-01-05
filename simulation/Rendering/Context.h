@@ -24,9 +24,6 @@ public :
 
     void pushMaterial(Material &material);
 
-    /** Charge le programme composé des shaders passés en paramètres.
-     * @param vertexShader le chemin du vertex shader
-     * @param fragmentShader le chemin du fragment shader*/
     void loadProgram(std::string name, std::string vertexShader, std::string fragmentShader);
     void setCurrentProgram(std::string currentProgramID);
     Program& program() {return *_programMap.at(this->_currentProgram);}

@@ -112,7 +112,7 @@ void Simulation::createRules() {
                 }
                 emptyBuffer();
             }
-            rules.addRule(color, (Move) move);
+            rules.addRule(color, (Move)(move - 1));
         }
         emptyBuffer();
     }
@@ -162,12 +162,6 @@ void Simulation::mainLoop() {
         if(_count == step)
             pauseSimulation(true);
     }
-    // Stop the simulation if the ant diverges (one of the directions is more than a LIMIT)
-    /*if(!_diverge)
-        if (_grid->getMaxCoord() == LIMIT_SIMULATION) {
-            pauseSimulation(true);
-            _diverge = true;
-        }*/
 
     // Update of the display
     _window->setupFrame();
@@ -183,26 +177,10 @@ void Simulation::mainLoop() {
 }
 
 void Simulation::start() {
-    _updateFrequency = DEFAULT_UPDATE_FREQUENCY;
-
     centerCamera();
 
-    double beginLoop(0), endLoop(0), timeElapsed(0);
-
-    _time1Update = 1.0 / _updateFrequency;
-
     while(_window->isWindowOpened()) {
-        //beginLoop = glfwGetTime();
-
         mainLoop();
-
-        // Maintenance of the good FPS
-        //endLoop = glfwGetTime();
-        //timeElapsed = endLoop - beginLoop;
-        //if(timeElapsed < _time1Update)
-            //usleep((_time1Update - timeElapsed) * 1000000);
-        //else
-            //std::cerr << "FPS low : " << 1.0 / timeElapsed << '\n';
     }
     std::cout << _BOLD(_MAGENTA("\nEnd of the simulation")) << std::endl;
 }
@@ -223,10 +201,10 @@ void Simulation::pauseSimulation(bool desactivate) {
 void Simulation::addCheckpoints() {
     pauseSimulation(true);
     std::cout << _BOLD(_BLUE("\nCheckpoints sandbox of the simulation\n")) <<
-              _CYAN("Delete existing checkpoints : [init|delete|null]\n"
-                    "Add a new checkpoint        : [INT|now]\n"
-                    "Get the  checkpoint list    : [get]\n"
-                    "Quit                        : [end|exit|quit|stop]\n");
+              _CYAN("[init|delete|null]   ") _YELLOW(": ") "Delete existing checkpoints\n"
+              _CYAN("[INT|now]            ") _YELLOW(": ") "Add a new checkpoint\n"
+              _CYAN("[get]                ") _YELLOW(": ") "Get the checkpoint list\n"
+              _CYAN("[end|exit|quit|stop] ") _YELLOW(": ") "Quit\n" << std::endl;
 
     bool continueGetChekpoints = true;
 
@@ -344,8 +322,8 @@ void Simulation::createWindow() {
 
     EventListener::init(_window.get());
 
-
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    //glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // white background
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f); // grey  backgroung
 }
 
 void Simulation::createControlKeys() {
@@ -438,12 +416,12 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
 void Simulation::printHelp() {
     std::cout << _BOLD(_BLUE("\nCommands to control the 3D Langton's Ant simulation :\n"))
             _CYAN("[Arrows]    ")                       _YELLOW(": ") "Orientate the camera\n"
-            _CYAN("A           ")                       _YELLOW(": ") "Moving of the camera : +Y\n"
-            _CYAN("Z           ")                       _YELLOW(": ") "Moving of the camera : +Z\n"
-            _CYAN("E           ")                       _YELLOW(": ") "Moving of the camera : -Y\n"
-            _CYAN("Q           ")                       _YELLOW(": ") "Moving of the camera : -X\n"
-            _CYAN("S           ")                       _YELLOW(": ") "Moving of the camera : -Z\n"
-            _CYAN("D           ")                       _YELLOW(": ") "Moving of the camera : +X\n\n"
+            _CYAN("A           ")                       _YELLOW(": ") "Moving of the camera : " _GREEN("+Y\n")
+            _CYAN("Z           ")                       _YELLOW(": ") "Moving of the camera : " _GREEN("+Z\n")
+            _CYAN("E           ")                       _YELLOW(": ") "Moving of the camera : " _GREEN("-Y\n")
+            _CYAN("Q           ")                       _YELLOW(": ") "Moving of the camera : " _GREEN("-X\n")
+            _CYAN("S           ")                       _YELLOW(": ") "Moving of the camera : " _GREEN("-Z\n")
+            _CYAN("D           ")                       _YELLOW(": ") "Moving of the camera : " _GREEN("+X\n\n")
 
             _CYAN("[BACKSPACE] ")                       _YELLOW(": ") "Reset the simulation\n"
             _CYAN("[ENTER]     ")                       _YELLOW(": ") "Get the time of the simulation (on ant steps)\n"
@@ -465,14 +443,4 @@ void Simulation::printHelp() {
 
 void Simulation::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
     _scene->getCamera().zoom((float) pow(1.2, - yoffset));
-}
-
-void Simulation::debug() {
-    for(int x = -10 ; x < 10 ; x+=2) {
-        for(int y = -10 ; y < 10 ; y+=2) {
-            for(int z = -10 ; z < 10 ; z+=2) {
-                _grid->addCube(Vector3(x, y, z), RED);
-            }
-        }
-    }
 }

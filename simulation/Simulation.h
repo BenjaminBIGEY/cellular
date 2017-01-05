@@ -47,7 +47,6 @@ public:
     void addAnt(int x, int y, int z);
     void addAnt(Vector3 position);
 
-
     void start();
 
     void initialize();
@@ -57,9 +56,6 @@ public:
     void setRules(RuleDefinition rules);
 
     void printHelp();
-
-    // Initialize the 3D grid with initials cubes
-    void debug();
 
 protected:
     void mainLoop();
@@ -84,8 +80,6 @@ private:
 
     int _count = 0;
     int _currentPreConfiguredRules = 0;
-    int _updateFrequency;
-    double _time1Update;
 
     double _beginSimulation;
     double _beginSimulationPaused = 0;
@@ -95,7 +89,6 @@ private:
 
     bool _pauseSimulation = false;
     bool _pauseDisplaying = false;
-    bool _diverge = false;
 
     // Controls
     int _rightKey;

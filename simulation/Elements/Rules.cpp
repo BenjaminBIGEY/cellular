@@ -102,7 +102,6 @@ Orientation Rules::getInitOrientation() {
         case Move::GO_DOWN:  return LEFT;
         case Move::GO_RIGHT: return FRONT;
         case Move::GO_LEFT:  return BACK;
-
         case Move::DO_NOTHING: return FRONT;
     }
 }
@@ -116,5 +115,16 @@ std::string Rules::getMoveName(Move move) {
         case Move::GO_UP:      return "GO_up";
         case Move::GO_DOWN:    return "GO_down";
         case Move::DO_NOTHING: return "do nothing";
+    }
+}
+
+std::string Rules::getOrientationName(Orientation orientation) {
+    switch(orientation) {
+        case Orientation::FRONT:   return "front";
+        case Orientation::BACK:    return "back";
+        case Orientation::RIGHT:   return "right";
+        case Orientation::LEFT:    return "left";
+        case Orientation::UP:      return "up";
+        case Orientation::DOWN:    return "down";
     }
 }

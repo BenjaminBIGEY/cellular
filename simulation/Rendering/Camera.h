@@ -16,9 +16,8 @@ class Context;
 
 class Traveling;
 
-/** Définit la caméra du rendu. */
+/// Create the render camera
 class Camera {
-
 public :
     Camera(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) :
             _eyeX(eyeX), _eyeY(eyeY), _eyeZ(eyeZ), _centerX(centerX), _centerY(centerY), _centerZ(centerZ), _upX(upX), _upY(upY), _upZ(upZ) { }
@@ -46,33 +45,17 @@ public :
 
     void moveCameraByCenterPoint(float newCenterX, float newCenterY, float newCenterZ);
 
-    /** Fait tourner la caméra du nombre de degrés indiqué
-     * vers la droite ou vers la gauche, autour du point central
-     * de la vue. Le haut est donné par l'axe Z. */
     void rotateZ(float degrees);
-    /** Fait tourner la caméra du nombre de degrés indiqué
-     * vers le haut ou vers le bas, autour du point central
-     * de la vue. Le haut est donné par l'axe Z.
-     * La caméra ne peut s'orienter trop proche de l'axe Z.*/
+
     void rotateUpDown(float degrees);
 
-    /** Zoome sur le point central de la vue, du facteur passé
-     * en paramètres. */
     void zoom(float factor);
 
-    /** Déplace la caméra de sorte que son origine soit à la
-     * position indiquée. Le déplacement dure le nombre de secondes
-     * passé en paramètres. */
     void travelEye(float eyeX, float eyeY, float eyeZ, float seconds);
     void travelEye(glm::vec3 eyePosition, float seconds);
 
-    /** Indique si la caméra est actuellement en cours de
-     * déplacement. */
     bool isTraveling() {return this->_traveling != nullptr;};
 
-    /** Définit le traveling passé en paramètres comme traveling
-     * actuel de la caméra. Le traveling fait ensuite décrire
-     * une trajectoire lisse à la caméra, jusqu'au point demandé.*/
     void traveling(std::unique_ptr<Traveling> & traveling);
 
     void updateCamera();
@@ -92,8 +75,6 @@ private:
 };
 
 
-/** La classe Traveling permet de déplacer la caméra de
- * manière lisse jusqu'à un point désiré. */
 class Traveling {
 
 public :
@@ -102,33 +83,27 @@ public :
     Traveling(Camera &camera, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ) :
             Traveling(camera, eyeX, eyeY, eyeZ, centerX, centerY, centerZ, 0, 0, 1) { }
 
-    /** Définit la durée du traveling, en secondes. */
     void setDuration(float duration);
     bool isFinished() {return this->_finished;};
 
-    /** Méthode généralement appellée à la fin du traveling pour
-     * s'assurer que la camera est bien à sa position finale.*/
     void applyImmediatly(Camera &camera);
 
-    /** Cette méthode met à jour la position de la caméra, selon
-     * ce traveling.*/
     void update(Camera &camera);
 
 private :
-    //Valeurs au début du traveling
+    // Begin of traveling
     float _startEyeX, _startEyeY, _startEyeZ;
     float _startCenterX, _startCenterY, _startCenterZ;
     float _startUpX, _startUpY, _startUpZ;
 
-    //Valeurs à atteindre
+    // End of traveling
     float _eyeX, _eyeY, _eyeZ;
     float _centerX, _centerY, _centerZ;
     float _upX, _upY, _upZ;
 
-    ///L'instant où le traveling débute en clicks.
     std::chrono::time_point<std::chrono::system_clock> _timeStarted;
-    ///Durée du traveling de la caméra en secondes.
-    float _duration = 0.5;
+
+    float _duration = 0.5; // seconds
     bool _finished = false;
 };
 

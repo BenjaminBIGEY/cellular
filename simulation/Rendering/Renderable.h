@@ -26,9 +26,7 @@ protected :
     Renderable();
 
     virtual void deleteBuffers();
-    /// Recrée les buffers de données ainsi que le VAO,
-    /// puis bind le vertex Array pour préparer un envoi
-    /// de données.
+
     virtual void regenerateBuffers();
 
     bool _compiled = false;

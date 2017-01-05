@@ -36,11 +36,8 @@ public:
 
     void addCube(Vector3 position, Color color);
     int getSize();
-    int getMaxCoord();
 
     Color getColor();
-
-    void debug();
 
 private:
     // List of Cube ptr
@@ -60,8 +57,6 @@ private:
     Vector3 _cubePosition = Vector3(0, 0, 0);
 
     std::map<Vector3, CubeContainer>::iterator currentIterator = _grid3D.begin();
-
-    void drawSubCubes(Context *context, std::map<Vector3, CubeContainer>::iterator it, Color color);
 
     Color _colorInit;
 };

@@ -7,7 +7,8 @@ using namespace std;
 
 void printHelp() {
     cout << "Usage : " _CYAN("langton3D " _BOLD("--rules [[int]|new]\n"))
-             _YELLOW(TOSTRING(PRE_CONFIGURED_RULES_NUMBER)) " rules existing" << endl;
+             _YELLOW(TOSTRING(PRE_CONFIGURED_RULES_NUMBER)) " rules existing\n"
+            "To have more help, press " _CYAN("h") " during a simulation." << endl;
 
     exit(0);
 }
