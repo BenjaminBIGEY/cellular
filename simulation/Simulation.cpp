@@ -55,10 +55,10 @@ void Simulation::initialize() {
 
     _listAnts.clear();
 
-    for(int i = 0 ; i < _antsPosition.size() ; i++) {
+    for(unsigned int i = 0 ; i < _antsPosition.size() ; i++) {
         Vector3 position = _antsPosition[i];
 
-        _grid->addCube(position, NULL_COLOR);
+        _grid->addCube(position, AllColors::NULL_COLOR);
 
         std::unique_ptr<Ant> ant = std::make_unique<Ant>(position, _rules->getInitOrientation());
         _listAnts.push_back(std::move(ant));
@@ -149,7 +149,7 @@ Simulation::~Simulation() {
 void Simulation::mainLoop() {
     if (!_pauseSimulation) {
         // Update of the simulation
-        for (int i = 0; i < _listAnts.size(); i++) {
+        for (unsigned int i = 0; i < _listAnts.size(); i++) {
             Vector3 pos = _listAnts[i]->getPosition();
             _grid->update(pos, _rules);
 
@@ -264,8 +264,8 @@ void Simulation::input() {
         }
 
         /// ZQSD keys : traveling control
-        glm::vec3 eyePos = _scene->getCamera().getEye();
-        float duration = 0.2f;
+        //glm::vec3 eyePos = _scene->getCamera().getEye();
+        //float duration = 0.2f;
         if(_keyD == GLFW_PRESS && _keyQ != GLFW_PRESS) {
             glm::vec3 center = _scene->getCamera().getCenter();
             _scene->getCamera().setCenter(center.x, center.y + 0.5f, center.z);
@@ -355,7 +355,7 @@ void Simulation::centerCamera() {
 /*
  * Callbacks definition
  */
-void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+void Simulation::keyCallback(GLFWwindow *window, int key, int /*scancode*/, int action, int /*mods*/) {
     if(action == GLFW_PRESS) {
         // Exit the simulation
         if (key == GLFW_KEY_ESCAPE)
@@ -381,7 +381,7 @@ void Simulation::keyCallback(GLFWwindow *window, int key, int scancode, int acti
                 setRules(PRE_CONFIGURED_RULES_NUMBER);
         }
             // Access to the next rule
-        else if (key == GLFW_KEY_KP_ADD || key == GLFW_KEY_PAGE_UP) {
+        else if (key == GLFW_KEY_KP_ADD || key == GLFW_KEY_PAGE_UP) {
             if (_currentPreConfiguredRules < PRE_CONFIGURED_RULES_NUMBER)
                 setRules(_currentPreConfiguredRules + 1);
             else
@@ -441,6 +441,6 @@ void Simulation::printHelp() {
             _CYAN("R           ")                       _YELLOW(": ") "Display the current rules\n" << std::endl;
 }
 
-void Simulation::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+void Simulation::scrollCallback(GLFWwindow* /*window*/, double /*xoffset*/, double yoffset) {
     _scene->getCamera().zoom((float) pow(1.2, - yoffset));
 }

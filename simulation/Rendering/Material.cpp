@@ -9,9 +9,10 @@
 
 Material::Material(float diffuseR, float diffuseG, float diffuseB, float specularR, float specularG, float specularB,
                    float ambientR, float ambientG, float ambientB) :
-
-        _ambientR(ambientR), _ambientG(ambientG), _ambientB(ambientB), _diffuseR(diffuseR), _diffuseG(diffuseG), _diffuseB(diffuseB),
-        _specularR(specularR), _specularG(specularG), _specularB(specularB), _shininess(80.0), _specularIntensity(0.5), _specularHardness(5) {
+        _diffuseR(diffuseR),   _diffuseG(diffuseG),   _diffuseB(diffuseB),
+        _specularR(specularR), _specularG(specularG), _specularB(specularB),
+        _ambientR(ambientR),   _ambientG(ambientG),   _ambientB(ambientB),
+        _specularIntensity(0.5), _specularHardness(5), _shininess(80.0) {
 
 }
 

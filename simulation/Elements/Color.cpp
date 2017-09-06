@@ -74,7 +74,7 @@ std::string Color::getColorName() {
         case AllColors::CORAL:
             return "coral";
 
-        case AllColors::NULL_COLOR:
+        default: //case AllColors::NULL_COLOR:
             std::cerr << _RED("Warning : NULL_COLOR") << std::endl;
             return "null";
     }
@@ -108,7 +108,7 @@ bool Color::setColor(std::string color) {
 }
 
 bool Color::exists() {
-    return _color != NULL_COLOR;
+    return _color != AllColors::NULL_COLOR;
 }
 
 bool Color::equal(const Color &other) const {

@@ -17,10 +17,7 @@ public :
     Program(const std::vector<Shader>& shaders);
     Program(const Program &other);
     ~Program();
-
-    void addShader(Shader & shader);
-    void removeShader(Shader & shader);
-
+    
     void use() const;
     bool isInUse() const;
     void stopUsing() const;

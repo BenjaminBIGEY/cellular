@@ -7,12 +7,13 @@
 
 #include <glm/detail/type_vec3.hpp>
 #include <glm/detail/type_vec4.hpp>
+#include <tuple>
 
 #include "../Message_Colors.h"
 
 #define COLORS_NUMBER 16
 
-enum AllColors {
+enum class AllColors {
     WHITE = 0,
     RED,
     GREEN,
@@ -35,7 +36,7 @@ enum AllColors {
 
 class Color {
 public:
-    Color(AllColors c = NULL_COLOR);
+    Color(AllColors c = AllColors::NULL_COLOR);
     Color(std::string color);
 
     AllColors getColor();
@@ -49,13 +50,14 @@ public:
     bool equal(const Color &other) const;
     bool less(const Color &other) const;
 
+    const std::tuple<AllColors> tie() const { return std::tie(_color); }
+    
+    friend bool operator==(const Color& c1, const Color& c2) { return c1.tie() == c2.tie(); }
+    friend bool operator!=(const Color& c1, const Color& c2) { return !(c1 == c2); }
+    friend bool operator< (const Color& c1, const Color& c2) { return c1.tie() < c2.tie(); }
+
 private:
     AllColors _color;
 };
-
-constexpr bool operator==(Color const& c1, Color const& c2) {return c1.equal(c2);}
-constexpr bool operator!=(Color const& c1, Color const& c2) {return !(c1==c2);}
-constexpr bool operator< (Color const& c1, Color const& c2) {return c1.less(c2);}
-
 
 #endif //LANGTON3D_COLOR_H

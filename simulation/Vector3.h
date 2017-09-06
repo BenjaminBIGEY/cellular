@@ -24,14 +24,14 @@ struct Vector3 {
     glm::vec3 toGlmVec3() {return glm::vec3(x, y, z);}
 
     int x, y, z;
+    
+    friend bool operator==(Vector3 const& u, Vector3 const& v) {return u.equal(v);}
+    friend bool operator!=(Vector3 const& u, Vector3 const& v) {return !(u==v);}
+    friend bool operator< (Vector3 const& u, Vector3 const& v) {return u.less(v);}
+    friend bool operator<=(Vector3 const& u, Vector3 const& v) {return u<v || u==v;}
+    friend bool operator>=(Vector3 const& u, Vector3 const& v) {return !(u<v);}
+    friend bool operator> (Vector3 const& u, Vector3 const& v) {return u>=v && u!=v;}
 };
-
-constexpr bool operator==(Vector3 const& u, Vector3 const& v) {return u.equal(v);}
-constexpr bool operator!=(Vector3 const& u, Vector3 const& v) {return !(u==v);}
-constexpr bool operator< (Vector3 const& u, Vector3 const& v) {return u.less(v);}
-constexpr bool operator<=(Vector3 const& u, Vector3 const& v) {return u<v || u==v;}
-constexpr bool operator>=(Vector3 const& u, Vector3 const& v) {return !(u<v);}
-constexpr bool operator> (Vector3 const& u, Vector3 const& v) {return u>=v && u!=v;}
 
 
 

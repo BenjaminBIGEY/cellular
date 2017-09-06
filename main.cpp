@@ -41,6 +41,7 @@ int main(int argc, char** argv) {
         Simulation simu;
 
         simu.addAnt(0, 0, 0);
+        simu.addAnt(5, 5, 5);
 
         if(rule == 0)
             simu.createRules();

@@ -15,7 +15,7 @@ void Rules::add(std::string color, Move rule) {
 
 void Rules::add(Color color, Move rule) {
     bool existingColor = false;
-    for(int i = 0 ; i < _listRules.size() ; i++) {
+    for(unsigned int i = 0 ; i < _listRules.size() ; i++) {
         if(color == _listRules[i].first)
             existingColor = true;
     }
@@ -41,7 +41,7 @@ void Rules::loadRule(RuleDefinition ruleDefinition) {
 std::vector<Color> Rules::getListColors() {
     std::vector<Color> result;
 
-    for(int i = 0 ; i < _listRules.size() ; i++) {
+    for(unsigned int i = 0 ; i < _listRules.size() ; i++) {
         result.push_back(_listRules[i].first);
     }
     return result;
@@ -55,7 +55,7 @@ Orientation Rules::getNewOrientation(Orientation currentOrientation, Color cubeC
 }
 
 Move Rules::getRule(Color color) {
-    for(int i = 0 ; i < _listRules.size() ; i++) {
+    for(unsigned int i = 0 ; i < _listRules.size() ; i++) {
         if(color == _listRules[i].first)
             return _listRules[i].second;
     }
@@ -64,10 +64,10 @@ Move Rules::getRule(Color color) {
 }
 
 Color Rules::nextColor(Color color) {
-    if(color == NULL_COLOR)
-        return NULL_COLOR;
+    if(color == AllColors::NULL_COLOR)
+        return AllColors::NULL_COLOR;
 
-    for(int i = 0 ; i < _listRules.size() - 1 ; i++) {
+    for(unsigned int i = 0 ; i < _listRules.size() - 1 ; i++) {
         if(color == _listRules[i].first)
             return _listRules[i+1].first;
     }
@@ -77,16 +77,16 @@ Color Rules::nextColor(Color color) {
 std::string Rules::getRules() {
     std::string rules;
     std::string color;
-    int sizeMax = 0;
-    for(int i = 0 ; i < _listRules.size() ; i++) {
+    unsigned int sizeMax = 0;
+    for(unsigned int i = 0 ; i < _listRules.size() ; i++) {
         if(_listRules[i].first.getColorName().size() > sizeMax)
             sizeMax = (int)_listRules[i].first.getColorName().size();
     }
 
-    for(int i = 0 ; i < _listRules.size() ; i++) {
+    for(unsigned int i = 0 ; i < _listRules.size() ; i++) {
         color = _listRules[i].first.getColorName();
         rules += color;
-        for(int k = 0 ; k < sizeMax - color.size() ; k++)
+        for(unsigned int k = 0 ; k < sizeMax - color.size() ; k++)
             rules += ' ';
         rules += " : " + getMoveName(_listRules[i].second) + "\n";
     }
@@ -102,7 +102,7 @@ Orientation Rules::getInitOrientation() {
         case Move::GO_DOWN:  return LEFT;
         case Move::GO_RIGHT: return FRONT;
         case Move::GO_LEFT:  return BACK;
-        case Move::DO_NOTHING: return FRONT;
+        default: return FRONT; // Move::DO_NOTHING
     }
 }
 
@@ -114,7 +114,7 @@ std::string Rules::getMoveName(Move move) {
         case Move::GO_LEFT:    return "GO_left";
         case Move::GO_UP:      return "GO_up";
         case Move::GO_DOWN:    return "GO_down";
-        case Move::DO_NOTHING: return "do nothing";
+        default:/*case Move::DO_NOTHING:*/ return "do nothing";
     }
 }
 
@@ -126,5 +126,6 @@ std::string Rules::getOrientationName(Orientation orientation) {
         case Orientation::LEFT:    return "left";
         case Orientation::UP:      return "up";
         case Orientation::DOWN:    return "down";
+        default: std::cerr << "ERROR" << std::endl; return "front";
     }
 }

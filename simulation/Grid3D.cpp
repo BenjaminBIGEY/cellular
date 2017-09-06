@@ -48,7 +48,7 @@ void Grid3D::addCube(Vector3 position, Color color) {
 }
 
 void Grid3D::updateCube(Color color) {
-    if(color == NULL_COLOR)
+    if(color == AllColors::NULL_COLOR)
         _grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z] = _cubesPtr[_colorInit];
     else
         _grid3D[_subCubePosition].subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z] = _cubesPtr[color];
@@ -70,7 +70,7 @@ int Grid3D::getSize() {
 Color Grid3D::getColor() {
         std::shared_ptr<Unit> unit = currentIterator->second.subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z];
     if(unit == nullptr)
-        return NULL_COLOR;
+        return AllColors::NULL_COLOR;
     else
         return currentIterator->second.subCube[_cubePosition.x][_cubePosition.y][_cubePosition.z]->_color;
 }
